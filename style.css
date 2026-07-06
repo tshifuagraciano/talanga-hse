@@ -1,0 +1,516 @@
+/* ========================================
+   TALANGA HSE v2.0
+   Olhando hoje para proteger o amanhã
+======================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+:root{
+
+    
+
+--primary:#0f172a;
+    --secondary:#1e293b;
+
+    --success:#16a34a;
+    --danger:#dc2626;
+    --warning:#f59e0b;
+    --info:#2563eb;
+    --purple:#7c3aed;
+
+    --bg:#f4f6f8;
+    --white:#ffffff;
+    --border:#dbe2ea;
+
+    --shadow:0 4px 12px rgba(0,0,0,.08);
+
+
+}
+
+body{
+    background:var(--bg);
+    display:flex;
+    min-height:100vh;
+    color:#333;
+}
+
+/* ========================================
+   SIDEBAR
+======================================== */
+
+.sidebar{
+
+    width:260px;
+    background:var(--primary);
+    color:white;
+    padding:20px;
+    position:sticky;
+    top:0;
+    height:100vh;
+
+}
+
+.sidebar h2{
+
+    text-align:center;
+    margin-bottom:25px;
+    font-size:24px;
+
+}
+
+.sidebar ul{
+    list-style:none;
+}
+
+.sidebar li{
+
+    padding:12px;
+    margin-bottom:6px;
+    border-radius:8px;
+    cursor:pointer;
+    transition:.3s;
+
+}
+
+.sidebar li:hover{
+
+    background:var(--secondary);
+
+}
+
+/* ========================================
+   MAIN
+======================================== */
+
+.main{
+
+    flex:1;
+    padding:25px;
+
+}
+
+/* ========================================
+   HEADER
+======================================== */
+
+header{
+
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:var(--shadow);
+
+}
+
+header h1{
+
+    color:var(--primary);
+    margin-bottom:5px;
+
+}
+
+header p{
+
+    color:#64748b;
+
+}
+
+/* ========================================
+   HERO
+======================================== */
+
+.hero{
+
+    margin-top:20px;
+    background:white;
+    border-radius:12px;
+    padding:25px;
+    box-shadow:var(--shadow);
+
+}
+
+.hero h2{
+
+    color:var(--primary);
+    margin-bottom:10px;
+
+}
+
+/* ========================================
+   KPI CARDS
+======================================== */
+
+.cards{
+
+    margin-top:20px;
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(220px,1fr));
+
+    gap:20px;
+
+}
+
+.card{
+
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:var(--shadow);
+
+    transition:.3s;
+
+}
+
+.card:hover{
+
+    transform:translateY(-4px);
+
+}
+
+.card h3{
+
+    color:#64748b;
+    margin-bottom:10px;
+
+}
+
+.card h2{
+
+    color:var(--primary);
+
+}
+
+/* ========================================
+   SECTIONS
+======================================== */
+
+section{
+
+    background:white;
+    margin-top:20px;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:var(--shadow);
+
+}
+
+section h2{
+
+    color:var(--primary);
+    margin-bottom:15px;
+
+}
+
+section h3{
+
+    margin-top:20px;
+    margin-bottom:10px;
+
+}
+
+/* ========================================
+   FORMULARIOS
+======================================== */
+
+label{
+
+    display:block;
+    margin-top:12px;
+    margin-bottom:5px;
+    font-weight:600;
+
+}
+
+input,
+textarea,
+select{
+
+    width:100%;
+    padding:10px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    font-size:14px;
+
+}
+
+textarea{
+
+    min-height:100px;
+    resize:vertical;
+
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+
+    outline:none;
+    border-color:var(--info);
+
+}
+
+/* ========================================
+   BOTÕES
+======================================== */
+
+button{
+
+    margin-top:15px;
+    border:none;
+    border-radius:8px;
+    padding:12px 20px;
+    color:white;
+    cursor:pointer;
+    transition:.3s;
+    font-weight:600;
+
+}
+
+button:hover{
+
+    opacity:.9;
+
+}
+
+/* SEGURANÇA */
+
+.seguranca button{
+    background:var(--success);
+}
+
+/* SAÚDE */
+
+.saude button{
+    background:var(--danger);
+}
+
+/* AMBIENTE */
+
+.ambiente button{
+    background:var(--success);
+}
+
+/* EMERGÊNCIAS */
+
+.emergencias button{
+    background:var(--danger);
+}
+
+/* INSPEÇÕES */
+
+.inspecoes button{
+    background:var(--info);
+}
+
+/* COLABORADORES */
+
+.colaboradores button{
+    background:var(--primary);
+}
+
+/* TREINAMENTOS */
+
+.treinamentos button{
+    background:var(--purple);
+}
+
+/* UTILIZADORES */
+
+.utilizadores button{
+    background:var(--info);
+}
+
+/* LOGIN */
+
+.login button{
+    background:var(--success);
+}
+
+/* EVIDÊNCIAS */
+
+.evidencias button{
+    background:#0891b2;
+}
+
+/* MATRIZ DE RISCO */
+
+.matriz-risco button{
+    background:#ea580c;
+}
+
+/* ========================================
+   TABELAS
+======================================== */
+
+table{
+
+    width:100%;
+    margin-top:15px;
+    border-collapse:collapse;
+
+}
+
+table th{
+
+    background:var(--primary);
+    color:white;
+
+}
+
+table th,
+table td{
+
+    border:1px solid #dbe2ea;
+    padding:12px;
+    text-align:left;
+
+}
+
+table tr:nth-child(even){
+
+    background:#f9fafb;
+
+}
+
+/* ========================================
+   DASHBOARD CHARTS
+======================================== */
+
+.dashboard-graficos{
+
+    margin-top:20px;
+
+}
+
+.graficos{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(400px,1fr));
+
+    gap:20px;
+
+}
+
+.grafico-card{
+
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:var(--shadow);
+
+}
+
+canvas{
+
+    width:100% !important;
+    max-height:320px;
+
+}
+
+/* ========================================
+   CHECKLIST
+======================================== */
+
+.check-item{
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-top:10px;
+
+}
+
+.check-item input{
+
+    width:auto;
+
+}
+
+/* ========================================
+   EVIDÊNCIAS
+======================================== */
+
+#previewFoto{
+
+    margin-top:10px;
+    border-radius:10px;
+    border:1px solid #ddd;
+    max-width:300px;
+
+}
+
+/* ========================================
+   MATRIZ DE RISCO
+======================================== */
+
+.risco-baixo{
+    color:green;
+    font-weight:bold;
+}
+
+.risco-moderado{
+    color:#f59e0b;
+    font-weight:bold;
+}
+
+.risco-alto{
+    color:#ea580c;
+    font-weight:bold;
+}
+
+.risco-critico{
+    color:#dc2626;
+    font-weight:bold;
+}
+
+/* ========================================
+   RESPONSIVO
+======================================== */
+
+@media(max-width:900px){
+
+    body{
+        flex-direction:column;
+    }
+
+    .sidebar{
+
+        width:100%;
+        height:auto;
+        position:relative;
+
+    }
+
+    .main{
+
+        padding:15px;
+
+    }
+
+    .graficos{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
+@media(max-width:600px){
+
+    .cards{
+
+        grid-template-columns:1fr;
+
+    }
+
+}

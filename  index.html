@@ -1,0 +1,562 @@
+
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Talanga HSE</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    
+
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+
+    <div class="sidebar">
+
+        <h2>Talanga HSE</h2>
+
+        <ul>
+            <li>🏠 Dashboard</li>
+            <li>🦺 Segurança</li>
+            <li>❤️ Saúde Ocupacional</li>
+            <li>🌱 Meio Ambiente</li>
+            <li>🚨 Emergências</li>
+            <li>🔍 Inspeções</li>
+            <li>👷 Colaboradores</li>
+            <li>📚 Treinamentos</li>
+            <li>👤 Utilizadores</li>
+            <li>📸 Evidências</li>
+            <li>⚠️ Matriz de Risco</li>
+            <li>🔐 Login</li>
+        </ul>
+
+    </div>
+
+    <!-- MAIN -->
+
+    <div class="main">
+
+        <header>
+
+            <h1>Talanga HSE</h1>
+
+            <p>
+                Olhando hoje para proteger o amanhã.
+            </p>
+
+        </header>
+
+        <!-- HERO -->
+
+        <section class="hero">
+
+            <h2>Bem-vindo ao Talanga HSE</h2>
+
+            <p>
+                Plataforma integrada para gestão de Segurança,
+                Saúde Ocupacional, Meio Ambiente e Emergências.
+            </p>
+
+        </section>
+
+        <!-- CARDS -->
+
+        <div class="cards">
+
+            <div class="card">
+                <h3>HHT</h3>
+                <h2>2.500.000</h2>
+            </div>
+
+            <div class="card">
+                <h3>Dias Sem Acidente</h3>
+                <h2>145</h2>
+            </div>
+
+            <div class="card">
+                <h3>ASOs Vencendo</h3>
+                <h2>12</h2>
+            </div>
+
+            <div class="card">
+                <h3>Condições Inseguras</h3>
+                <h2>42</h2>
+            </div>
+
+        </div>
+
+        <!-- DASHBOARD -->
+
+        <section class="dashboard-graficos">
+
+            <h2>📊 Dashboard Executivo</h2>
+
+            <div class="graficos">
+
+                <div class="grafico-card">
+                    <canvas id="graficoSeguranca"></canvas>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- SEGURANÇA -->
+
+        <section class="seguranca">
+
+            <h2>🦺 Segurança</h2>
+
+            <form id="formSeguranca">
+
+                <label>Título</label>
+                <input type="text" id="titulo">
+
+                <label>Descrição</label>
+                <textarea id="descricao"></textarea>
+
+                <label>Severidade</label>
+
+                <select id="severidade">
+                    <option>Baixa</option>
+                    <option>Média</option>
+                    <option>Alta</option>
+                    <option>Crítica</option>
+                </select>
+
+                <label>Área</label>
+                <input type="text" id="area">
+
+                <label>Responsável</label>
+                <input type="text" id="responsavel">
+
+                <label>Status</label>
+
+                <select id="status">
+                    <option>Aberto</option>
+                    <option>Em Tratamento</option>
+                    <option>Fechado</option>
+                </select>
+
+                <button type="submit">
+                    Registrar Ocorrência
+                </button>
+
+            </form>
+
+            <table id="tabelaOcorrencias">
+
+                <thead>
+
+                    <tr>
+                        <th>Título</th>
+                        <th>Severidade</th>
+                        <th>Área</th>
+                        <th>Responsável</th>
+                        <th>Status</th>
+                    </tr>
+
+                </thead>
+
+                <tbody></tbody>
+
+            </table>
+
+        </section>
+
+        <!-- SAÚDE -->
+
+        <section class="saude">
+
+            <h2>❤️ Gestão de ASO</h2>
+
+            <form id="formASO">
+
+                <input type="text" id="nomeColaborador" placeholder="Colaborador">
+
+                <select id="funcao">
+                    <option>Soldador</option>
+                    <option>Supervisor</option>
+                    <option>Motorista</option>
+                </select>
+
+                <select id="tipoASO">
+                    <option>Periódico</option>
+                    <option>Admissional</option>
+                </select>
+
+                <input type="date" id="validadeASO">
+
+                <select id="statusASO">
+                    <option>Apto</option>
+                    <option>Inapto</option>
+                </select>
+
+                <button type="submit">Registrar ASO</button>
+
+            </form>
+
+            <table id="tabelaASO">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Função</th>
+                        <th>Tipo</th>
+                        <th>Validade</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+        </section>
+
+        <!-- AMBIENTE -->
+
+        <section class="ambiente">
+
+            <h2>🌱 Gestão Ambiental</h2>
+
+            <form id="formAmbiente">
+
+                <input type="number" id="agua" placeholder="Água">
+
+                <input type="number" id="energia" placeholder="Energia">
+
+                <input type="number" id="combustivel" placeholder="Combustível">
+
+                <input type="number" id="co2" placeholder="CO₂">
+
+                <button type="submit">
+                    Registrar Consumo
+                </button>
+
+            </form>
+
+            <table id="tabelaAmbiental">
+
+                <thead>
+                    <tr>
+                        <th>Água</th>
+                        <th>Energia</th>
+                        <th>Combustível</th>
+                        <th>CO₂</th>
+                    </tr>
+                </thead>
+
+                <tbody></tbody>
+
+            </table>
+
+        </section>
+
+        <!-- FAUNA -->
+
+        <section>
+
+            <h2>🐍 Fauna</h2>
+
+            <form id="formFauna">
+
+                <select id="animal">
+                    <option>Cobra</option>
+                    <option>Escorpião</option>
+                    <option>Macaco</option>
+                </select>
+
+                <input type="text" id="localAnimal" placeholder="Local">
+
+                <button type="submit">
+                    Registrar
+                </button>
+
+            </form>
+
+            <table id="tabelaFauna">
+                <thead>
+                    <tr>
+                        <th>Animal</th>
+                        <th>Local</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+        </section>
+
+        <!-- EMERGÊNCIAS -->
+
+        <section class="emergencias">
+
+            <h2>🚨 Emergências</h2>
+
+            <form id="formEmergencia">
+
+                <select id="tipoEmergencia">
+                    <option>Incêndio</option>
+                    <option>Mal Súbito</option>
+                    <option>Derrame</option>
+                </select>
+
+                <input type="text" id="localEmergencia" placeholder="Local">
+
+                <textarea id="descricaoEmergencia"></textarea>
+
+                <button type="submit">
+                    Registrar Emergência
+                </button>
+
+            </form>
+
+            <table id="tabelaEmergencias">
+
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Local</th>
+                        <th>Descrição</th>
+                    </tr>
+                </thead>
+
+                <tbody></tbody>
+
+            </table>
+
+        </section>
+
+        <!-- INSPEÇÕES -->
+
+        <section class="inspecoes">
+
+            <h2>🔍 Inspeções</h2>
+
+            <form id="formInspecao">
+
+                <select id="tipoInspecao">
+                    <option>Segurança</option>
+                    <option>Saúde</option>
+                    <option>Ambiental</option>
+                </select>
+
+                <input type="text" id="areaInspecao" placeholder="Área">
+
+                <label>
+                    <input type="checkbox" class="checkItem">
+                    Uso correto de EPI
+                </label>
+
+                <label>
+                    <input type="checkbox" class="checkItem">
+                    Área sinalizada
+                </label>
+
+                <button type="submit">
+                    Salvar Inspeção
+                </button>
+
+            </form>
+
+            <table id="tabelaInspecoes">
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Área</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+        </section>
+
+        <!-- COLABORADORES -->
+
+        <section class="colaboradores">
+
+            <form id="formColaborador">
+
+                <h2>👷 Colaboradores</h2>
+
+                <input type="text" id="nomeFuncionario" placeholder="Nome">
+
+                <input type="text" id="empresaFuncionario" placeholder="Empresa">
+
+                <input type="text" id="funcaoFuncionario" placeholder="Função">
+
+                <input type="text" id="supervisorFuncionario" placeholder="Supervisor">
+
+                <button type="submit">
+                    Salvar
+                </button>
+
+            </form>
+
+            <table id="tabelaColaboradores">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Empresa</th>
+                        <th>Função</th>
+                        <th>Supervisor</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+        </section>
+
+        <!-- TREINAMENTOS -->
+
+        <section class="treinamentos">
+
+            <form id="formTreinamento">
+
+                <h2>📚 Treinamentos</h2>
+
+                <input type="text" id="treinamentoNome">
+
+                <select id="tipoTreinamento">
+                    <option>Integração</option>
+                    <option>Altura</option>
+                    <option>Espaço Confinado</option>
+                </select>
+
+                <input type="date" id="validadeTreinamento">
+
+                <button type="submit">
+                    Registrar
+                </button>
+
+            </form>
+
+            <table id="tabelaTreinamentos">
+                <thead>
+                    <tr>
+                        <th>Colaborador</th>
+                        <th>Treinamento</th>
+                        <th>Validade</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+        </section>
+
+        <!-- UTILIZADORES -->
+
+        <section class="utilizadores">
+
+            <h2>👤 Utilizadores</h2>
+
+            <form id="formUtilizador">
+
+                <input type="text" id="nomeUser">
+
+                <input type="email" id="emailUser">
+
+                <select id="perfilUser">
+                    <option>Administrador</option>
+                    <option>Técnico HSE</option>
+                </select>
+
+                <button type="submit">
+                    Criar
+                </button>
+
+            </form>
+
+            <table id="tabelaUtilizadores">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Perfil</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+        </section>
+
+        <!-- EVIDÊNCIAS -->
+
+        <section class="evidencias">
+
+            <h2>📸 Gestão de Evidências</h2>
+
+            <input type="file" id="fotoEvidencia">
+
+            <img id="previewFoto" style="display:none;max-width:300px;">
+
+        </section>
+
+        <!-- MATRIZ DE RISCO -->
+
+        <section class="matriz-risco">
+
+            <h2>⚠️ Matriz de Risco</h2>
+
+            <form id="formRisco">
+
+                <input type="text" id="perigo" placeholder="Perigo">
+
+                <input type="number" id="probabilidade" min="1" max="5">
+
+                <input type="number" id="consequencia" min="1" max="5">
+
+                <button type="submit">
+                    Calcular
+                </button>
+
+            </form>
+
+            <table id="tabelaRisco">
+                <thead>
+                    <tr>
+                        <th>Perigo</th>
+                        <th>Score</th>
+                        <th>Classificação</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+        </section>
+
+        <!-- LOGIN -->
+
+        <section class="login">
+
+            <h2>🔐 Login</h2>
+
+            <form id="formLogin">
+
+                <input type="email" id="loginEmail">
+
+                <input type="password" id="loginSenha">
+
+                <button type="submit">
+                    Entrar
+                </button>
+
+            </form>
+
+        </section>
+
+    </div>
+
+    <script src="app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+
+</html>
+
