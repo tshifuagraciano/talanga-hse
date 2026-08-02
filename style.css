@@ -1,3 +1,4 @@
+
 /* ========================================
    TALANGA HSE v2.0
    Olhando hoje para proteger o amanhã
@@ -45,16 +46,22 @@ body{
 
 .sidebar{
 
-    width:260px;
-    background:var(--primary);
-    color:white;
-    padding:20px;
-    position:sticky;
-    top:0;
-    height:100vh;
+    width: 260px;
+    background: #071330;
+    color: white;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+
+    overflow-y: auto;
+
+    padding: 20px;
+
+    box-sizing: border-box;
 
 }
-
 .sidebar h2{
 
     text-align:center;
@@ -65,6 +72,9 @@ body{
 
 .sidebar ul{
     list-style:none;
+list-style: none;
+padding: 0;
+margin: 0;
 }
 
 .sidebar li{
@@ -74,22 +84,37 @@ body{
     border-radius:8px;
     cursor:pointer;
     transition:.3s;
+padding: 15px 20px;
+cursor: pointer;
+}
+.sidebar li{
+
+    cursor:pointer;
+
+    user-select:none;
+
+    caret-color:transparent;
 
 }
-
 .sidebar li:hover{
 
     background:var(--secondary);
 
 }
+.sidebar li.ativo{
 
+    background:#2563eb;
+    border-radius:8px;
+
+}
 /* ========================================
    MAIN
 ======================================== */
 
-.main{
 
-    flex:1;
+    .main{
+
+    margin-left:260px;
     padding:25px;
 
 }
@@ -267,18 +292,23 @@ button{
     border:none;
     border-radius:8px;
     padding:12px 20px;
+
+    background:#2563eb;
+
     color:white;
+
     cursor:pointer;
     transition:.3s;
     font-weight:600;
 
 }
-
 button:hover{
 
-    opacity:.9;
+    transform:translateY(-2px);
+    opacity:0.95;
 
 }
+
 
 /* SEGURANÇA */
 
@@ -291,11 +321,330 @@ button:hover{
 .saude button{
     background:var(--danger);
 }
+.aptidoes{
 
+    display:grid;
+
+    grid-template-columns:
+    repeat(
+        auto-fit,
+        minmax(250px,1fr)
+    );
+
+    gap:10px;
+
+}
 /* AMBIENTE */
 
 .ambiente button{
     background:var(--success);
+}
+.status-valido{
+
+    color: #198754;
+
+    font-weight: bold;
+
+}
+
+.status-vencer{
+
+    color: #fd7e14;
+
+    font-weight: bold;
+
+}
+
+.status-vencido{
+
+    color: #dc3545;
+
+    font-weight: bold;
+
+}
+
+.status-sem-validade{
+
+    color: #6c757d;
+
+    font-weight: bold;
+
+}
+.indicadores-ambientais{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:15px;
+
+    margin:20px 0;
+
+}
+
+.card-indicador{
+
+    background:white;
+
+    color:#0f172a;
+
+    border-radius:12px;
+
+    padding:20px;
+
+    box-shadow:
+    0 4px 12px rgba(0,0,0,.08);
+
+}
+body.dark .card-indicador{
+
+    background:#1e2b45;
+
+    color:white;
+
+}
+body.dark .card-indicador span{
+
+    color:white;
+
+}
+.form-grid{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(
+        3,
+        minmax(250px,1fr)
+    );
+
+    gap:20px;
+
+    align-items:end;
+
+    margin-top:20px;
+
+}
+
+.form-grid div{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.form-grid label{
+
+    font-weight:600;
+
+    margin-bottom:5px;
+
+}
+
+.form-grid button{
+
+    height:50px;
+
+}
+.form-grid{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(
+        auto-fit,
+        minmax(250px,1fr)
+    );
+
+    gap:20px;
+
+    align-items:end;
+
+}
+.form-grid{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(
+        auto-fit,
+        minmax(250px,1fr)
+    );
+
+    gap:20px;
+
+    margin-top:20px;
+
+}
+
+.form-grid div{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.form-grid button{
+
+    height:50px;
+
+}
+.form-grid{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(
+        auto-fit,
+        minmax(250px,1fr)
+    );
+
+    gap:20px;
+
+    margin-top:20px;
+
+    align-items:end;
+
+}
+
+.form-grid div{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.form-grid label{
+
+    font-weight:600;
+
+    margin-bottom:5px;
+
+}
+
+.form-grid button{
+
+    height:50px;
+
+}
+.filtros-epi{
+
+    display:flex;
+
+    gap:10px;
+
+    align-items:center;
+
+    flex-wrap:wrap;
+
+    margin:15px 0;
+
+}
+
+.filtros-epi input{
+
+    max-width:220px;
+
+}
+
+.filtros-epi button{
+
+    width:auto;
+
+    min-width:120px;
+
+}
+.card-indicador h4{
+
+    margin-bottom:10px;
+
+}
+
+.card-indicador span{
+
+    font-size:24px;
+
+    font-weight:bold;
+
+}
+.alerta-ambiental{
+
+    padding:12px;
+
+    margin-bottom:10px;
+
+    border-radius:8px;
+
+    font-weight:bold;
+
+}
+
+.alerta-vencer{
+
+    background:#fff3cd;
+
+    color:#856404;
+
+}
+
+.alerta-vencido{
+
+    background:#f8d7da;
+
+    color:#721c24;
+
+}
+.alerta-valido{
+
+    background:#d1e7dd;
+
+    color:#0f5132;
+
+}
+.secao-toggle{
+
+    width:100%;
+
+    padding:15px;
+
+    margin:15px 0;
+
+    border:none;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-size:18px;
+
+    font-weight:bold;
+
+    text-align:left;
+
+    background:#24334d;
+
+    color:white;
+
+}
+.filtros-ambiente{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:20px;
+}
+
+.filtros-ambiente input,
+.filtros-ambiente button{
+    padding:10px;
+    border:1px solid #ccc;
+    border-radius:8px;
+}
+
+.filtros-ambiente input[type="text"]{
+    min-width:250px;
 }
 
 /* EMERGÊNCIAS */
@@ -392,31 +741,106 @@ table tr:nth-child(even){
 
 .graficos{
 
-    display:grid;
-
-    grid-template-columns:
-    repeat(auto-fit,minmax(400px,1fr));
+    display:flex;
 
     gap:20px;
+
+    flex-wrap:wrap;
+
+}
+.modulo{
+
+    display:none;
+
+    width:100%;
+
+}
+
+.main{
+
+    margin-left:260px;
+
+    padding:25px;
+
+    width:calc(100% - 260px);
+
+    box-sizing:border-box;
 
 }
 
 .grafico-card{
 
+    flex:1;
+
+    min-width:400px;
+
     background:white;
+
     padding:20px;
+
     border-radius:12px;
-    box-shadow:var(--shadow);
+
+    box-shadow:
+    0 2px 10px rgba(0,0,0,.08);
 
 }
+.grafico-card h4{
 
+    margin-bottom:15px;
+
+    color:#334155;
+
+    font-size:16px;
+
+}
+#statusConformidade{
+
+    margin-top:10px;
+
+    font-weight:bold;
+
+    font-size:16px;
+
+}
 canvas{
 
     width:100% !important;
-    max-height:320px;
+
+    max-height:300px !important;
 
 }
 
+/* ========================================
+   RESPONSIVO
+======================================== */
+
+@media(max-width:900px){
+
+    .sidebar{
+
+        width:100%;
+
+        position:relative;
+
+    }
+
+    .main{
+
+        margin-left:0;
+
+        padding:15px;
+
+        width:100%;
+
+    }
+
+    .graficos{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
 /* ========================================
    CHECKLIST
 ======================================== */
@@ -479,31 +903,33 @@ canvas{
 
 @media(max-width:900px){
 
-    body{
-        flex-direction:column;
-    }
-
     .sidebar{
-
         width:100%;
-        height:auto;
         position:relative;
-
     }
 
+    .main{
+        margin-left:0;
+        padding:15px;
+    }
+
+}
     .main{
 
         padding:15px;
 
     }
-
+.main{
+margin-left:260px;
+padding:25px;
+}
     .graficos{
 
         grid-template-columns:1fr;
 
     }
 
-}
+
 
 @media(max-width:600px){
 
@@ -512,5 +938,1027 @@ canvas{
         grid-template-columns:1fr;
 
     }
+
+}
+/* ========================================
+   TEMA ESCURO
+======================================== */
+
+body.dark{
+
+    background:#0f172a;
+    color:#f8fafc;
+
+}
+
+body.dark section,
+body.dark .card,
+body.dark .hero,
+body.dark header,
+body.dark .grafico-card{
+
+    background:#1e293b;
+    color:#f8fafc;
+
+}
+
+body.dark h1,
+body.dark h2,
+body.dark h3{
+
+    color:#f8fafc;
+
+}
+
+body.dark p{
+
+    color:#cbd5e1;
+
+}
+
+body.dark input,
+body.dark textarea,
+body.dark select{
+
+    background:#334155;
+    color:white;
+    border:1px solid #475569;
+
+}
+
+body.dark table td{
+
+    background:#1e293b;
+    color:white;
+
+}
+
+body.dark table tr:nth-child(even){
+
+    background:#334155;
+
+}
+#btnTema{
+    width:100%;
+    margin-bottom:20px;
+}
+header{
+
+    padding:15px 20px;
+
+    text-align:center;
+
+}
+
+.logo-area{
+
+    display:flex;
+
+    justify-content:center;
+
+    margin-bottom:10px;
+
+}
+
+.logo{
+
+    width:90px;
+
+}
+
+header p{
+
+    margin:0;
+
+    text-align:center;
+
+    font-size:18px;
+
+}
+.sidebar li.ativo{
+
+    background:#a2a7b1;
+
+    border-radius:8px;
+
+    font-weight:bold;
+
+}
+body.dark .card-alertas{
+
+    background:#7c2d12;
+
+    color:white;
+
+    border-left:6px solid #f59e0b;
+
+}
+body.dark .card-alertas p,
+body.dark .card-alertas h3{
+
+    color:white;
+
+}
+.logo-dashboard{
+
+    width:110px;
+
+    display:block;
+
+    margin:0 auto 15px auto;
+
+}
+.hero{
+
+    text-align:center;
+
+}
+#listaNotificacoes{
+
+    list-style:none;
+
+    padding:0;
+
+    margin:0;
+
+}
+
+#listaNotificacoes li{
+
+    margin-bottom:10px;
+
+}
+
+
+/* ========================================
+   RODAPÉ
+======================================== */
+
+.rodape{
+
+    text-align:center;
+
+    margin-top:50px;
+
+    padding:20px;
+
+    color:#64748b;
+
+    font-size:13px;
+
+    border-top:1px solid #dbe2ea;
+
+}
+body.dark .rodape{
+
+    color:#94a3b8;
+
+    border-top:1px solid #334155;
+#tabelaFauna td:nth-child(4){
+
+    max-width:300px;
+
+    word-wrap:break-word;
+
+}
+}
+.card-alertas{
+
+    background:#fff7ed;
+
+    border-left:6px solid #f59e0b;
+
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+
+}
+.titulo-dashboard{
+
+    margin:20px 0;
+
+    font-size:32px;
+
+    font-weight:700;
+
+    color:#0f172a;
+
+}
+.miniatura{
+
+    width:70px;
+
+    height:70px;
+
+    object-fit:cover;
+
+    border-radius:8px;
+
+    border:1px solid #ccc;
+
+}
+/* ========================================
+   LANDING PAGE TALANGA HSE
+======================================== */
+
+.hero-publico{
+
+    background:linear-gradient(
+        135deg,
+        #071330,
+        #0f172a
+    );
+
+    color:white;
+
+    padding:50px;
+
+    border-radius:20px;
+
+    display:grid;
+
+    grid-template-columns:
+    1fr 1fr;
+
+    gap:40px;
+
+    align-items:center;
+
+}
+.hero-conteudo{
+
+    flex:1;
+
+}
+
+.hero-conteudo h1{
+
+    font-size:48px;
+
+    line-height:1.15;
+
+    max-width:700px;
+
+}
+.hero-texto{
+
+    font-size:20px;
+
+    color:#cbd5e1;
+
+    margin-bottom:30px;
+
+    max-width:650px;
+
+}
+
+.hero-botoes{
+
+    display:flex;
+
+    gap:15px;
+
+    flex-wrap:wrap;
+
+}
+
+.btn-demo{
+
+    background:#16a34a;
+
+}
+
+.btn-demo:hover{
+
+    background:#15803d;
+
+}
+
+.hero-imagem{
+
+    display:none;
+
+}
+.landing-section{
+
+    margin-top:35px;
+
+}
+
+.landing-section h2{
+
+    text-align:center;
+
+    margin-bottom:30px;
+
+    font-size:32px;
+
+}
+
+.cards-publicos{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(
+        4,
+        1fr
+    );
+
+    gap:20px;
+
+}
+.card-publico{
+
+    background:white;
+
+    border-radius:16px;
+
+    padding:25px;
+
+    box-shadow:
+    0 10px 25px rgba(0,0,0,.08);
+
+    transition:.3s;
+
+}
+
+.card-publico:hover{
+
+    transform:translateY(-6px);
+
+}
+
+.card-publico h3{
+
+    margin-bottom:15px;
+
+    color:#0f172a;
+
+}
+
+.card-publico p{
+
+    color:#64748b;
+
+}
+
+.card-demo{
+
+    background:white;
+
+    border-left:5px solid #2563eb;
+
+    border-radius:14px;
+
+    padding:25px;
+
+    box-shadow:
+    0 6px 15px rgba(0,0,0,.08);
+
+}
+
+.card-demo h4{
+
+    color:#64748b;
+
+    margin-bottom:15px;
+
+}
+
+.card-demo span{
+
+    font-size:34px;
+
+    font-weight:700;
+
+    color:#0f172a;
+
+}
+
+.cta-talanga{
+
+    margin-top:50px;
+
+    text-align:center;
+
+    padding:60px;
+
+    border-radius:20px;
+
+    background:linear-gradient(
+        135deg,
+        #2563eb,
+        #1d4ed8
+    );
+
+    color:white;
+
+}
+
+.cta-talanga h2{
+
+    color:white;
+
+    margin-bottom:20px;
+
+    font-size:36px;
+
+}
+
+.cta-talanga p{
+
+    color:#dbeafe;
+
+    max-width:750px;
+
+    margin:auto;
+
+    margin-bottom:25px;
+
+}
+
+.cta-talanga button{
+
+    margin:8px;
+
+}
+
+/* ========================================
+   MODO ESCURO
+======================================== */
+
+body.dark .card-publico,
+body.dark .card-demo{
+
+    background:#1e293b;
+
+    color:white;
+
+}
+
+body.dark .card-publico h3,
+body.dark .card-demo span{
+
+    color:white;
+
+}
+
+body.dark 
+
+.hero-publico{
+
+    background:linear-gradient(
+        135deg,
+        #071330,
+        #0f172a
+    );
+
+    color:white;
+
+    padding:50px;
+
+    border-radius:20px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    text-align:center;
+
+    gap:30px;
+
+}
+/* ========================================
+   RESPONSIVO
+======================================== */
+
+@media(max-width:1000px){
+
+    .hero-publico{
+
+        grid-template-columns:1fr;
+
+        text-align:center;
+
+    }
+
+    .main{
+
+        margin-left:0;
+
+        width:100%;
+
+    }
+
+}
+.landing-section{
+
+    background:white;
+
+    border-radius:20px;
+
+    padding:30px;
+
+    margin-top:30px;
+
+    width:100%;
+
+}
+@media(max-width:1200px){
+
+    .cards-publicos{
+
+        grid-template-columns:
+        repeat(
+            2,
+            1fr
+        );
+
+    }
+
+}
+
+@media(max-width:768px){
+
+    .cards-publicos{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+.hero-publico{
+
+    position:relative;
+
+    overflow:hidden;
+
+    min-height:550px;
+
+}
+
+.hero-slider{
+
+    position:absolute;
+
+    top:0;
+    left:0;
+
+    width:100%;
+    height:100%;
+
+    background-size:cover;
+    background-position:center;
+
+    animation:sliderHero 18s infinite;
+
+}
+
+.hero-overlay{
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+    rgba(7,19,48,0.65);
+
+}
+
+.hero-conteudo{
+
+    position:relative;
+
+    z-index:2;
+
+    color:white;
+
+}
+@keyframes sliderHero{
+
+    0%,30%{
+
+        background-image:
+        url("img/slide1.jpg");
+
+    }
+
+    33%,63%{
+
+        background-image:
+        url("img/slide2.jpg");
+
+    }
+
+    66%,100%{
+
+        background-image:
+        url("img/slide3.jpg");
+
+    }
+
+}
+.logos-topo{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:40px;
+
+}
+
+.logo-talanga{
+
+    width:120px;
+
+}
+
+.gt-info{
+
+    text-align:right;
+
+}
+
+.gt-info span{
+
+    display:block;
+
+    color:white;
+
+    font-size:12px;
+
+    margin-bottom:5px;
+
+}
+
+.logo-gt{
+
+    width:90px;
+
+}.hero-conteudo{
+
+    max-width:700px;
+
+}
+
+.logos-topo{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:30px;
+
+    margin-bottom:30px;
+
+}
+
+.logo-talanga{
+
+    width:120px;
+
+    height:auto;
+
+}
+
+.parceiro-gt{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+}
+
+.parceiro-gt span{
+
+    color:white;
+
+    font-size:14px;
+
+}
+
+.logo-gt{
+
+    height:30px;
+
+    width:auto;
+
+}.logos-topo{
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+    margin-bottom:30px;
+
+}
+
+.logo-talanga{
+
+    width:120px;
+
+    height:auto;
+
+}
+
+.texto-gt{
+
+    color:white;
+
+    font-size:12px;
+
+    margin-top:10px;
+
+    margin-bottom:5px;
+
+}
+
+.logo-gt{
+
+    width:90px;
+
+    height:auto;
+
+}
+.cards-dashboard{
+    display:grid;
+    grid-template-columns:
+    repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+    margin:20px 0;
+}
+
+.card-kpi{
+    background:#ffffff;
+    border-radius:16px;
+    padding:20px;
+    box-shadow:
+    0 4px 12px rgba(0,0,0,0.08);
+    text-align:center;
+    transition:0.3s;
+}
+
+.card-kpi:hover{
+    transform:translateY(-5px);
+}
+
+.card-kpi h3{
+    margin-bottom:10px;
+    color:#334155;
+    font-size:16px;
+}
+
+.card-kpi span{
+    font-size:32px;
+    font-weight:bold;
+    color:#2563eb;
+}
+
+.bloco-dashboard{
+    margin-top:30px;
+    background:#fff;
+    padding:20px;
+    border-radius:16px;
+    box-shadow:
+    0 4px 12px rgba(0,0,0,0.08);
+}
+
+.dashboard-alertas{
+    display:grid;
+    grid-template-columns:
+    repeat(auto-fit,minmax(250px,1fr));
+    gap:15px;
+    margin:20px 0;
+}
+
+.dashboard-alertas div{
+    background:#fff7ed;
+    border-left:5px solid #f59e0b;
+    padding:15px;
+    border-radius:10px;
+    font-weight:600;
+}
+
+.graficos-dashboard{
+    display:grid;
+    grid-template-columns:
+    repeat(auto-fit,minmax(400px,1fr));
+    gap:20px;
+}
+
+.grafico-card{
+    background:white;
+    border-radius:16px;
+    padding:20px;
+    box-shadow:
+    0 4px 12px rgba(0,0,0,0.08);
+    height:350px;
+}
+
+.grafico-card canvas{
+    width:100% !important;
+    height:100% !important;
+}
+@media (max-width:768px){
+
+    .graficos-dashboard{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+@media (max-width:768px){
+
+    .sidebar{
+
+        position:fixed;
+
+        left:-280px;
+
+        transition:0.3s;
+
+        z-index:999;
+
+    }
+
+    .sidebar.aberta{
+
+        left:0;
+
+    }
+
+}
+@media (max-width:768px){
+
+    h1{
+        font-size:28px;
+    }
+
+    h2{
+        font-size:22px;
+    }
+
+    .hero-conteudo{
+        padding:20px;
+    }
+
+    .cards-publicos{
+        grid-template-columns:1fr;
+    }
+
+    .cards-dashboard{
+        grid-template-columns:1fr;
+    }
+
+    .dashboard-alertas{
+        grid-template-columns:1fr;
+    }
+
+    .bloco-dashboard{
+        padding:15px;
+    }
+
+}
+@media (max-width: 768px){
+
+    .hero-conteudo{
+
+        padding:20px !important;
+
+        text-align:center;
+
+    }
+
+    .hero-conteudo h1{
+
+        font-size:42px !important;
+
+        line-height:1.1;
+
+    }
+
+    .hero-conteudo h3{
+
+        font-size:28px !important;
+
+    }
+
+    .hero-texto{
+
+        font-size:16px !important;
+
+        line-height:1.6;
+
+    }
+
+    .hero-botoes{
+
+        display:flex;
+
+        flex-direction:column;
+
+        gap:10px;
+
+    }
+
+    .hero-botoes button{
+
+        width:100%;
+
+    }
+
+}
+@media (max-width:768px){
+
+    .logo-talanga{
+
+        width:120px;
+
+    }
+
+    .logo-gt{
+
+        width:80px;
+
+    }
+
+}
+@media (max-width:768px){
+
+    .sidebar{
+
+        transform:translateX(-100%);
+
+    }
+
+    .sidebar.aberta{
+
+        transform:translateX(0);
+
+    }
+
+}
+@media (max-width:768px){
+
+    .cards-publicos{
+
+        display:grid;
+
+        grid-template-columns:1fr;
+
+        gap:15px;
+
+    }
+
+}
+@media (max-width:768px){
+
+    .cards-dashboard{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+.table-responsive{
+
+    overflow-x:auto;
+
+}
+.hero-conteudo h1{
+
+    font-size:36px;
+
+}
+.credenciais-demo{
+
+    margin-top:20px;
+
+    padding:20px;
+
+    background:#f8fafc;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:12px;
+
+}
+
+.demo-user{
+
+    margin-top:12px;
+
+    padding:12px;
+
+    background:white;
+
+    border-radius:8px;
 
 }

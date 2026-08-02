@@ -1,3 +1,5 @@
+
+    
 <!DOCTYPE html>
 <html lang="pt">
 
@@ -7,10 +9,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Talanga HSE</title>
-
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
 </head>
 
 <body>
@@ -19,102 +23,584 @@
 
     <div class="sidebar">
 
-        <h2>Talanga HSE</h2>
+       <!-- <div class="logo-area">
 
+    <img
+src="logo-talanga.png"
+alt="Logo Talanga"
+class="logo"
+>
+
+
+</div>-->
+
+<div id="areaUtilizador">
+
+    <span id="utilizadorLogadoInfo">
+        Não autenticado
+    </span>
+
+    <button
+        id="btnLogout"
+        style="display:none;"
+    >
+        🚪 Terminar Sessão
+    </button>
+
+</div>
+<button
+    id="btnTema"
+    onclick="alternarTema()"
+>
+    🌙 Modo Escuro
+</button>
         <ul>
-            <li>🏠 Dashboard</li>
-            <li>🦺 Segurança</li>
-            <li>❤️ Saúde Ocupacional</li>
-            <li>🌱 Meio Ambiente</li>
-            <li>🚨 Emergências</li>
-            <li>🔍 Inspeções</li>
-            <li>👷 Colaboradores</li>
-            <li>📚 Treinamentos</li>
-            <li>👤 Utilizadores</li>
-            <li>📸 Evidências</li>
-            <li>⚠️ Matriz de Risco</li>
-            <li>🔐 Login</li>
-        </ul>
+
+<li onclick="mostrarModulo('dashboard')">
+
+🏠 Dashboard
+
+</li>
+
+<li onclick="mostrarModulo('seguranca')">
+
+🦺 Segurança
+
+</li>
+
+<li onclick="mostrarModulo('saude')">
+
+❤️ Saúde Ocupacional
+</li>
+<li onclick="mostrarModulo('ambiente')">
+🌱 Meio Ambiente
+
+</li>
+<li onclick="mostrarModulo('emergencias')">
+
+🚨 Emergências
+
+</li>
+
+<li onclick="mostrarModulo('inspecoes')">
+
+🔍 Inspeções
+
+</li>
+
+<li onclick="mostrarModulo('colaboradores')">
+
+👷 Colaboradores
+
+</li>
+
+<li onclick="mostrarModulo('treinamentos')">
+
+📚 Treinamentos
+
+</li>
+
+<!--
+<li onclick="mostrarModulo('matriz')">
+⚠️ Matriz de Risco
+
+</li>
+ 
+📸 Evidências
+
+<li onclick="mostrarModulo('evidencias')">
+</li>
+-->
+
+
+<li onclick="mostrarModulo('relatorios')">
+
+📊 Relatórios
+
+</li>
+
+<li onclick="mostrarModulo('utilizadores')">
+
+👤 Utilizadores
+
+</li>
+
+
+<li onclick="mostrarModulo('login')">
+
+🔐 Login
+
+</li>
+
+</ul>
+    </div>
+   <div class="main"> 
+   <div id="areaConvidado" style="display:none;">
+
+    <!-- HERO -->
+
+    <div class="hero-publico">
+<div class="hero-slider"></div>
+
+<div class="hero-overlay"></div>
+
+        <div class="hero-conteudo">
+
+          
+
+
+<div class="hero-conteudo">
+
+    <div class="logos-topo">
+
+        <img
+            src="logo-talanga.png"
+            alt="Talanga"
+            class="logo-talanga"
+        >
+
+        <div class="parceiro-gt">
+
+            <span>Desenvolvido por</span>
+
+           <img
+            src="logo-gt.png"
+                alt="GT"
+                class="logo-gt"
+            >
+
+        </div>
 
     </div>
 
-    <!-- MAIN -->
+    <h3>
+        Transforme a Gestão HSE da Sua Empresa</h3>
+        <h1>A Prevenção Começa por Observar
+    </h1>
 
-    <div class="main">
+    <p class="hero-texto">
+        O Talanga HSE é uma plataforma digital desenvolvida para
+        centralizar Segurança, Saúde Ocupacional, Meio Ambiente,
+        Emergências e Gestão de Colaboradores numa única solução.
+    </p>
 
-        <header>
+</div>
+            <div class="hero-botoes">
 
-            <h1>Talanga HSE</h1>
+                <button onclick="mostrarModulo('login')">
+                    🔐 Iniciar Sessão
+                </button>
 
-            <p>
-                Olhando hoje para proteger o amanhã.
-            </p>
+                <button
+    class="btn-demo"
+    onclick="solicitarDemonstracao()"
+>
+    🚀 Solicitar Demonstração
+</button>
 
-        </header>
-
-        <!-- HERO -->
-
-        <section class="hero">
-
-            <h2>Bem-vindo ao Talanga HSE</h2>
-
-            <p>
-                Plataforma integrada para gestão de Segurança,
-                Saúde Ocupacional, Meio Ambiente e Emergências.
-            </p>
-
-        </section>
-
-        <!-- CARDS -->
-
-        <div class="cards">
-
-            <div class="card">
-                <h3>HHT</h3>
-                <h2>2.500.000</h2>
-            </div>
-
-            <div class="card">
-                <h3>Dias Sem Acidente</h3>
-                <h2>145</h2>
-            </div>
-
-            <div class="card">
-                <h3>ASOs Vencendo</h3>
-                <h2>12</h2>
-            </div>
-
-            <div class="card">
-                <h3>Condições Inseguras</h3>
-                <h2>42</h2>
             </div>
 
         </div>
 
-        <!-- DASHBOARD -->
+    </div>
 
-        <section class="dashboard-graficos">
+    <!-- BENEFICIOS -->
 
-            
-<h2>📊 Dashboard Executivo</h2>
+    <section class="landing-section">
 
-    <div class="graficos">
+        <h2>Porque escolher o Talanga?</h2>
 
-        <div class="grafico-card">
-            <canvas id="graficoSeguranca"></canvas>
+        <div class="cards-publicos">
+
+            <div class="card-publico">
+                <h3>🚨 Alertas Automáticos</h3>
+                <p>
+                    ASO, treinamentos, licenças e documentos sob controlo.
+                </p>
+            </div>
+
+            <div class="card-publico">
+                <h3>📊 Indicadores em Tempo Real</h3>
+                <p>
+                    Dashboards inteligentes para tomada de decisões rápidas.
+                </p>
+            </div>
+
+            <div class="card-publico">
+                <h3>📑 Relatórios Instantâneos</h3>
+                <p>
+                    Exportação para Excel e PDF.
+                </p>
+            </div>
+
+            <div class="card-publico">
+                <h3>☁️ Centralização Total</h3>
+                <p>
+                    Elimine folhas Excel e controle tudo numa única plataforma.
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- MODULOS -->
+
+    <section class="landing-section">
+
+        <h2>Módulos Integrados</h2>
+
+        <div class="cards-publicos">
+
+            <div class="card-publico"><h3>🦺 Segurança</h3></div>
+            <div class="card-publico"><h3>❤️ Saúde Ocupacional</h3></div>
+            <div class="card-publico"><h3>🌱 Meio Ambiente</h3></div>
+            <div class="card-publico"><h3>🚨 Emergências</h3></div>
+            <div class="card-publico"><h3>🔍 Inspeções</h3></div>
+            <div class="card-publico"><h3>📚 Treinamentos</h3></div>
+            <div class="card-publico"><h3>🦺 Gestão de EPI</h3></div>
+            <div class="card-publico"><h3>📢 DDS Eletrónico</h3></div>
+            <div class="card-publico"><h3>👷 Colaboradores</h3></div>
+            <div class="card-publico"><h3>📱 Portal do Colaborador</h3></div>
+            <div class="card-publico"><h3>⚠️ Matriz de Risco</h3></div>
+            <div class="card-publico"><h3>📊 Relatórios</h3></div>
+
+        </div>
+
+    </section>
+
+    <!-- SETORES -->
+
+    <section class="landing-section">
+
+        <h2>Ideal para os Sectores</h2>
+
+        <div class="cards-publicos">
+
+            <div class="card-publico">
+                <h3>🏗 Construção Civil</h3>
+            </div>
+
+            <div class="card-publico">
+                <h3>🛢 Petróleo e Gás</h3>
+            </div>
+
+            <div class="card-publico">
+                <h3>⚡ Energia</h3>
+            </div>
+
+            <div class="card-publico">
+                <h3>🏭 Indústria</h3>
+            </div>
+
+            <div class="card-publico">
+                <h3>🚢 Logística</h3>
+            </div>
+
+            <div class="card-publico">
+                <h3>⛏ Mineração</h3>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- CTA -->
+
+    <section class="cta-talanga">
+
+        <h2>
+            Digitalize a Gestão HSE da Sua Empresa
+        </h2>
+
+        <p>
+            Segurança, Saúde, Ambiente, Emergências e Relatórios
+            numa única plataforma moderna.
+        </p>
+
+        <button onclick="mostrarModulo('login')">
+            🔐 Iniciar Sessão
+        </button>
+
+        <button class="btn-demo">
+            🚀 Solicitar Demonstração
+        </button>
+
+    </section>
+
+</div>
+<!-- DASHBOARD -->
+
+<div id="areaPrivada" style="display:none;">
+
+    <section id="dashboard" class="modulo">
+
+       <h2>📊 Dashboard Executivo HSE</h2>
+
+    <!-- KPIs -->
+
+    <div class="cards-dashboard">
+
+        <div class="card-kpi">
+            <h3>📊 Conformidade</h3>
+            <span id="cardConformidade">0%</span>
+        </div>
+
+        <div class="card-kpi">
+            <h3>👷 Colaboradores</h3>
+            <span id="cardColaboradores">0</span>
+        </div>
+
+        
+        <div class="card-kpi">
+            <h3>📚 Treinamentos</h3>
+            <span id="cardTreinamentos">0</span>
+        </div>
+
+        
+        <div class="card-kpi">
+            <h3>🔍 Inspeções</h3>
+            <span id="cardInspecoes">0</span>
         </div>
 
     </div>
 
+    <!-- ALERTAS -->
 
-        </section>
+    <div class="dashboard-alertas">
 
-        <!-- SEGURANÇA -->
+        <div id="alertaASOVencido"></div>
 
-        <section class="seguranca">
+        <div id="alertaASOProximo"></div>
 
-            <h2>🦺 Segurança</h2>
+        <div id="alertaTreinamentoVencido"></div>
 
+        <div id="alertaTreinamentoProximo"></div>
+
+    </div>
+
+    <!-- SEGURANÇA -->
+
+    <div class="bloco-dashboard">
+
+        <h2>🦺 Segurança</h2>
+
+        <div class="cards-dashboard">
+
+            <div class="card-kpi">
+                <h3>Ocorrências</h3>
+                <span id="segOcorrencias">0</span>
+            </div>
+
+            <div class="card-kpi">
+                <h3>EPI</h3>
+                <span id="segEPI">0</span>
+            </div>
+
+            <div class="card-kpi">
+                <h3>DDS</h3>
+                <span id="segDDS">0</span>
+            </div>
+
+            <div class="card-kpi">
+                <h3>Fala Talanga</h3>
+                <span id="segFalaTalanga">0</span>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- SAÚDE -->
+
+    <div class="bloco-dashboard">
+
+        <h2>❤️ Saúde Ocupacional</h2>
+
+        <div class="cards-dashboard">
+
+            <div class="card-kpi">
+                <h3>ASO</h3>
+                <span id="saudeASO">0</span>
+            </div>
+
+            <div class="card-kpi">
+                <h3>Ambulatório</h3>
+                <span id="saudeAmbulatorio">0</span>
+            </div>
+
+            <div class="card-kpi">
+                <h3>Medicamentos</h3>
+                <span id="saudeMedicamentos">0</span>
+            </div>
+
+            <div class="card-kpi">
+                <h3>Emergências</h3>
+                <span id="saudeEmergencias">0</span>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- AMBIENTE -->
+
+    <div class="bloco-dashboard">
+
+        <h2>🌱 Meio Ambiente</h2>
+
+        <div class="cards-dashboard">
+
+            <div class="card-kpi">
+                <h3>Requisitos Legais</h3>
+                <span id="ambRequisitos">0</span>
+            </div>
+
+            <div class="card-kpi">
+                <h3>Resíduos</h3>
+                <span id="ambResiduos">0</span>
+            </div>
+
+            <div class="card-kpi">
+                <h3>Consumos</h3>
+                <span id="ambConsumos">0</span>
+            </div>
+
+            <div class="card-kpi">
+                <h3>Fauna</h3>
+                <span id="ambFauna">0</span>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- GRÁFICOS -->
+
+    <div class="bloco-dashboard">
+
+        <h2>📈 Indicadores Gráficos</h2>
+
+        <div class="graficos-dashboard">
+
+           <div class="grafico-card">
+    <canvas id="graficoSegurancaResumo"></canvas>
+</div>
+
+            <div class="grafico-card">
+                <canvas id="graficoVencimentos"></canvas>
+            </div>
+
+            <div class="grafico-card">
+                <canvas id="graficoEvolucao"></canvas>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>  </section>
+
+</div> 
+
+<!-- SEGURANÇA -->
+
+        <section id="seguranca" class="modulo">
+
+    <h2>🦺 Gestão de Segurança</h2>
+
+    <button
+        class="secao-toggle"
+        onclick="
+            alternarSecao(
+                'secaoOcorrencias'
+            )
+        "
+    >
+        🚨 Desvios e Ocorrências
+    </button>
+
+    <div
+        id="secaoOcorrencias"
+        style="display:none;"
+    >
+<div class="indicadores-ambientais">
+
+    <div class="card-indicador">
+        <h4>🚨 Total</h4>
+        <span id="totalOcorrencias">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>🔴 Abertos</h4>
+        <span id="abertosOcorrencias">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>🟡 Em Tratamento</h4>
+        <span id="tratamentoOcorrencias">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>🟢 Fechados</h4>
+        <span id="fechadosOcorrencias">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>⚠️ Alta Severidade</h4>
+        <span id="altaSeveridadeOcorrencias">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>🏢 Área Frequente</h4>
+        <span id="areaFrequenteOcorrencias">-</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>👤 Responsável Frequente</h4>
+        <span id="responsavelFrequenteOcorrencias">-</span>
+    </div>
+
+</div>
+  
+<label>Pesquisar Ocorrência</label>
+
+<input
+    type="text"
+    id="pesquisaOcorrencia"
+    placeholder="Pesquisar..."
+>
+<div class="filtro-periodo">
+
+    <label>Data Inicial</label>
+
+    <input
+        type="date"
+        id="dataInicioOcorrencia"
+    >
+
+    <label>Data Final</label>
+
+    <input
+        type="date"
+        id="dataFimOcorrencia"
+    >
+
+    <button
+    type="button"
+    onclick="filtrarOcorrenciasPeriodo()"
+>
+    Filtrar
+</button>
+
+<button
+    type="button"
+    onclick="limparFiltroOcorrencias()"
+>
+    Limpar
+</button>
+
+</div>
             <form id="formSeguranca">
 
                 <label>Título</label>
@@ -122,6 +608,22 @@
 
                 <label>Descrição</label>
                 <textarea id="descricao"></textarea>
+
+<label>Foto do Problema</label>
+
+<input
+    type="file"
+    id="fotoProblema"
+    accept="image/*"
+>
+
+<label>Foto da Solução</label>
+
+<input
+    type="file"
+    id="fotoSolucao"
+    accept="image/*"
+>
 
                 <label>Severidade</label>
 
@@ -158,10 +660,15 @@
 
                     <tr>
                         <th>Título</th>
-                        <th>Severidade</th>
-                        <th>Área</th>
-                        <th>Responsável</th>
-                        <th>Status</th>
+<th>Descrição</th>
+<th>Foto Problema</th>
+<th>Foto Solução</th>
+<th>Severidade</th>
+<th>Área</th>
+<th>Responsável</th>
+<th>Status</th>
+<th>Ações</th>
+
                     </tr>
 
                 </thead>
@@ -169,111 +676,2094 @@
                 <tbody></tbody>
 
             </table>
+  </div>
+<button
+    class="secao-toggle"
+    onclick="
+        alternarSecao(
+            'secaoEPI'
+        )
+    "
+>
+    🦺 Gestão de EPI
+</button>
 
-        </section>
+<div
+    id="secaoEPI"
+    style="display:none;"
+>
 
+
+<div class="indicadores-ambientais">
+
+    <div class="card-indicador">
+        <h4>🦺 Total Solicitações</h4>
+        <span id="totalSolicitacoesEPI">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>🔄 Trocas</h4>
+        <span id="trocasEPI">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>👤 Colaborador Frequente</h4>
+        <span id="colaboradorFrequenteEPI">-</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>🦺 EPI Frequente</h4>
+        <span id="epiFrequente">-</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>🏢 Empresa Frequente</h4>
+        <span id="empresaFrequenteEPI">-</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>📅 Solicitações do Mês</h4>
+        <span id="solicitacoesMesEPI">0</span>
+    </div>
+<div class="card-indicador">
+    <h4>🟡 Pendentes</h4>
+    <span id="pendentesEPI">0</span>
+</div>
+
+<div class="card-indicador">
+    <h4>🟢 Aprovados</h4>
+    <span id="aprovadosEPI">0</span>
+</div>
+
+<div class="card-indicador">
+    <h4>📦 Entregues</h4>
+    <span id="entreguesEPI">0</span>
+</div>
+
+<div class="card-indicador">
+    <h4>🔴 Rejeitados</h4>
+    <span id="rejeitadosEPI">0</span>
+</div>
+
+<div class="card-indicador">
+    <h4>📦 Estoque Total</h4>
+    <span id="estoqueTotalEPI">0</span>
+</div>
+
+<div class="card-indicador">
+    <h4>⚠️ Estoque Baixo</h4>
+    <span id="estoqueBaixoEPI">0</span>
+</div>
+
+<div class="card-indicador">
+    <h4>🚨 Sem Estoque</h4>
+    <span id="semEstoqueEPI">0</span>
+</div>
+
+</div>
+  
+
+
+
+<input
+    type="text"
+    id="pesquisaEPI"
+    placeholder="Pesquisar colaborador, empresa ou EPI"
+    >
+<input
+    type="date"
+    id="dataInicioEPI"
+>
+
+<input
+    type="date"
+    id="dataFimEPI"
+>
+
+<button
+    type="button"
+    onclick="filtrarEPI()"
+>
+    Filtrar
+</button>
+
+<button
+    type="button"
+    onclick="limparFiltroEPI()"
+>
+    Limpar
+</button>
+    
+
+
+<form id="formSolicitacaoEPI">
+<h3>🦺 Solicitação de EPI</h3>
+    <input
+        type="text"
+        id="colaboradorEPI"
+        placeholder="Colaborador"
+        readonly
+    >
+
+    <input
+        type="text"
+        id="matriculaEPI"
+        placeholder="Matrícula"
+        readonly
+    >
+
+    <input
+        type="text"
+        id="empresaEPI"
+        placeholder="Empresa"
+        readonly
+    >
+
+    <input
+        type="text"
+        id="funcaoEPI"
+        placeholder="Função"
+        readonly
+    >
+
+    <select id="epiSolicitado">
+
+    </select>
+
+    <input
+        type="number"
+        id="quantidadeEPI"
+        placeholder="Quantidade"
+        min="1"
+    >
+
+    <select id="motivoEPI">
+
+        <option>
+            Troca por Desgaste
+        </option>
+
+        <option>
+            Troca por Danificação
+        </option>
+
+        <option>
+            Perda
+        </option>
+
+        <option>
+            Reposição
+        </option>
+
+        <option>
+            Novo Risco Identificado
+        </option>
+
+    </select>
+
+   <button type="submit">
+    Solicitar EPI
+</button>
+
+</form>
+
+ <h3>📋 Histórico de Solicitações</h3>
+<table id="tabelaEPI">
+
+    <thead>
+
+        <tr>
+
+            <th>Data</th>
+
+            <th>Colaborador</th>
+
+            <th>Empresa</th>
+
+            <th>EPI</th>
+
+            <th>Quantidade</th>
+
+            <th>Motivo</th>
+
+            <th>Status</th>
+<th>Ações</th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+    </tbody>
+
+</table>
+<h3>👤 Histórico Individual</h3>
+
+<div id="historicoIndividualEPI">
+
+    Selecione um colaborador
+
+</div>
+</div>
+
+<button
+    class="secao-toggle"
+    onclick="
+        alternarSecao(
+            'secaoEstoqueEPI'
+        )
+    "
+>
+    📦 Estoque de EPI
+</button>
+
+<div
+    id="secaoEstoqueEPI"
+    style="display:none;"
+>
+
+    <h3>📦 Estoque de EPI</h3>
+
+    <form
+        id="formEstoqueEPI"
+        class="form-grid"
+    >
+
+        <div>
+            <label>EPI</label>
+
+            <select id="epiEstoque">
+
+            </select>
+        </div>
+
+        <div>
+            <label>CA</label>
+
+            <input
+                type="text"
+                id="caEPI"
+            >
+        </div>
+
+        <div>
+            <label>Fabricante</label>
+
+            <input
+                type="text"
+                id="fabricanteEPI"
+            >
+        </div>
+
+        <div>
+            <label>Fornecedor</label>
+
+            <input
+                type="text"
+                id="fornecedorEPI"
+            >
+        </div>
+
+        <div>
+            <label>Quantidade</label>
+
+            <input
+                type="number"
+                id="quantidadeEstoque"
+            >
+        </div>
+
+        <div>
+            <label>Data de Entrada</label>
+
+            <input
+                type="date"
+                id="dataEntradaEPI"
+            >
+        </div>
+
+        <div>
+            <label>Data de Validade</label>
+
+            <input
+                type="date"
+                id="validadeEPI"
+            >
+        </div>
+
+        <div>
+            <label>Observação</label>
+
+            <input
+                type="text"
+                id="observacaoEPI"
+            >
+        </div>
+
+        <div>
+            <button type="submit">
+                Adicionar Estoque
+            </button>
+        </div>
+
+    </form>
+
+    <br>
+
+    <table id="tabelaEstoqueEPI">
+
+        <thead>
+
+            <tr>
+
+                <th>EPI</th>
+
+                <th>CA</th>
+
+                <th>Fabricante</th>
+
+                <th>Fornecedor</th>
+
+                <th>Quantidade</th>
+
+                <th>Entrada</th>
+
+                <th>Validade</th>
+
+                <th>Ações</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+        </tbody>
+
+    </table>
+
+</div>
+<button
+    class="secao-toggle"
+    onclick="
+        alternarSecao(
+            'secaoDDS'
+        )
+    "
+>
+    📢 DDS Eletrônico
+</button>
+
+<div
+    id="secaoDDS"
+    style="display:none;"
+>
+<div class="indicadores-ambientais">
+
+    <div class="card-indicador">
+        <h4>📢 Total DDS</h4>
+        <span id="totalDDS">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>👥 Participantes</h4>
+        <span id="participantesDDS">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>📋 Tema Frequente</h4>
+        <span id="temaDDSFrequente">-</span>
+    </div>
+
+    <h4>🎯 Taxa Participação</h4>
+<span id="taxaParticipacaoDDS">0%</span>
+
+<div class="card-indicador">
+    <h4>🏆 Mais Participa</h4>
+    <span id="maisParticipaDDS">-</span>
+</div>
+
+<div class="card-indicador">
+    <h4>🚫 Nunca Participaram</h4>
+    <span id="nuncaParticiparamDDS">0</span>
+</div>
+<h3>
+🚫 Colaboradores Sem DDS
+</h3>
+
+<div id="listaSemDDS"></div>
+</div>
+<input
+    type="date"
+    id="dataInicioDDS"
+>
+
+<input
+    type="date"
+    id="dataFimDDS"
+>
+
+<button
+    type="button"
+    onclick="filtrarDDS()"
+>
+    Filtrar
+</button>
+
+<button
+    type="button"
+    onclick="limparFiltroDDS()"
+>
+    Limpar
+</button>
+<h3>📢 Registrar DDS</h3>
+
+<form id="formDDS">
+
+    <input
+        type="date"
+        id="dataDDS"
+        required
+    >
+
+    <input
+        type="text"
+        id="temaDDS"
+        placeholder="Tema do DDS"
+        required
+    >
+
+    <input
+        type="text"
+        id="responsavelDDS"
+        placeholder="Responsável"
+        required
+    >
+
+    <button type="submit">
+        Criar DDS
+    </button>
+
+</form>
+<h3>📋 Histórico DDS</h3>
+
+<table id="tabelaDDS">
+
+    <thead>
+
+        <tr>
+
+            <th>Data</th>
+
+            <th>Tema</th>
+
+            <th>Responsável</th>
+
+            <th>Participantes</th>
+
+            <th>Ações</th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+    </tbody>
+
+</table>
+<h3>👥 Participantes DDS</h3>
+
+<div id="participantesDDSDetalhe">
+
+    Nenhum DDS selecionado
+
+</div>
+</div>
+<button
+    class="secao-toggle"
+    onclick="
+        alternarSecao(
+            'secaoFalaTalanga'
+        )
+    "
+>
+    🗣️ Fala Talanga
+</button>
+
+<div
+    id="secaoFalaTalanga"
+    style="display:none;"
+>
+<div class="indicadores-ambientais">
+
+    <div class="card-indicador">
+        <h4>🗣️ Total Registos</h4>
+        <span id="totalFalaTalanga">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>💡 Sugestões</h4>
+        <span id="sugestoesFalaTalanga">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>⚠️ Reclamações</h4>
+        <span id="reclamacoesFalaTalanga">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>🚨 Denúncias</h4>
+        <span id="denunciasFalaTalanga">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>👏 Elogios</h4>
+        <span id="elogiosFalaTalanga">0</span>
+    </div>
+<div class="card-indicador">
+
+    <h4>
+        📝 Observações
+    </h4>
+
+    <span
+        id="observacoesFalaTalanga"
+    >
+        0
+    </span>
+
+</div>
+<div class="card-indicador">
+
+    <h4>
+        🔵 Em Tratamento
+    </h4>
+
+    <span
+        id="emTratamentoFalaTalanga"
+    >
+        0
+    </span>
+
+</div>
+
+<div class="card-indicador">
+
+    <h4>
+        🟢 Fechados
+    </h4>
+
+    <span
+        id="fechadosFalaTalanga"
+    >
+        0
+    </span>
+
+</div>
+</div>
+<input
+    type="date"
+    id="dataInicioFalaTalanga"
+>
+
+<input
+    type="date"
+    id="dataFimFalaTalanga"
+>
+
+<button
+    type="button"
+    onclick="filtrarFalaTalanga()"
+>
+    🔍 Filtrar
+</button>
+
+<button
+    type="button"
+    onclick="limparFiltroFalaTalanga()"
+>
+    🧹 Limpar
+</button>
+<h3>
+🗣️ Registos Fala Talanga
+</h3>
+
+<table id="tabelaFalaTalanga">
+
+    <thead>
+
+        <tr>
+
+            <th>Data</th>
+<th>Colaborador</th>
+<th>Empresa</th>
+<th>Tipo</th>
+<th>Mensagem</th>
+<th>Status</th>
+<th>Resposta</th>
+<th>Ações</th>
+            
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+    </tbody>
+
+</table>
+</div>
+</section>
         <!-- SAÚDE -->
+         <section id="saude" class="modulo">
+<h2>❤️ Gestão Saúde Ocupacional</h2>
+<button
+    class="secao-toggle"
+    onclick="
+        alternarSecao(
+            'secaoASO'
+        )
+    "
+>
+    ❤️ Gestão de ASO
+</button>
 
-        <section class="saude">
+<div
+    id="secaoASO"
+    style="display:none;"
+>
+        
+            
+<div class="indicadores-ambientais">
 
-            <h2>❤️ Gestão de ASO</h2>
+    <div class="card-indicador">
+        <h4>❤️ Total ASO</h4>
+        <span id="totalASO">0</span>
+    </div>
 
+    <div class="card-indicador">
+        <h4>✅ Válidos</h4>
+        <span id="validosASO">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>⛔ Vencidos</h4>
+        <span id="vencidosASO">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>✅ Aptos</h4>
+        <span id="aptosASO">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>⚠️ Restrição</h4>
+        <span id="restricoesASO">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>❌ Inaptos</h4>
+        <span id="inaptosASO">0</span>
+    </div>
+
+  <div class="card-indicador">
+    <h4>📅 Próximos a Vencer</h4>
+    <span id="proximosVencerASO">0</span>
+</div>
+
+    <div class="card-indicador">
+        <h4>🏥 Tipo Frequente</h4>
+        <span id="tipoFrequenteASO">-</span>
+    </div>
+
+</div>
             <form id="formASO">
+<label>Pesquisar ASO</label>
 
-                <input type="text" id="nomeColaborador" placeholder="Colaborador">
+<input
+    type="text"
+    id="pesquisaASO"
+    placeholder="Pesquisar..."
+>
+<label>Data Inicial</label>
+<input
+    type="date"
+    id="filtroDataInicio"
+>
 
-                <select id="funcao">
-                    <option>Soldador</option>
-                    <option>Supervisor</option>
-                    <option>Motorista</option>
-                </select>
+<label>Data Final</label>
+<input
+    type="date"
+    id="filtroDataFim"
+>
 
-                <select id="tipoASO">
-                    <option>Periódico</option>
-                    <option>Admissional</option>
-                </select>
+<button
+    type="button"
+    onclick="filtrarASO()"
+>
+    Filtrar
+</button>
 
-                <input type="date" id="validadeASO">
+<button
+    type="button"
+    onclick="limparFiltroASO()"
+>
+    Limpar
+</button>
 
-                <select id="statusASO">
-                    <option>Apto</option>
-                    <option>Inapto</option>
-                </select>
+               <label>Procurar Colaborador</label>
 
-                <button type="submit">Registrar ASO</button>
+<input
+    type="text"
+    id="pesquisaColaboradorASO"
+    placeholder="Nome ou Matrícula"
+    oninput="pesquisarColaboradorASO()"
+>
+<label>Colaborador</label>
+
+<select
+    id="colaboradorASO"
+    onchange="atualizarFuncaoASO()"
+>
+</select>
+
+<label>Função</label>
+
+<input
+    type="text"
+    id="funcao"
+    readonly
+>
+<label>Data do Exame</label>
+
+<input
+    type="date"
+    id="dataASO"
+>
+<label>Tipo de exame</label>
+               <select id="tipoASO">
+
+    <option>Admissional</option>
+
+    <option>Periódico</option>
+
+    <option>Mudança de Função</option>
+
+    <option>Retorno ao Trabalho</option>
+
+    <option>Demissional</option>
+
+</select>
+
+                <label>Validade</label>
+<input type="date" id="validadeASO">
+                <label>Resultado</label>
+
+<select id="resultadoASO">
+
+    <option>Apto</option>
+
+    <option>Apto com Restrição</option>
+
+    <option>Inapto</option>
+
+</select>
+<h3>Aptidões para Atividades Críticas</h3>
+
+<div class="aptidoes">
+
+<label>
+<input type="checkbox"
+       class="aptidao"
+       value="Trabalho em Altura">
+Trabalho em Altura
+</label>
+
+<label>
+<input type="checkbox"
+       class="aptidao"
+       value="Espaço Confinado">
+Espaço Confinado
+</label>
+
+<label>
+<input type="checkbox"
+       class="aptidao"
+       value="Operação de Equipamentos">
+Operação de Equipamentos
+</label>
+
+<label>
+<input type="checkbox"
+       class="aptidao"
+       value="Condução de Viaturas">
+Condução de Viaturas
+</label>
+
+<label>
+<input type="checkbox"
+       class="aptidao"
+       value="Trabalho Elétrico">
+Trabalho Elétrico
+</label>
+
+<label>
+<input type="checkbox"
+       class="aptidao"
+       value="Combate a Incêndio">
+Combate a Incêndio
+</label>
+
+<label>
+<input type="checkbox"
+       class="aptidao"
+       value="Movimentação de Cargas">
+Movimentação de Cargas
+</label>
+
+<label>
+<input type="checkbox"
+       class="aptidao"
+       value="Produtos Químicos">
+Produtos Químicos
+</label>
+
+</div>                <button type="submit">Registrar ASO</button>
 
             </form>
 
             <table id="tabelaASO">
                 <thead>
-                    <tr>
-                        <th>Nome</th>
-                        <th>Função</th>
-                        <th>Tipo</th>
-                        <th>Validade</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
+                   <tr>
+
+    <th>Colaborador</th>
+
+    <th>Função</th>
+
+    <th>Data Exame</th>
+
+    <th>Tipo ASO</th>
+
+    <th>Validade</th>
+
+    <th>Resultado</th>
+
+    <th>Status</th>
+
+    <th>Aptidões</th>
+
+    <th>Ações</th>
+
+</tr>
+           </thead>
                 <tbody></tbody>
-            </table>
+            </table>    
 
-        </section>
+</div>
 
-        <!-- AMBIENTE -->
+        <button
+    class="secao-toggle"
+    onclick="
+        alternarSecao(
+            'secaoAmbulatorio'
+        )
+    "
+>
+    🩺 Atendimento Ambulatorial
+</button>
 
-        <section class="ambiente">
+<div
+    id="secaoAmbulatorio"
+    style="display:none;"
+>
+
+
+<div class="indicadores-ambientais">
+
+    <div class="card-indicador">
+        <h4>🩺 Total Atendimentos</h4>
+        <span id="totalAmbulatorio">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>🦠 Doença Frequente</h4>
+        <span id="doencaFrequenteAmbulatorio">-</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>👤 Mais Atendido</h4>
+        <span id="colaboradorFrequenteAmbulatorio">-</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>🏭 Empresa Frequente</h4>
+        <span id="empresaFrequenteAmbulatorio">-</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>🦟 Casos de Malária</h4>
+        <span id="casosMalaria">0</span>
+    </div>
+<div class="card-indicador">
+    <h4>📅 Este Mês</h4>
+    <span id="atendimentosMes">0</span>
+</div>
+
+</div>
+<label>Pesquisar Atendimento</label>
+
+<input
+    type="text"
+    id="pesquisaAmbulatorio"
+    placeholder="Colaborador, Empresa ou Doença"
+    oninput="pesquisarAmbulatorio()"
+>
+<label>Data Inicial</label>
+
+<input
+    type="date"
+    id="filtroDataInicioAmbulatorio"
+>
+
+<label>Data Final</label>
+
+<input
+    type="date"
+    id="filtroDataFimAmbulatorio"
+>
+
+<button
+    type="button"
+    onclick="filtrarAmbulatorio()"
+>
+    Filtrar
+</button>
+
+<button
+    type="button"
+    onclick="limparFiltroAmbulatorio()"
+>
+    Limpar
+</button>
+
+<form id="formAmbulatorio">
+
+    <label>Data</label>
+
+    <input
+        type="date"
+        id="dataAmbulatorio"
+    >
+
+    <label>Pesquisar Colaborador</label>
+
+    <input
+    type="text"
+    id="pesquisaColaboradorAmbulatorio"
+    placeholder="Nome ou Matrícula"
+    oninput="
+        pesquisarColaboradorAmbulatorio()
+    "
+>
+
+    <label>Colaborador</label>
+
+   <select
+    id="colaboradorAmbulatorio"
+    onchange="
+        atualizarDadosAmbulatorio()
+    "
+>
+</select>
+
+    <label>Função</label>
+
+    <input
+        type="text"
+        id="funcaoAmbulatorio"
+        readonly
+    >
+
+    <label>Empresa</label>
+
+    <input
+        type="text"
+        id="empresaAmbulatorio"
+        readonly
+    >
+
+    <label>Pesquisar Doença</label>
+
+    <input
+    type="text"
+    id="pesquisaDoencaAmbulatorio"
+    placeholder="Pesquisar doença..."
+    oninput="
+        pesquisarDoencaAmbulatorio()
+    "
+>
+
+    <label>Doença</label>
+
+    <select
+        id="doencaAmbulatorio"
+    >
+    </select>
+
+    <button type="submit">
+        Registrar Atendimento
+    </button>
+
+</form>
+
+<table id="tabelaAmbulatorio">
+
+    <thead>
+
+        <tr>
+
+            <th>Data</th>
+
+            <th>Colaborador</th>
+
+            <th>Função</th>
+
+            <th>Empresa</th>
+
+            <th>Doença</th>
+
+            <th>Ações</th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+    </tbody>
+
+</table>
+
+
+</div>
+   <button
+    class="secao-toggle"
+    onclick="
+        alternarSecao(
+            'secaoMedicamentos'
+        )
+    "
+>
+    💊 Controle de Validade de Medicamentos
+</button>
+
+<div
+    id="secaoMedicamentos"
+    style="display:none;"
+</h2>
+
+<div class="indicadores-ambientais">
+
+    <div class="card-indicador">
+        <h4>💊 Total</h4>
+        <span id="totalMedicamentos">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>🟢 Em Validade</h4>
+        <span id="medicamentosValidos">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>🟡 A Vencer</h4>
+        <span id="medicamentosAVencer">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>🔴 Vencidos</h4>
+        <span id="medicamentosVencidos">0</span>
+    </div>
+<div class="card-indicador">
+    <h4>💊 Medicamento Frequente</h4>
+    <span id="medicamentoFrequente">-</span>
+</div>
+<div class="card-indicador">
+    <h4>🏭 Fabricante Frequente</h4>
+    <span id="fabricanteFrequente">-</span>
+</div>
+<div class="card-indicador">
+    <h4>📦 Estoque Total</h4>
+    <span id="estoqueTotal">0</span>
+</div>
+<div class="card-indicador">
+    <h4>⚠️ Próximo a Vencer</h4>
+    <span id="proximoMedicamentoVencer">-</span>
+</div>
+<div class="card-indicador">
+    <h4>📦 Estoque Baixo</h4>
+    <span id="estoqueBaixo">0</span>
+</div>
+<div class="card-indicador">
+    <h4>🏥 Local Frequente</h4>
+    <span id="localFrequenteMedicamento">-</span>
+</div>
+</div>
+
+<label>Pesquisar Medicamento</label>
+
+<input
+    type="text"
+    id="pesquisaMedicamento"
+    placeholder="
+    Medicamento, Lote, Fabricante ou Local
+    "
+    oninput="
+        pesquisarMedicamento()
+    "
+>
+<label>Validade Inicial</label>
+
+<input
+    type="date"
+    id="filtroValidadeInicioMedicamento"
+>
+
+<label>Validade Final</label>
+
+<input
+    type="date"
+    id="filtroValidadeFimMedicamento"
+>
+
+<button
+    type="button"
+    onclick="filtrarMedicamentos()"
+>
+    Filtrar
+</button>
+
+<button
+    type="button"
+    onclick="limparFiltroMedicamentos()"
+>
+    Limpar
+</button>
+<form id="formMedicamento">
+
+    <label>Medicamento</label>
+    <input
+        type="text"
+        id="nomeMedicamento"
+    >
+
+    <label>Fabricante</label>
+    <input
+        type="text"
+        id="fabricanteMedicamento"
+    >
+
+    <label>Lote</label>
+    <input
+        type="text"
+        id="loteMedicamento"
+    >
+
+    <label>Quantidade</label>
+    <input
+        type="number"
+        id="quantidadeMedicamento"
+    >
+
+    <label>Data de Fabricação</label>
+    <input
+        type="date"
+        id="fabricacaoMedicamento"
+    >
+
+    <label>Data de Validade</label>
+    <input
+        type="date"
+        id="validadeMedicamento"
+    >
+
+    <label>Local</label>
+    <select id="localMedicamento">
+
+        <option>Ambulatório</option>
+
+        <option>Posto Médico</option>
+
+        <option>Kit Primeiros Socorros</option>
+
+        <option>Ambulância</option>
+
+        <option>Farmácia</option>
+
+        <option>Armazém</option>
+
+    </select>
+
+    <button type="submit">
+        Registrar Medicamento
+    </button>
+
+</form>
+
+<table id="tabelaMedicamentos">
+
+    <thead>
+
+        <tr>
+
+            <th>Medicamento</th>
+
+            <th>Lote</th>
+
+            <th>Quantidade</th>
+
+            <th>Validade</th>
+
+            <th>Status</th>
+
+            <th>Local</th>
+
+            <th>Ações</th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+    </tbody>
+
+</table>
+
+    
+
+</div>
+
+        </section> 
+    <!-- AMBIENTE -->
+
+        <section id="ambiente" class="modulo">
 
             <h2>🌱 Gestão Ambiental</h2>
+<button
+    class="secao-toggle"
+    onclick="
+        alternarSecao(
+            'secaoConformidade'
+        )
+    "
+>
+    ⚖️ Conformidade Legal Ambiental
+</button>
+
+<div
+    id="secaoConformidade"
+    style="display:none;"
+>
+            
+<div id="alertasAmbientais"></div>
+<div class="indicadores-ambientais">
+
+    <div class="card-indicador">
+        <h4>Total</h4>
+        <span id="totalAmbiental">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>🟢 Válidos</h4>
+        <span id="validosAmbiental">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>🟡 A Vencer</h4>
+        <span id="vencerAmbiental">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>🔴 Vencidos</h4>
+        <span id="vencidosAmbiental">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>⚪ Sem Validade</h4>
+        <span id="semValidadeAmbiental">0</span>
+    </div>
+
+</div>
+
 
             <form id="formAmbiente">
+<label>Pesquisar Registo Ambiental</label>
 
-                <input type="number" id="agua" placeholder="Água">
+<input
+    type="text"
+    id="pesquisaAmbiente"
+    placeholder="Pesquisar..."
+>
 
-                <input type="number" id="energia" placeholder="Energia">
+<label>Requisito Legal</label>
+<input
+    type="text"
+    id="requisitoLegal"
+    placeholder="Licença Ambiental"
+>
 
-                <input type="number" id="combustivel" placeholder="Combustível">
+<label>Categoria</label>
+<select id="categoriaAmbiental">
 
-                <input type="number" id="co2" placeholder="CO₂">
+    <option>
+        Licenciamento
+    </option>
 
-                <button type="submit">
-                    Registrar Consumo
-                </button>
+    <option>
+        Recursos Hídricos
+    </option>
 
-            </form>
+    <option>
+        Resíduos
+    </option>
 
-            <table id="tabelaAmbiental">
+    <option>
+        Emissões
+    </option>
 
-                <thead>
-                    <tr>
-                        <th>Água</th>
-                        <th>Energia</th>
-                        <th>Combustível</th>
-                        <th>CO₂</th>
-                    </tr>
-                </thead>
+    <option>
+        Auditoria Ambiental
+    </option>
 
-                <tbody></tbody>
+    <option>
+        Outros
+    </option>
 
-            </table>
+</select>
 
-        </section>
+<label>Possui Validade?</label>
 
-        <!-- FAUNA -->
+<select
+    id="possuiValidade"
+    onchange="
+        controlarValidadeAmbiental()
+    "
+>
 
-        <section>
+    <option value="Sim">
+        Sim
+    </option>
 
-            <h2>🐍 Fauna</h2>
+    <option value="Nao">
+        Não
+    </option>
+
+</select>
+
+<div id="grupoDataEmissao">
+
+    <label>Data de Emissão</label>
+
+    <input
+        type="date"
+        id="dataEmissao"
+    >
+
+</div>
+
+<div id="grupoDataValidade">
+
+    <label>Data de Validade</label>
+
+    <input
+        type="date"
+        id="dataValidade"
+    >
+
+</div>
+<label>Responsável</label>
+<input
+    type="text"
+    id="responsavelAmbiental"
+>
+
+<label>Cumpre?</label>
+
+<select id="cumprimentoAmbiental">
+
+    <option>
+        Sim
+    </option>
+
+    <option>
+        Não
+    </option>
+
+    <option>
+        Parcialmente
+    </option>
+
+</select>
+
+<label>Observações</label>
+
+<textarea
+    id="observacoesAmbientais"
+></textarea>
+<button type="submit">
+    Registrar Requisito
+</button>
+
+</form>
+
+<table id="tabelaAmbiental">
+
+    <thead>
+
+        <tr>
+
+            <th>
+                Requisito
+            </th>
+
+            <th>
+                Categoria
+            </th>
+
+            <th>
+                Responsável
+            </th>
+
+            <th>
+                Cumpre
+            </th>
+
+            <th>
+                Status
+            </th>
+
+            <th>
+                Ações
+            </th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+    </tbody>
+
+</table></div>
+<button
+    class="secao-toggle"
+    onclick="
+        alternarSecao(
+            'secaoConsumos'
+        )
+    "
+>
+    🌍 Consumos e Emissões
+</button>
+
+<div
+    id="secaoConsumos"
+    style="display:none;"
+>
+
+<section id="consumosEmissoes">
+
+    <h3>
+        🌍 Consumos e Emissões
+    </h3>
+    <div class="indicadores-ambientais">
+
+    <div class="card-indicador">
+        <h4>Total</h4>
+        <span id="totalConsumos">
+            0
+        </span>
+    </div>
+
+    <div class="card-indicador">
+
+    <h4>💧 Água</h4>
+
+    <p>
+        Total:
+        <span id="aguaConsumos">
+            0
+        </span>
+    </p>
+
+    <p>
+        🚰 Potável:
+        <span id="aguaPotavel">
+            0
+        </span>
+    </p>
+
+    <p>
+        🏞️ Bruta:
+        <span id="aguaBruta">
+            0
+        </span>
+    </p>
+
+</div>
+
+    <div class="card-indicador">
+
+    <h4>⚡ Energia</h4>
+
+    <p>
+        Total:
+        <span id="energiaConsumos">
+            0
+        </span>
+    </p>
+
+    <p>
+        🔌 Rede:
+        <span id="energiaRede">
+            0
+        </span>
+    </p>
+
+    <p>
+        🛢️ Gerador:
+        <span id="energiaGerador">
+            0
+        </span>
+    </p>
+
+</div>
+
+    <div class="card-indicador">
+
+    <h4>⛽ Combustíveis</h4>
+
+    <p>
+        Total:
+        <span id="combustivelConsumos">0</span>
+    </p>
+
+    <p>
+        🚛 Gasóleo:
+        <span id="gasoleoConsumos">0</span>
+    </p>
+
+    <p>
+        🚗 Gasolina:
+        <span id="gasolinaConsumos">0</span>
+    </p>
+
+</div>
+
+    <div class="card-indicador">
+        <h4>🌫️ Emissões CO₂</h4>
+        <span id="co2Consumos">
+            0
+        </span>
+    </div>
+
+</div>
+
+<div class="filtros-ambiente">
+
+    <input
+        type="text"
+        id="pesquisaConsumos"
+        placeholder="Pesquisar registos...">
+
+    <input
+        type="date"
+        id="dataInicio">
+
+    <input
+        type="date"
+        id="dataFim">
+
+    <button onclick="filtrarConsumos()">
+        Filtrar
+    </button>
+
+    <button onclick="limparFiltrosConsumos()">
+        Limpar
+    </button>
+
+</div>
+
+
+    <form id="formConsumos">
+
+        <label>Data</label>
+
+        <input
+            type="date"
+            id="dataConsumo"
+            required
+        >
+
+        <label>Tipo</label>
+
+        <select
+            id="tipoConsumo"
+        >
+
+           <option>
+    Água Potável
+</option>
+
+<option>
+    Água Bruta
+</option>
+
+<option>
+    Energia - Rede Pública
+</option>
+
+<option>
+    Energia - Gerador
+</option>
+
+<option>
+    Gasolina
+</option>
+<option>
+    Gasóleo
+</option>
+<option>
+    Gasolina
+</option>
+
+<option>
+    CO₂
+</option>
+        </select>
+
+        <label>Quantidade</label>
+
+        <input
+            type="number"
+            id="quantidadeConsumo"
+            step="0.01"
+            required
+        >
+
+         <label>Unidade</label>
+
+        <input
+            type="text"
+            id="unidadeConsumo"
+            placeholder="m³, kWh, L, t"
+        >
+
+        <label>Local</label>
+
+        <input
+            type="text"
+            id="localConsumo"
+        >
+
+        <label>Observação</label>
+
+        <textarea
+            id="observacaoConsumo"
+        ></textarea>
+
+        <button type="submit">
+
+            Registar
+
+        </button>
+
+    </form>
+
+</section>
+
+<table id="tabelaConsumos">
+
+    <thead>
+
+        <tr>
+
+            <th>Data</th>
+
+            <th>Tipo</th>
+
+            <th>Quantidade</th>
+
+            <th>Unidade</th>
+
+            <th>Local</th>
+
+            <th>Ações</th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+    </tbody>
+
+</table></div>
+
+
+<button
+    class="secao-toggle"
+    onclick="
+        alternarSecao(
+            'secaoResiduos'
+        )
+    "
+>
+    ♻️ Gestão de Resíduos
+</button>
+
+<div
+    id="secaoResiduos"
+    style="display:none;"
+>
+<h3>♻️ Gestão de Resíduos</h3>
+
+<div class="indicadores-ambientais">
+
+    <div class="card-indicador">
+        <h4>♻️ Total Registos</h4>
+        <span id="totalResiduos">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>🏆 Mais Frequente</h4>
+        <span id="residuoFrequente">-</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>📊 Quantidade Total</h4>
+        <span id="quantidadeTotalResiduo">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>♻️ Reciclagem</h4>
+        <span id="reciclagemResiduos">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>🔄 Reutilização</h4>
+        <span id="reutilizacaoResiduos">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>🟤 Aterro</h4>
+        <span id="aterroResiduos">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>🏭 Coprocessamento</h4>
+        <span id="coprocessamentoResiduos">0</span>
+    </div>
+
+</div>
+
+
+<div class="filtros-ambiente">
+
+    <input
+        type="text"
+        id="pesquisaResiduo"
+        placeholder="Pesquisar resíduos...">
+
+    <input
+        type="date"
+        id="dataInicioResiduo">
+
+    <input
+        type="date"
+        id="dataFimResiduo">
+
+    <button
+        type="button"
+        onclick="filtrarResiduos()">
+        Filtrar
+    </button>
+
+    <button
+        type="button"
+        onclick="limparFiltrosResiduos()">
+        Limpar
+    </button>
+
+</div>
+<form id="formResiduos">
+
+    <label>Data</label>
+    <input
+        type="date"
+        id="dataResiduo"
+        required
+    >
+
+    <label>Tipo de Resíduo</label>
+
+    <select
+        id="tipoResiduo"
+    >
+
+        <option>
+            Papel
+        </option>
+
+        <option>
+            Plástico
+        </option>
+
+        <option>
+            Vidro
+        </option>
+
+        <option>
+            Madeira
+        </option>
+
+        <option>
+            Sucata Metálica
+        </option>
+
+        <option>
+            Óleo Usado
+        </option>
+
+        <option>
+            Resíduo Perigoso
+        </option>
+
+        <option>
+            Entulho
+        </option>
+<option>
+            Efluente Industrial
+        </option>
+        <option>
+            Efluente Sanitário
+        </option>
+        <option>
+           Lama Oleosa
+        </option>
+        <option>
+           Água Contaminada
+        </option>
+    </select>
+    
+
+    <label>Quantidade</label>
+
+    <input
+        type="number"
+        id="quantidadeResiduo"
+        step="0.01"
+        required
+    >
+
+    <label>Unidade</label>
+
+    <select
+        id="unidadeResiduo"
+    >
+
+        <option>
+            kg
+        </option>
+
+        <option>
+            t
+        </option>
+
+        <option>
+            L
+        </option>
+
+        <option>
+            m³
+        </option>
+
+    </select>
+
+    <label>Destino</label>
+
+    <select
+        id="destinoResiduo"
+    >
+
+        <option>
+            Reciclagem
+        </option>
+
+        <option>
+            Reutilização
+        </option>
+
+        <option>
+            Aterro
+        </option>
+
+        <option>
+            Coprocessamento
+        </option>
+
+    </select>
+
+    <label>Responsável</label>
+
+    <input
+        type="text"
+        id="responsavelResiduo"
+    >
+
+    <button
+        type="submit"
+    >
+        Registar
+    </button>
+
+</form>
+<table id="tabelaResiduos">
+
+    <thead>
+
+        <tr>
+
+            <th>Data</th>
+
+            <th>Tipo</th>
+
+            <th>Quantidade</th>
+
+            <th>Unidade</th>
+
+            <th>Destino</th>
+
+            <th>Responsável</th>
+
+            <th>Ações</th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+    </tbody>
+
+</table></div>
+
+<button
+    class="secao-toggle"
+    onclick="
+        alternarSecao(
+            'secaoFauna'
+        )
+    "
+>
+    🐍 Fauna
+</button>
+
+<div
+    id="secaoFauna"
+    style="display:none;"
+>
+<h2>🐍 Fauna</h2>
+<div class="indicadores-ambientais">
+
+    <div class="card-indicador">
+        <h4>Total</h4>
+        <span id="totalFauna">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>🏆 Mais Frequente</h4>
+        <span id="animalFrequente">
+            -
+        </span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>📍 Local Frequente</h4>
+        <span id="localFrequente">
+            -
+        </span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>📊 Espécies</h4>
+        <span id="especiesFauna">
+            0
+        </span>
+    </div>
+
+</div>
+<div style="margin-bottom:20px;">
+    <input
+        type="text"
+        id="pesquisaFauna"
+        placeholder="Pesquisar animal, local ou descrição..."
+    >
+</div>
+
+<div class="filtros-ambiente">
+
+    <input
+        type="date"
+        id="dataInicioFauna">
+
+    <input
+        type="date"
+        id="dataFimFauna">
+
+    <button
+        type="button"
+        onclick="filtrarFauna()">
+        Filtrar
+    </button>
+
+    <button
+        type="button"
+        onclick="limparFiltroFauna()">
+        Limpar
+    </button>
+
+</div>
 
             <form id="formFauna">
+<label>Data da Ocorrência</label>
 
-                <select id="animal">
-                    <option>Cobra</option>
-                    <option>Escorpião</option>
-                    <option>Macaco</option>
-                </select>
+<input
+    type="date"
+    id="dataFauna"
+    required
+>
+                <label>Animal</label>
+<input
+    type="text"
+    id="animal"
+    placeholder="Nome do animal observado">
 
-                <input type="text" id="localAnimal" placeholder="Local">
+                <label>Local da Ocorrência</label>
+<input
+    type="text"
+    id="localAnimal"
+    placeholder="Informe o local"
+>
+<label>Descrição da Ocorrência</label>
 
+<textarea
+    id="descricaoFauna"
+    placeholder="Descreva a ocorrência..."
+></textarea>
                 <button type="submit">
                     Registrar
                 </button>
@@ -281,34 +2771,136 @@
             </form>
 
             <table id="tabelaFauna">
-                <thead>
-                    <tr>
-                        <th>Animal</th>
-                        <th>Local</th>
-                    </tr>
-                </thead>
+
+    <thead>
+        <tr>
+
+            <th>Data</th>
+
+            <th>Animal</th>
+
+            <th>Local</th>
+
+            <th>Descrição</th>
+
+            <th>Ações</th>
+
+        </tr>
+    </thead>
                 <tbody></tbody>
             </table>
+        </div>
+        <!-- FAUNA -->
 
+        
         </section>
 
         <!-- EMERGÊNCIAS -->
 
-        <section class="emergencias">
+        <section id="emergencias" class="modulo">
 
             <h2>🚨 Emergências</h2>
+            <div class="indicadores-ambientais">
+
+    <div class="card-indicador">
+        <h4>🚨 Total</h4>
+        <span id="totalEmergencias">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>🏆 Mais Frequente</h4>
+        <span id="tipoFrequenteEmergencia">-</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>📍 Local Frequente</h4>
+        <span id="localFrequenteEmergencia">-</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>📊 Tipos</h4>
+        <span id="tiposEmergencia">0</span>
+    </div>
+
+</div>
 
             <form id="formEmergencia">
+<label>Pesquisar Emergência</label>
 
-                <select id="tipoEmergencia">
+<input
+    type="text"
+    id="pesquisaEmergencia"
+    placeholder="Pesquisar..."
+>
+<br><br>
+<div class="filtros-emergencia">
+
+    <input
+        type="date"
+        id="dataInicioEmergencia">
+<br><br>
+    <input
+        type="date"
+        id="dataFimEmergencia">
+
+    <button
+        type="button"
+        onclick="filtrarEmergencias()">
+        Filtrar
+    </button>
+
+    <button
+        type="button"
+        onclick="limparFiltroEmergencias()">
+        Limpar
+    </button>
+
+</div>
+<label>Data da Emergência</label>
+
+<input
+    type="date"
+    id="dataEmergencia"
+    required
+>
+
+                <label>Tipo de Emergência</label>
+<select id="tipoEmergencia">
                     <option>Incêndio</option>
-                    <option>Mal Súbito</option>
-                    <option>Derrame</option>
+
+<option>Derrame Ambiental</option>
+
+<option>Mal Súbito</option>
+
+<option>Acidente de Trabalho</option>
+
+<option>Acidente Rodoviário</option>
+
+<option>Explosão</option>
+
+<option>Evacuação</option>
+
+<option>Falha de Energia</option>
+
+<option>Fuga de Gás</option>
+
+<option>Acidente com Fauna</option>
+
+<option>Outros</option>
                 </select>
 
-                <input type="text" id="localEmergencia" placeholder="Local">
+                <label>Local</label>
+<input
+    type="text"
+    id="localEmergencia"
+    placeholder="Informe o local"
+>
 
-                <textarea id="descricaoEmergencia"></textarea>
+                <label>Descrição</label>
+<textarea
+    id="descricaoEmergencia"
+    placeholder="Descreva a ocorrência"
+></textarea>
 
                 <button type="submit">
                     Registrar Emergência
@@ -319,10 +2911,20 @@
             <table id="tabelaEmergencias">
 
                 <thead>
-                    <tr>
-                        <th>Tipo</th>
-                        <th>Local</th>
-                        <th>Descrição</th>
+                    
+                        <tr>
+
+    <th>Data</th>
+
+    <th>Tipo</th>
+
+    <th>Local</th>
+
+    <th>Descrição</th>
+
+    <th>Ações</th>
+
+
                     </tr>
                 </thead>
 
@@ -334,29 +2936,179 @@
 
         <!-- INSPEÇÕES -->
 
-        <section class="inspecoes">
+        <section id="inspecoes" class="modulo">
 
             <h2>🔍 Inspeções</h2>
 
+<div class="indicadores-ambientais">
+
+    <div class="card-indicador">
+        <h4>🔍 Total</h4>
+        <span id="totalInspecoes">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>📂 Abertas</h4>
+        <span id="abertasInspecoes">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>🛠️ Em Tratamento</h4>
+        <span id="tratamentoInspecoes">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>✅ Fechadas</h4>
+        <span id="fechadasInspecoes">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>🏆 Área Frequente</h4>
+        <span id="areaFrequenteInspecao">-</span>
+    </div>
+<div class="card-indicador">
+    <h4>👤 Responsável Frequente</h4>
+    <span id="responsavelFrequente">-</span>
+</div>
+<div class="card-indicador">
+    <h4>🏆 Tipo Frequente</h4>
+    <span id="tipoFrequenteInspecao">-</span>
+</div>
+</div>
+
             <form id="formInspecao">
+<label>Pesquisar Inspeção</label>
 
-                <select id="tipoInspecao">
-                    <option>Segurança</option>
-                    <option>Saúde</option>
-                    <option>Ambiental</option>
-                </select>
+<input
+    type="text"
+    id="pesquisaInspecao"
+    placeholder="Pesquisar..."
+>
+<br><br>
 
-                <input type="text" id="areaInspecao" placeholder="Área">
+<input
+    type="date"
+    id="dataInicioInspecao"
+>
+<br><br>
+<input
+    type="date"
+    id="dataFimInspecao"
+>
 
-                <label>
-                    <input type="checkbox" class="checkItem">
-                    Uso correto de EPI
-                </label>
+<button
+    type="button"
+    onclick="filtrarInspecoes()"
+>
+    Filtrar
+</button>
 
-                <label>
-                    <input type="checkbox" class="checkItem">
-                    Área sinalizada
-                </label>
+<button
+    type="button"
+    onclick="limparFiltroInspecoes()"
+>
+    Limpar
+</button>
+
+<label>Data da Inspeção</label>
+
+<input
+    type="date"
+    id="dataInspecao"
+    required
+>
+
+<br><br>
+
+<label>Atividade</label>
+
+<input
+    type="text"
+    id="atividadeInspecao"
+    placeholder="Ex: Trabalho em Altura"
+>
+
+<br><br>
+
+<label>Área</label>
+
+<input
+    type="text"
+    id="areaInspecao"
+    placeholder="Informe a área"
+>
+
+<br><br>
+
+<label>Responsável</label>
+
+<input
+    type="text"
+    id="responsavelInspecao"
+    placeholder="Responsável pela ação"
+>  
+
+<label>Tipo de Inspeção</label>
+<select id="tipoInspecao">
+
+    <option>Segurança</option>
+
+    <option>Saúde Ocupacional</option>
+
+    <option>Ambiental</option>
+
+    <option>EPI</option>
+
+    <option>Equipamentos</option>
+
+    <option>Veículos</option>
+
+    <option>Instalações</option>
+
+    <option>Extintores</option>
+
+    <option>Outros</option>
+
+</select>
+
+ <label>Descrição</label>
+
+<textarea
+    id="descricaoInspecao"
+></textarea>
+
+<br><br>
+
+<label>Ações Corretivas</label>
+
+<textarea
+    id="acaoCorretivaInspecao"
+></textarea>
+
+<br><br>
+
+<label>Prazo</label>
+
+<input
+    type="date"
+    id="prazoInspecao"
+>
+
+<br><br>
+
+<label>Status</label>
+
+<select
+    id="statusInspecao"
+>
+
+    <option>Aberto</option>
+
+    <option>Em Tratamento</option>
+
+    <option>Fechado</option>
+
+</select>
 
                 <button type="submit">
                     Salvar Inspeção
@@ -367,9 +3119,19 @@
             <table id="tabelaInspecoes">
                 <thead>
                     <tr>
-                        <th>Tipo</th>
-                        <th>Área</th>
-                        <th>Score</th>
+                       <tr>
+    <th>Data</th>
+    <th>Atividade</th>
+    <th>Área</th>
+    <th>Responsável</th>
+    <th>Tipo</th>
+    <th>Descrição</th>
+    <th>Ação Corretiva</th>
+    <th>Prazo</th>
+    <th>Status</th>
+    <th>Ações</th>
+</tr>
+
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -379,19 +3141,141 @@
 
         <!-- COLABORADORES -->
 
-        <section class="colaboradores">
+        <section id="colaboradores" class="modulo">
 
             <form id="formColaborador">
 
+
                 <h2>👷 Colaboradores</h2>
+                <div class="indicadores-ambientais">
 
-                <input type="text" id="nomeFuncionario" placeholder="Nome">
+    <div class="card-indicador">
+        <h4>👷 Total</h4>
+        <span id="totalColaboradores">0</span>
+    </div>
 
-                <input type="text" id="empresaFuncionario" placeholder="Empresa">
+    <div class="card-indicador">
+        <h4>✅ Ativos</h4>
+        <span id="ativosColaboradores">0</span>
+    </div>
 
-                <input type="text" id="funcaoFuncionario" placeholder="Função">
+    <div class="card-indicador">
+        <h4>⛔ Inativos</h4>
+        <span id="inativosColaboradores">0</span>
+    </div>
 
-                <input type="text" id="supervisorFuncionario" placeholder="Supervisor">
+    <div class="card-indicador">
+        <h4>👨 Homens</h4>
+        <span id="homensColaboradores">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>👩 Mulheres</h4>
+        <span id="mulheresColaboradores">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>🏢 Empresa Frequente</h4>
+        <span id="empresaFrequente">-</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>💼 Função Frequente</h4>
+        <span id="funcaoFrequente">-</span>
+    </div>
+
+</div>
+<label>Pesquisar Colaborador</label>
+
+<input
+    type="text"
+    id="pesquisaColaborador"
+    placeholder="Pesquisar..."
+>
+<br><br>
+
+<input
+    type="date"
+    id="dataInicioColaborador"
+>
+<br><br>
+<input
+    type="date"
+    id="dataFimColaborador"
+>
+
+<button
+    type="button"
+    onclick="filtrarColaboradores()"
+>
+    Filtrar
+</button>
+
+<button
+    type="button"
+    onclick="limparFiltroColaboradores()"
+>
+    Limpar
+</button>
+
+<label>Nome</label>
+<input
+    type="text"
+    id="nomeFuncionario"
+>
+
+<label>Matrícula</label>
+<input
+    type="text"
+    id="matriculaFuncionario"
+>
+
+<label>Género</label>
+<select id="generoFuncionario">
+
+    <option>Masculino</option>
+
+    <option>Feminino</option>
+
+</select>
+
+<label>Função</label>
+<input
+    type="text"
+    id="funcaoFuncionario"
+>
+
+<label>Setor</label>
+<input
+    type="text"
+    id="setorFuncionario"
+>
+
+<label>Líder</label>
+<input
+    type="text"
+    id="liderFuncionario"
+>
+
+<label>Empresa</label>
+<input
+    type="text"
+    id="empresaFuncionario"
+>
+
+<label>Data de Admissão</label>
+
+<input
+    type="date"
+    id="dataAdmissao"
+>
+
+<label>Data de Demissão</label>
+
+<input
+    type="date"
+    id="dataDemissao"
+>
 
                 <button type="submit">
                     Salvar
@@ -401,33 +3285,160 @@
 
             <table id="tabelaColaboradores">
                 <thead>
-                    <tr>
-                        <th>Nome</th>
-                        <th>Empresa</th>
-                        <th>Função</th>
-                        <th>Supervisor</th>
+                    
+                        <tr>
+
+    <th>Nome</th>
+
+    <th>Matrícula</th>
+
+    <th>Género</th>
+
+    <th>Função</th>
+
+    <th>Setor</th>
+
+    <th>Líder</th>
+
+    <th>Empresa</th>
+
+    <th>Admissão</th>
+<th>Demissão</th>
+<th>Status</th>
+<th>QR Code</th>
+    <th>Ações</th>
+
+</tr>
                     </tr>
                 </thead>
                 <tbody></tbody>
+                </section>
             </table>
-
-        </section>
+</section>
+        
 
         <!-- TREINAMENTOS -->
 
-        <section class="treinamentos">
+        <section id="treinamentos" class="modulo">
 
             <form id="formTreinamento">
 
                 <h2>📚 Treinamentos</h2>
+<div class="indicadores-ambientais">
 
-                <input type="text" id="treinamentoNome">
+    <div class="card-indicador">
+        <h4>📚 Total</h4>
+        <span id="totalTreinamentos">0</span>
+    </div>
 
-                <select id="tipoTreinamento">
-                    <option>Integração</option>
-                    <option>Altura</option>
-                    <option>Espaço Confinado</option>
-                </select>
+    <div class="card-indicador">
+        <h4>✅ Válidos</h4>
+        <span id="validosTreinamentos">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>⛔ Vencidos</h4>
+        <span id="vencidosTreinamentos">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>👤 Colaborador Frequente</h4>
+        <span id="colaboradorFrequenteTreinamento">-</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>🏆 Treinamento Frequente</h4>
+        <span id="treinamentoFrequente">-</span>
+    </div>
+
+</div>
+
+                <label>Pesquisar Treinamento</label>
+
+<input
+    type="text"
+    id="pesquisaTreinamento"
+    placeholder="Pesquisar..."
+>
+<br><br>
+
+<input
+    type="date"
+    id="dataInicioTreinamento"
+>
+<br><br>
+<input
+    type="date"
+    id="dataFimTreinamento"
+>
+
+<button
+    type="button"
+    onclick="filtrarTreinamentos()"
+>
+    Filtrar
+</button>
+
+<button
+    type="button"
+    onclick="limparFiltroTreinamentos()"
+>
+    Limpar
+</button>
+
+<label>Data do Treinamento</label>
+
+<input
+    type="date"
+    id="dataTreinamento"
+><label>Procurar Colaborador</label>
+
+<input
+    type="text"
+    id="pesquisaColaboradorTreinamento"
+    placeholder="Nome ou Matrícula"
+    oninput="pesquisarColaboradorTreinamento()"
+>
+<label>Colaborador</label>
+
+<select id="colaboradorTreinamento">
+
+</select>
+<label>Treinamento</label>
+               <select id="tipoTreinamento">
+
+    <option>Integração</option>
+
+    <option>Trabalho em Altura</option>
+
+    <option>Espaço Confinado</option>
+
+<option>Simops</option>
+<option>H2S</option>
+
+    <option>Trabalho a Quente</option>
+
+    <option>Combate a Incêndio</option>
+
+    <option>Primeiros Socorros</option>
+
+    <option>Direção Defensiva</option>
+
+    <option>Movimentação de Cargas</option>
+
+    <option>Gestão Ambiental</option>
+
+    
+
+</select>
+<label>Instrutor</label>
+
+<input
+    type="text"
+    id="instrutorTreinamento"
+    placeholder="Nome do instrutor"
+>
+<label>Validade</label>
 
                 <input type="date" id="validadeTreinamento">
 
@@ -439,12 +3450,23 @@
 
             <table id="tabelaTreinamentos">
                 <thead>
-                    <tr>
-                        <th>Colaborador</th>
-                        <th>Treinamento</th>
-                        <th>Validade</th>
-                        <th>Status</th>
-                    </tr>
+                   <tr>
+
+    <th>Data</th>
+
+    <th>Colaborador</th>
+
+    <th>Treinamento</th>
+
+    <th>Instrutor</th>
+
+    <th>Validade</th>
+
+    <th>Status</th>
+
+    <th>Ações</th>
+
+</tr>
                 </thead>
                 <tbody></tbody>
             </table>
@@ -453,111 +3475,421 @@
 
         <!-- UTILIZADORES -->
 
-        <section class="utilizadores">
+        <section id="utilizadores" class="modulo">
 
+            <div class="indicadores-ambientais">
+
+    <div class="card-indicador">
+        <h4>👥 Total</h4>
+        <span id="totalUtilizadores">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>✅ Ativos</h4>
+        <span id="ativosUtilizadores">0</span>
+    </div>
+<div class="card-indicador">
+
+    <h4>
+        ❌ Inativos
+    </h4>
+
+    <span id="inativosUtilizadores">
+        0
+    </span>
+
+</div>
+    <div class="card-indicador">
+        <h4>👑 Administradores</h4>
+        <span id="adminsUtilizadores">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>🦺 Técnicos HSE</h4>
+        <span id="hseUtilizadores">0</span>
+    </div>
+
+</div>
             <h2>👤 Utilizadores</h2>
 
             <form id="formUtilizador">
+<label>Pesquisar Utilizador</label>
 
-                <input type="text" id="nomeUser">
+<input
+    type="text"
+    id="pesquisaUtilizador"
+    placeholder="Pesquisar..."
+>
 
-                <input type="email" id="emailUser">
+                <label>Nome</label>
+<input
+    type="text"
+    id="nomeUser"
+    placeholder="Nome completo"
+>
 
-                <select id="perfilUser">
-                    <option>Administrador</option>
-                    <option>Técnico HSE</option>
+<label>Email</label>
+<input
+    type="email"
+    id="emailUser"
+    placeholder="Email do utilizador"
+>
+
+<label>Perfil</label>
+<select id="perfilUser">
+                
+                   <option>Administrador</option>
+
+
+
+<option>Técnico HSE</option>
+
+
                 </select>
+<label>Status</label>
+
+<select id="statusUser">
+
+    <option>Ativo</option>
+
+    <option>Inativo</option>
+
+</select>
 
                 <button type="submit">
                     Criar
                 </button>
-
             </form>
 
             <table id="tabelaUtilizadores">
                 <thead>
-                    <tr>
-                        <th>Nome</th>
-                        <th>Email</th>
-                        <th>Perfil</th>
-                    </tr>
-                </thead>
+
+    <tr>
+
+        <th>Nome</th>
+
+        <th>Email</th>
+
+        <th>Perfil</th>
+
+        <th>Status</th>
+
+        <th>Data Criação</th>
+
+        <th>Último Acesso</th>
+        <th>Senha</th>
+        <th>Ações</th>
+
+    </tr>
+
+</thead>
                 <tbody></tbody>
             </table>
+<div class="acoes-exportacao">
 
+    <button id="exportarCSV">
+        📄 CSV
+    </button>
+
+    <button id="exportarExcel">
+        📊 Excel
+    </button>
+
+    <button id="exportarPDF">
+        📕 PDF
+    </button>
+
+</div>
         </section>
+
 
         <!-- EVIDÊNCIAS -->
 
-        <section class="evidencias">
+        
+<!--<section id="evidencias" class="modulo">
 
-            <h2>📸 Gestão de Evidências</h2>
+    <h2>📸 Gestão de Evidências</h2>
+<label>Pesquisar Evidência</label>
 
-            <input type="file" id="fotoEvidencia">
+<input
+    type="text"
+    id="pesquisaEvidencia"
+    placeholder="Pesquisar..."
+>
+    <form id="formEvidencia">
 
-            <img id="previewFoto" style="display:none;max-width:300px;">
+        <input
+            type="file"
+            id="fotoEvidencia"
+            accept="image/*"
+        >
 
-        </section>
+        <input
+            type="text"
+            id="descricaoEvidencia"
+            placeholder="Descrição da evidência"
+        >
 
-        <!-- MATRIZ DE RISCO -->
+        <button type="submit">
+            Guardar Evidência
+        </button>
 
-        <section class="matriz-risco">
+    </form>
 
-            <h2>⚠️ Matriz de Risco</h2>
+    <img
+        id="previewFoto"
+        style="display:none;max-width:300px;"
+    >
 
-            <form id="formRisco">
+    <table id="tabelaEvidencias">
 
-                <input type="text" id="perigo" placeholder="Perigo">
+        <thead>
+            <tr>
+                <th>Descrição</th>
+                <th>Data</th>
+            </tr>
+        </thead>
 
-                <input type="number" id="probabilidade" min="1" max="5">
+        <tbody></tbody>
 
-                <input type="number" id="consequencia" min="1" max="5">
+    </table>
 
-                <button type="submit">
-                    Calcular
-                </button>
+</section>
+ -->
 
-            </form>
+        
+<section id="relatorios" class="modulo">
 
-            <table id="tabelaRisco">
-                <thead>
-                    <tr>
-                        <th>Perigo</th>
-                        <th>Score</th>
-                        <th>Classificação</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+    <h2>
+        📊 Centro de Relatórios HSE
+    </h2>
 
-        </section>
+    <p>
+        Gere relatórios operacionais e executivos
+        com um clique.
+    </p>
 
+    <div class="cards-publicos">
+
+        <div class="card-publico">
+            <h3>🦺 Segurança</h3>
+            <button id="excelSeguranca">
+                Exportar Excel
+            </button>
+        </div>
+
+        <div class="card-publico">
+            <h3>❤️ Saúde Ocupacional</h3>
+            <button id="excelASO">
+                Exportar Excel
+            </button>
+        </div>
+    
+    <div class="card-publico">
+        <h3>🌱 Ambiente</h3>
+<button id="excelAmbiente">
+    Exportar Excel
+</button>
+</div>
+        <div class="card-publico">
+            <h3>👷 Colaboradores</h3>
+            <button id="excelColaboradores">
+                Exportar Excel
+            </button>
+        </div>
+
+        <div class="card-publico">
+            <h3>📚 Treinamentos</h3>
+            <button id="excelTreinamentos">
+                Exportar Excel
+            </button>
+        </div>
+
+        <div class="card-publico">
+            <h3>👤 Utilizadores</h3>
+            <button id="excelUtilizadores">
+                Exportar Excel
+            </button>
+        </div>
+
+    </div>
+
+    <br>
+
+    <div class="cta-talanga">
+
+        <h2>
+            📄 Relatório Executivo HSE
+        </h2>
+
+        <p>
+            Gere um relatório consolidado para
+            Direção, Gerência e Auditorias.
+        </p>
+
+        <button id="relatorioExecutivo">
+            Gerar PDF Executivo
+        </button>
+
+    </div>
+
+</section>
         <!-- LOGIN -->
 
-        <section class="login">
+        <section id="login" class="modulo">
 
             <h2>🔐 Login</h2>
+<div class="indicadores-ambientais">
 
+    <div class="card-indicador">
+
+        <h4>
+            🔐 Total Logins
+        </h4>
+
+        <span id="totalLogins">
+            0
+        </span>
+
+    </div>
+
+    <div class="card-indicador">
+
+        <h4>
+            👥 Utilizadores Ativos
+        </h4>
+
+        <span id="utilizadoresAtivos">
+            0
+        </span>
+
+    </div>
+
+</div>
             <form id="formLogin">
 
-                <input type="email" id="loginEmail">
+                <label>Email</label>
+<input
+    type="email"
+    id="loginEmail"
+    placeholder="Digite o email"
+>
 
-                <input type="password" id="loginSenha">
+<label>Palavra-passe</label>
+<input
+    type="password"
+    id="loginSenha"
+    placeholder="Digite a palavra-passe"
+>
 
                 <button type="submit">
                     Entrar
                 </button>
 
             </form>
+<hr>
 
-        </section>
+<h3>
+    🔑 Alterar Palavra-passe
+</h3>
+
+<form id="formAlterarSenha">
+
+    <input
+        type="password"
+        id="senhaAtual"
+        placeholder="Senha Atual"
+    >
+
+    <input
+        type="password"
+        id="novaSenha"
+        placeholder="Nova Senha"
+    >
+
+    <input
+        type="password"
+        id="confirmarSenha"
+        placeholder="Confirmar Nova Senha"
+    >
+
+    <button type="submit">
+        Alterar Palavra-passe
+    </button>
+<div class="credenciais-demo">
+
+    <div class="credenciais-demo">
+
+    <h3>🧪 Credenciais de Teste</h3>
+
+    <div class="demo-user">
+
+        <strong>Administrador</strong><br>
+
+        📧 admin@talanga.co.ao<br>
+
+        🔑 123456
 
     </div>
 
-    <script src="app.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</body>
+    <div class="demo-user">
 
+        <strong>Técnico HSE</strong><br>
+
+        📧 hse@talanga.co.ao<br>
+
+        🔑 123456
+
+    </div>
+
+</div>
+<p style="color:#f59e0b;font-weight:bold;">
+🚧 Ambiente de Testes (Beta)
+</p>
+</form>
+        </section>
+<footer class="rodape">
+
+    <p>
+        Talanga HSE® | Desenvolvido por GT Engenharia e Serviços
+    </p>
+
+    <p>
+        © 2026 GT Engenharia e Serviços.
+        Todos os direitos reservados.
+    </p>
+
+</footer>
+    </div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="storage.js"></script>
+<script src="db.js"></script>
+<script src="app.js"></script>
+<script src="tema.js"></script>
+<script src="seguranca.js"></script>
+<script src="aso.js"></script>
+<script src="ambiente.js"></script>
+<script src="colaborador.js"></script>
+<script src="treinamento.js"></script>
+<script src="utilizador.js"></script>
+<script src="login.js"></script>
+<script src="evidencia.js"></script>
+<script src="matriz.js"></script>
+<script src="relatorios.js"></script>
+<script src="pesquisa.js"></script>
+<script src="dashboard.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
 </html>
+
 
 

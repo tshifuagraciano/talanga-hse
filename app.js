@@ -1,699 +1,377 @@
-
-
-/* ==========================================
-   TALANGA HSE v2.0
-========================================== */
-
 console.clear();
+
 console.log("Talanga HSE iniciado");
-
-/* ==========================================
-   LOCAL STORAGE
-========================================== */
-
-function salvarDados(chave, dados) {
-    localStorage.setItem(
-        chave,
-        JSON.stringify(dados)
-    );
-}
-
-function carregarDados(chave) {
-
-    const dados =
-        localStorage.getItem(chave);
-
-    return dados
-        ? JSON.parse(dados)
-        : [];
-
-}
 
 /* ==========================================
    FUNÇÃO GENÉRICA TABELAS
 ========================================== */
 
-function adicionarLinha(tabela, conteudo) {
+function adicionarLinha(tabela, conteudo){
 
     const linha =
-        document.createElement("tr");
+    document.createElement("tr");
 
     linha.innerHTML =
-        conteudo;
+    conteudo;
 
-    tabela.appendChild(linha);
+    tabela.appendChild(
+        linha
+    );
 
 }
 
 /* ==========================================
-   SEGURANÇA
+   NAVEGAÇÃO
 ========================================== */
 
-const formSeguranca =
-    document.getElementById(
-        "formSeguranca"
+function mostrarModulo(id){
+
+    const modulos =
+    document.querySelectorAll(
+        ".modulo"
     );
 
-const tabelaOcorrencias =
-    document.querySelector(
-        "#tabelaOcorrencias tbody"
+    modulos.forEach(modulo => {
+
+        modulo.style.display =
+        "none";
+
+    });
+
+    const moduloSelecionado =
+    document.getElementById(id);
+
+    if(moduloSelecionado){
+
+        moduloSelecionado.style.display =
+        "block";
+
+    }
+
+    const itensMenu =
+    document.querySelectorAll(
+        ".sidebar li"
     );
 
-let ocorrencias =
-    carregarDados(
-        "ocorrencias"
-    );
+    itensMenu.forEach(item => {
 
-function atualizarOcorrencias() {
-
-    if (!tabelaOcorrencias) return;
-
-    tabelaOcorrencias.innerHTML = "";
-
-    ocorrencias.forEach(item => {
-
-        adicionarLinha(
-
-            tabelaOcorrencias,
-
-            `
-            <td>${item.titulo}</td>
-            <td>${item.severidade}</td>
-            <td>${item.area}</td>
-            <td>${item.responsavel}</td>
-            <td>${item.status}</td>
-            `
+        item.classList.remove(
+            "ativo"
         );
 
     });
 
-}
-
-if (formSeguranca) {
-
-    formSeguranca.addEventListener(
-        "submit",
-        e => {
-
-            e.preventDefault();
-
-            const titulo =
-                document.getElementById("titulo").value;
-
-            const severidade =
-                document.getElementById("severidade").value;
-
-            const area =
-                document.getElementById("area").value;
-
-            const responsavel =
-                document.getElementById("responsavel").value;
-
-            const status =
-                document.getElementById("status").value;
-
-            ocorrencias.push({
-                titulo,
-                severidade,
-                area,
-                responsavel,
-                status
-            });
-
-            salvarDados(
-                "ocorrencias",
-                ocorrencias
-            );
-
-            atualizarOcorrencias();
-
-            formSeguranca.reset();
-
-        }
-    );
-
-}
-
-atualizarOcorrencias();
-
-/* ==========================================
-   ASO
-========================================== */
-
-const formASO =
-    document.getElementById("formASO");
-
-const tabelaASO =
+    const itemAtivo =
     document.querySelector(
-        "#tabelaASO tbody"
+        `.sidebar li[onclick="mostrarModulo('${id}')"]`
     );
 
-if (formASO && tabelaASO) {
+    if(itemAtivo){
 
-    formASO.addEventListener(
-        "submit",
-        e => {
+        itemAtivo.classList.add(
+            "ativo");
+        
 
-            e.preventDefault();
-
-            adicionarLinha(
-
-                tabelaASO,
-
-                `
-                <td>${document.getElementById("nomeColaborador").value}</td>
-                <td>${document.getElementById("funcao").value}</td>
-                <td>${document.getElementById("tipoASO").value}</td>
-                <td>${document.getElementById("validadeASO").value}</td>
-                <td>${document.getElementById("statusASO").value}</td>
-                `
-            );
-
-            formASO.reset();
-
-        }
-    );
+    }
 
 }
 
-/* ==========================================
-   AMBIENTE
-========================================== */
+mostrarModulo(
+    "dashboard"
+);
 
-const formAmbiente =
+
+ function mostrarUtilizadorLogado(){
+
+    const utilizador =
+
+    JSON.parse(
+        localStorage.getItem(
+            "utilizadorLogado"
+        )
+    );
+
+    const info =
     document.getElementById(
-        "formAmbiente"
+        "utilizadorLogadoInfo"
     );
 
-const tabelaAmbiental =
-    document.querySelector(
-        "#tabelaAmbiental tbody"
+    const logout =
+    document.getElementById(
+        "btnLogout"
     );
 
-if (formAmbiente && tabelaAmbiental) {
+    if(!info || !logout)
+    return;
 
-    formAmbiente.addEventListener(
-        "submit",
-        e => {
+    if(utilizador){
 
-            e.preventDefault();
+        info.textContent =
 
-            adicionarLinha(
+        `👤 ${utilizador.nome}
+         (${utilizador.email})`;
 
-                tabelaAmbiental,
+        logout.style.display =
+        "inline-block";
 
-                `
-                <td>${document.getElementById("agua").value}</td>
-                <td>${document.getElementById("energia").value}</td>
-                <td>${document.getElementById("combustivel").value}</td>
-                <td>${document.getElementById("co2").value}</td>
-                `
-            );
+    }
+    else{
 
-            formAmbiente.reset();
+        info.textContent =
+        "Não autenticado";
 
-        }
-    );
+        logout.style.display =
+        "none";
+
+    }
 
 }
+const btnLogout =
+document.getElementById(
+    "btnLogout"
+);
 
-/* ==========================================
-   FAUNA
-========================================== */
+if(btnLogout){
 
-const formFauna =
-    document.getElementById(
-        "formFauna"
-    );
+    btnLogout.addEventListener(
 
-const tabelaFauna =
-    document.querySelector(
-        "#tabelaFauna tbody"
-    );
+        "click",
 
-if (formFauna && tabelaFauna) {
+        () => {
 
-    formFauna.addEventListener(
-        "submit",
-        e => {
-
-            e.preventDefault();
-
-            adicionarLinha(
-
-                tabelaFauna,
-
-                `
-                <td>${document.getElementById("animal").value}</td>
-                <td>${document.getElementById("localAnimal").value}</td>
-                `
+            localStorage.removeItem(
+                "utilizadorLogado"
             );
-
-            formFauna.reset();
-
-        }
-    );
-
-}
-
-/* ==========================================
-   EMERGÊNCIAS
-========================================== */
-
-const formEmergencia =
-    document.getElementById(
-        "formEmergencia"
-    );
-
-const tabelaEmergencias =
-    document.querySelector(
-        "#tabelaEmergencias tbody"
-    );
-
-if (formEmergencia && tabelaEmergencias) {
-
-    formEmergencia.addEventListener(
-        "submit",
-        e => {
-
-            e.preventDefault();
-
-            adicionarLinha(
-
-                tabelaEmergencias,
-
-                `
-                <td>${document.getElementById("tipoEmergencia").value}</td>
-                <td>${document.getElementById("localEmergencia").value}</td>
-                <td>${document.getElementById("descricaoEmergencia").value}</td>
-                `
-            );
-
-            formEmergencia.reset();
-
-        }
-    );
-
-}
-
-/* ==========================================
-   INSPEÇÕES
-========================================== */
-
-const formInspecao =
-    document.getElementById(
-        "formInspecao"
-    );
-
-const tabelaInspecoes =
-    document.querySelector(
-        "#tabelaInspecoes tbody"
-    );
-
-if (formInspecao && tabelaInspecoes) {
-
-    formInspecao.addEventListener(
-        "submit",
-        e => {
-
-            e.preventDefault();
-
-            const checks =
-                document.querySelectorAll(
-                    ".checkItem:checked"
-                ).length;
-
-            const total =
-                document.querySelectorAll(
-                    ".checkItem"
-                ).length;
-
-            const score =
-                Math.round(
-                    (checks / total) * 100
-                );
-
-            adicionarLinha(
-
-                tabelaInspecoes,
-
-                `
-                <td>${document.getElementById("tipoInspecao").value}</td>
-                <td>${document.getElementById("areaInspecao").value}</td>
-                <td>${score}%</td>
-                `
-            );
-
-            formInspecao.reset();
-
-        }
-    );
-
-}
-
-/* ==========================================
-   COLABORADORES
-========================================== */
-
-const formColaborador =
-    document.getElementById(
-        "formColaborador"
-    );
-
-const tabelaColaboradores =
-    document.querySelector(
-        "#tabelaColaboradores tbody"
-    );
-
-if (formColaborador && tabelaColaboradores) {
-
-    formColaborador.addEventListener(
-        "submit",
-        e => {
-
-            e.preventDefault();
-
-            adicionarLinha(
-
-                tabelaColaboradores,
-
-                `
-                <td>${document.getElementById("nomeFuncionario").value}</td>
-                <td>${document.getElementById("empresaFuncionario").value}</td>
-                <td>${document.getElementById("funcaoFuncionario").value}</td>
-                <td>${document.getElementById("supervisorFuncionario").value}</td>
-                `
-            );
-
-            formColaborador.reset();
-
-        }
-    );
-
-}
-
-/* ==========================================
-   TREINAMENTOS
-========================================== */
-
-const formTreinamento =
-    document.getElementById(
-        "formTreinamento"
-    );
-
-const tabelaTreinamentos =
-    document.querySelector(
-        "#tabelaTreinamentos tbody"
-    );
-
-if (formTreinamento && tabelaTreinamentos) {
-
-    formTreinamento.addEventListener(
-        "submit",
-        e => {
-
-            e.preventDefault();
-
-            const validade =
-                new Date(
-                    document.getElementById(
-                        "validadeTreinamento"
-                    ).value
-                );
-
-            const hoje =
-                new Date();
-
-            const status =
-                validade < hoje
-                ? "Vencido"
-                : "Válido";
-
-            adicionarLinha(
-
-                tabelaTreinamentos,
-
-                `
-                <td>${document.getElementById("treinamentoNome").value}</td>
-                <td>${document.getElementById("tipoTreinamento").value}</td>
-                <td>${document.getElementById("validadeTreinamento").value}</td>
-                <td>${status}</td>
-                `
-            );
-
-            formTreinamento.reset();
-
-        }
-    );
-
-}
-
-/* ==========================================
-   UTILIZADORES
-========================================== */
-
-const formUtilizador =
-    document.getElementById(
-        "formUtilizador"
-    );
-
-const tabelaUtilizadores =
-    document.querySelector(
-        "#tabelaUtilizadores tbody"
-    );
-
-if (formUtilizador && tabelaUtilizadores) {
-
-    formUtilizador.addEventListener(
-        "submit",
-        e => {
-
-            e.preventDefault();
-
-            adicionarLinha(
-
-                tabelaUtilizadores,
-
-                `
-                <td>${document.getElementById("nomeUser").value}</td>
-                <td>${document.getElementById("emailUser").value}</td>
-                <td>${document.getElementById("perfilUser").value}</td>
-                `
-            );
-
-            formUtilizador.reset();
-
-        }
-    );
-
-}
-
-/* ==========================================
-   LOGIN
-========================================== */
-
-const formLogin =
-    document.getElementById(
-        "formLogin"
-    );
-
-if (formLogin) {
-
-    formLogin.addEventListener(
-        "submit",
-        e => {
-
-            e.preventDefault();
-
-            const email =
-                document.getElementById(
-                    "loginEmail"
-                ).value;
 
             alert(
-                `Bem-vindo ao Talanga HSE\n\n${email}`
+                "Sessão terminada."
             );
 
+            location.reload();
+
         }
+
     );
 
 }
+function aplicarPermissoes(){
 
-/* ==========================================
-   EVIDÊNCIAS
-========================================== */
+    const utilizador =
 
-const fotoEvidencia =
+    JSON.parse(
+        localStorage.getItem(
+            "utilizadorLogado"
+        )
+    );
+
+    const menuItens =
+    document.querySelectorAll(
+        ".sidebar li"
+    );
+
+    const dashboardPrivado =
     document.getElementById(
-        "fotoEvidencia"
+        "dashboardPrivado"
     );
 
-const previewFoto =
+    const dashboardPublico =
     document.getElementById(
-        "previewFoto"
+        "dashboardPublico"
     );
 
-if (fotoEvidencia && previewFoto) {
+    /* =====================================
+       CONVIDADO
+    ===================================== */
 
-    fotoEvidencia.addEventListener(
-        "change",
-        function () {
+    if(!utilizador){
 
-            const ficheiro =
-                this.files[0];
-
-            if (!ficheiro) return;
-
-            const reader =
-                new FileReader();
-
-            reader.onload =
-                e => {
-
-                    previewFoto.src =
-                        e.target.result;
-
-                    previewFoto.style.display =
-                        "block";
-
-                };
-
-            reader.readAsDataURL(
-                ficheiro
-            );
-
-        }
-    );
-
-}
-
-/* ==========================================
-   MATRIZ DE RISCO
-========================================== */
-
-const formRisco =
-    document.getElementById(
-        "formRisco"
-    );
-
-const tabelaRisco =
-    document.querySelector(
-        "#tabelaRisco tbody"
-    );
-
-if (formRisco && tabelaRisco) {
-
-    formRisco.addEventListener(
-        "submit",
-        e => {
-
-            e.preventDefault();
-
-            const perigo =
-                document.getElementById(
-                    "perigo"
-                ).value;
-
-            const probabilidade =
-                Number(
-                    document.getElementById(
-                        "probabilidade"
-                    ).value
-                );
-
-            const consequencia =
-                Number(
-                    document.getElementById(
-                        "consequencia"
-                    ).value
-                );
-
-            const score =
-                probabilidade *
-                consequencia;
-
-            let classificacao =
-                "Baixo";
-
-            if (score >= 5)
-                classificacao =
-                "Moderado";
-
-            if (score >= 10)
-                classificacao =
-                "Alto";
-
-            if (score >= 17)
-                classificacao =
-                "Crítico";
-
-            adicionarLinha(
-
-                tabelaRisco,
-
-                `
-                <td>${perigo}</td>
-                <td>${score}</td>
-                <td>${classificacao}</td>
-                `
-            );
-
-            formRisco.reset();
-
-        }
-    );
-
-}
-
-/* ==========================================
-   DASHBOARD
-========================================== */
-
-if (
-    typeof Chart !== "undefined" &&
-    document.getElementById(
-        "graficoSeguranca"
+    document
+    .getElementById(
+        "areaConvidado"
     )
-) {
+    ?.style.setProperty(
+        "display",
+        "block"
+    );
 
-    new Chart(
+    document
+    .getElementById(
+        "areaPrivada"
+    )
+    ?.style.setProperty(
+        "display",
+        "none"
+    );
 
-        document.getElementById(
-            "graficoSeguranca"
-        ),
+    menuItens.forEach(
+        item => {
 
-        {
+            const texto =
+            item.textContent;
 
-            type: "bar",
+            if(
+                !texto.includes("Dashboard")
+                &&
+                !texto.includes("Login")
+            ){
 
-            data: {
-
-                labels: [
-                    "Condição Insegura",
-                    "Quase Acidente",
-                    "Acidente"
-                ],
-
-                datasets: [
-                    {
-
-                        label: "Ocorrências",
-
-                        data: [42, 8, 2],
-
-                        backgroundColor: [
-                            "#f59e0b",
-                            "#3b82f6",
-                            "#dc2626"
-                        ]
-
-                    }
-                ]
+                item.style.display =
+                "none";
 
             }
 
         }
+    );
 
+    return;
+
+}
+
+    /* =====================================
+       UTILIZADOR AUTENTICADO
+    ===================================== */
+
+    if(dashboardPrivado){
+
+        dashboardPrivado.style.display =
+        "block";
+
+    }
+
+    if(dashboardPublico){
+
+        dashboardPublico.style.display =
+        "none";
+
+    }
+document
+.getElementById(
+    "areaConvidado"
+)
+?.style.setProperty(
+    "display",
+    "none"
+);
+
+document
+.getElementById(
+    "areaPrivada"
+)
+?.style.setProperty(
+    "display",
+    "block"
+);
+    const perfil =
+
+    utilizador.perfil
+    .trim()
+    .toLowerCase();
+
+    /* =====================================
+       ADMINISTRADOR
+    ===================================== */
+
+    if (
+    perfil === "administrador"
+){
+
+    menuItens.forEach(item => {
+
+        item.style.display = "";
+
+    });
+
+    return;
+}
+    /* =====================================
+       TÉCNICO HSE
+    ===================================== */
+
+   if (
+    perfil === "técnico hse"
+){
+
+    menuItens.forEach(item => {
+
+        item.style.display = "";
+
+    });
+
+    document
+    .querySelector(
+        ".sidebar li[onclick=\"mostrarModulo('utilizadores')\"]"
+    )
+    ?.style.setProperty(
+        "display",
+        "none"
     );
 
 }
+}
+function solicitarDemonstracao(){
+
+    const mensagem =
+    encodeURIComponent(
+`Olá!
+
+Tenho interesse em conhecer o Talanga HSE.
+
+Nome:
+Empresa:
+Sector:
+Nº de colaboradores:
+
+Gostaria de solicitar uma demonstração da plataforma.`
+    );
+
+    window.open(
+        `https://wa.me/921630180?text=${mensagem}`,
+        "_blank"
+    );
+
+}
+function limparTexto(texto){
+
+    return texto
+    .replace(/</g,"")
+    .replace(/>/g,"");
+
+}
+function criarUtilizadoresDemo(){
+
+    const utilizadores =
+    carregarDados("utilizadores") || [];
+
+    if(utilizadores.length > 0){
+        return;
+    }
+
+    const contasDemo = [
+
+        {
+            nome:"Administrador",
+            email:"admin@talanga.co.ao",
+            senha:"123456",
+            perfil:"Administrador"
+        },
+
+        {
+            nome:"Técnico HSE",
+            email:"hse@talanga.co.ao",
+            senha:"123456",
+            perfil:"Técnico HSE"
+        }
+
+    ];
+
+    salvarDados(
+        "utilizadores",
+        contasDemo
+    );
+
+}
+
+criarUtilizadoresDemo();
+
+mostrarUtilizadorLogado();
+aplicarPermissoes();
