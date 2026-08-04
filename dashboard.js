@@ -150,6 +150,8 @@ function atualizarDashboard(){
 
 }
 
+
+
 if(
     typeof Chart !== "undefined" &&
     document.getElementById(
@@ -188,117 +190,19 @@ if(
 
         }
     );
-
-}
-
-{
-
-    const baixo =
-    riscos.filter(
-        item =>
-        item.classificacao === "Baixo"
-    ).length;
-
-    const moderado =
-    riscos.filter(
-        item =>
-        item.classificacao === "Moderado"
-    ).length;
-
-    const alto =
-    riscos.filter(
-        item =>
-        item.classificacao === "Alto"
-    ).length;
-
-    const critico =
-    riscos.filter(
-        item =>
-        item.classificacao === "Crítico"
-    ).length;
-
-    new Chart(
-
-    document.getElementById(
-        "graficoRiscos"
-    ),
-
-    {
-
-        type:"doughnut",
-
-        data:{
-
-            labels:[
-                "Baixo",
-                "Moderado",
-                "Alto",
-                "Crítico"
-            ],
-
-            datasets:[
-                {
-
-                    data:[
-                        baixo,
-                        moderado,
-                        alto,
-                        critico
-                    ],
-
-                    backgroundColor:[
-
-    "#22c55e", // Baixo
-    "#eab308", // Moderado
-    "#f97316", // Alto
-    "#dc2626"  // Crítico
-
-]
-
-                }
-            ]
-
-        },
-
-        options:{
-
-    responsive:true,
-
-    maintainAspectRatio:false,
-
-    cutout:"65%",
-
-    plugins:{
-
-        legend:{
-
-            position:"top",
-
-            labels:{
-
-                padding:20,
-
-                boxWidth:20,
-
-                font:{
-
-                    size:13,
-
-                    weight:"bold"
-
-                }
-
-            }
-
-        }
-
-    }
-
-}
-
-    }
-
+const cardDiasSemAcidente =
+document.getElementById(
+    "diasSemAcidente"
 );
+
+if(cardDiasSemAcidente){
+
+    cardDiasSemAcidente.textContent =
+    calcularDiasSemAcidente();
+
+}
+
+}
 
 /* SEGURANÇA */
 
@@ -376,7 +280,7 @@ document.getElementById(
     "ambFauna"
 ).textContent =
 fauna.length;
-}
+
 
 if(
     typeof Chart !== "undefined" &&

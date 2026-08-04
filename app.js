@@ -370,7 +370,243 @@ function criarUtilizadoresDemo(){
     );
 
 }
+document
+.getElementById("menuMobile")
+?.addEventListener(
+    "click",
+    () => {
 
+        document
+        .querySelector(".sidebar")
+        ?.classList.toggle(
+            "aberta"
+        );
+
+    }
+);
+document
+.querySelectorAll(".sidebar li")
+.forEach(item => {
+
+    item.addEventListener(
+        "click",
+        () => {
+
+            if(
+                window.innerWidth <= 768
+            ){
+
+                document
+                .querySelector(".sidebar")
+                ?.classList.remove(
+                    "aberta"
+                );
+
+            }
+
+        }
+    );
+
+});
+``
+const talanguinhaBot =
+document.getElementById(
+    "talanguinhaBot"
+);
+
+const talanguinhaChat =
+document.getElementById(
+    "talanguinhaChat"
+);
+
+talanguinhaBot.addEventListener(
+    "click",
+    ()=>{
+
+        if(
+            talanguinhaChat.style.display
+            ===
+            "flex"
+        ){
+
+            talanguinhaChat.style.display =
+            "none";
+
+        }
+        else{
+
+            talanguinhaChat.style.display =
+            "flex";
+
+        }
+
+    }
+);
+function responderTalanguinha(){
+
+    const pergunta =
+
+    document.getElementById(
+        "perguntaTalanguinha"
+    )
+    .value
+    .toLowerCase();
+
+    let resposta =
+    "Desculpe, ainda não sei responder isso.";
+
+    if(
+        pergunta.includes(
+            "conformidade"
+        )
+    ){
+
+        resposta =
+
+        "📊 A conformidade atual é de "
+
+        +
+
+        document.getElementById(
+            "cardConformidade"
+        ).textContent;
+
+    }
+
+    else if(
+        pergunta.includes(
+            "hht"
+        )
+    ){
+
+        resposta =
+
+        "⏱️ HHT Acumulado: "
+
+        +
+
+        document.getElementById(
+            "hhtAcumulado"
+        ).textContent;
+
+    }
+
+    else if(
+        pergunta.includes(
+            "tf"
+        )
+    ){
+
+        resposta =
+
+        "📊 Taxa de Frequência: "
+
+        +
+
+        document.getElementById(
+            "taxaFrequencia"
+        ).textContent;
+
+    }
+
+    else if(
+        pergunta.includes(
+            "tg"
+        )
+    ){
+
+        resposta =
+
+        "📊 Taxa de Gravidade: "
+
+        +
+
+        document.getElementById(
+            "taxaGravidade"
+        ).textContent;
+
+    }
+
+    else if(
+        pergunta.includes(
+            "dias"
+        )
+    ){
+
+        resposta =
+
+        "🏆 Dias sem acidente: "
+
+        +
+
+        document.getElementById(
+            "cardDiasSemAcidente"
+        ).textContent;
+
+    }
+
+    adicionarMensagem(
+        pergunta,
+        "user"
+    );
+
+    adicionarMensagem(
+        resposta,
+        "bot"
+    );
+
+    document.getElementById(
+        "perguntaTalanguinha"
+    ).value = "";
+
+}
+function adicionarMensagem(
+    texto,
+    tipo
+){
+
+    const area =
+
+    document.getElementById(
+        "talanguinhaMensagens"
+    );
+
+    const div =
+    document.createElement(
+        "div"
+    );
+
+    div.className =
+
+    tipo === "user"
+
+    ?
+
+    "msgUser"
+
+    :
+
+    "msgBot";
+
+    div.textContent =
+    texto;
+
+    area.appendChild(
+        div
+    );
+
+    area.scrollTop =
+    area.scrollHeight;
+
+}
+document
+.getElementById(
+    "btnTalanguinha"
+)
+.addEventListener(
+    "click",
+    responderTalanguinha
+);
 criarUtilizadoresDemo();
 
 mostrarUtilizadorLogado();

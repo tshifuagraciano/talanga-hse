@@ -423,8 +423,10 @@ function eliminarOcorrencia(indice){
 
     salvarDados(
         "ocorrencias",
-        ocorrencias
+        ocorrencias  
     );
+    ocorrenciasHSEFiltradas =
+[...ocorrenciasHSE];
 
     atualizarOcorrencias();
 
@@ -586,6 +588,8 @@ atualizarIndicadoresOcorrencias();
 atualizarIndicadoresOcorrencias();
 
 }
+
+
 
 function eliminarOcorrencia(indice){
 
@@ -4439,4 +4443,1700 @@ falaTalangaFiltrado[index];
     );
 
 }
+
+let ocorrenciasHSE =
+carregarDados(
+    "ocorrenciasHSE"
+) || [];
+
+let ocorrenciasHSEFiltradas =
+[...ocorrenciasHSE];
+
+const formOcorrenciasHSE =
+document.getElementById(
+    "formOcorrenciasHSE"
+);
+
+if(formOcorrenciasHSE){
+
+    formOcorrenciasHSE.addEventListener(
+        "submit",
+        e => {
+
+            e.preventDefault();
+
+            console.log(
+                "SUBMIT OCORRENCIAS HSE"
+            );
+
+            
+
+            
+            e.preventDefault();
+
+            const registo = {
+
+                data:
+                document.getElementById(
+                    "dataOcorrenciaHSE"
+                ).value,
+
+                tipo:
+                document.getElementById(
+                    "tipoOcorrenciaHSE"
+                ).value,
+
+                area:
+                document.getElementById(
+                    "areaOcorrenciaHSE"
+                ).value,
+
+                local:
+                document.getElementById(
+                    "localOcorrenciaHSE"
+                ).value,
+
+                empresa:
+                document.getElementById(
+                    "empresaOcorrenciaHSE"
+                ).value,
+
+                colaborador:
+                document.getElementById(
+                    "colaboradorOcorrenciaHSE"
+                ).value,
+
+                diasPerdidos:
+                Number(
+                    document.getElementById(
+                        "diasPerdidosHSE"
+                    ).value
+                ),
+
+                descricao:
+                document.getElementById(
+                    "descricaoOcorrenciaHSE"
+                ).value,
+
+                status:
+                document.getElementById(
+                    "statusOcorrenciaHSE"
+                ).value
+
+            };
+
+           if(
+    indiceEdicaoOcorrenciaHSE !== null
+){
+
+    ocorrenciasHSE[
+        indiceEdicaoOcorrenciaHSE
+    ] = registo;
+
+    indiceEdicaoOcorrenciaHSE =
+    null;
+
+}
+else{
+
+    ocorrenciasHSE.push(
+        registo
+    );
+
+}
+            salvarDados(
+                "ocorrenciasHSE",
+                ocorrenciasHSE
+            );
+ocorrenciasHSEFiltradas =
+[...ocorrenciasHSE];
+            atualizarOcorrenciasHSE();
+            // atualizarDashboard();
+
+            formOcorrenciasHSE.reset();
+
+        }
+    );
+
+}
+
+const pesquisaOcorrenciaHSE =
+document.getElementById(
+    "pesquisaOcorrenciaHSE"
+);
+
+if(pesquisaOcorrenciaHSE){
+
+    pesquisaOcorrenciaHSE.addEventListener(
+        "input",
+        () => {
+
+            const termo =
+            pesquisaOcorrenciaHSE.value
+            .toLowerCase();
+
+            ocorrenciasHSEFiltradas =
+
+            ocorrenciasHSEFiltradas.filter(
+                item =>
+
+                (item.tipo || "")
+                .toLowerCase()
+                .includes(termo)
+
+                ||
+
+                (item.area || "")
+                .toLowerCase()
+                .includes(termo)
+
+                ||
+
+                (item.local || "")
+                .toLowerCase()
+                .includes(termo)
+
+                ||
+
+                (item.colaborador || "")
+                .toLowerCase()
+                .includes(termo)
+
+                ||
+
+                (item.status || "")
+                .toLowerCase()
+                .includes(termo)
+            );
+
+            atualizarOcorrenciasHSE();
+
+        }
+    );
+
+}
+
+function filtrarOcorrenciasHSE(){
+
+    const inicio =
+    document.getElementById(
+        "dataInicioOcorrenciaHSE"
+    ).value;
+
+    const fim =
+    document.getElementById(
+        "dataFimOcorrenciaHSE"
+    ).value;
+
+    if(!inicio || !fim){
+
+        alert(
+            "Selecione as duas datas."
+        );
+
+        return;
+
+    }
+
+    const dataInicio =
+    new Date(inicio);
+
+    const dataFim =
+    new Date(fim);
+
+    dataFim.setHours(
+        23,
+        59,
+        59,
+        999
+    );
+
+    ocorrenciasHSEFiltradas =
+
+    ocorrenciasHSE.filter(
+        item => {
+
+            const data =
+            new Date(
+                item.data
+            );
+
+            return (
+                data >= dataInicio &&
+                data <= dataFim
+            );
+
+        }
+    );
+
+    atualizarOcorrenciasHSE();
+
+}
+function limparFiltroOcorrenciasHSE(){
+
+    document.getElementById(
+        "dataInicioOcorrenciaHSE"
+    ).value = "";
+
+    document.getElementById(
+        "dataFimOcorrenciaHSE"
+    ).value = "";
+
+    ocorrenciasHSEFiltradas =
+    [...ocorrenciasHSE];
+
+    atualizarOcorrenciasHSE();
+
+}
+
+
+if(pesquisaOcorrenciaHSE){
+
+    pesquisaOcorrenciaHSE
+    .addEventListener(
+        "input",
+        () => {
+
+            const termo =
+            pesquisaOcorrenciaHSE
+            .value
+            .toLowerCase();
+
+            ocorrenciasHSEFiltradas =
+
+            ocorrenciasHSE.filter(
+                item =>
+
+                (item.tipo || "")
+                .toLowerCase()
+                .includes(termo)
+
+                ||
+
+                (item.area || "")
+                .toLowerCase()
+                .includes(termo)
+
+                ||
+
+                (item.local || "")
+                .toLowerCase()
+                .includes(termo)
+
+                ||
+
+                (item.colaborador || "")
+                .toLowerCase()
+                .includes(termo)
+
+                ||
+
+                (item.empresa || "")
+                .toLowerCase()
+                .includes(termo)
+
+                ||
+
+                (item.status || "")
+                .toLowerCase()
+                .includes(termo)
+            );
+
+            atualizarOcorrenciasHSE();
+
+        }
+    );
+
+}
+
+function calcularDiasSemAcidente(){
+
+    const acidentesReais =
+
+    ocorrenciasHSEFiltradas.filter(
+        item =>
+
+        item.tipo === "ACA" ||
+
+        item.tipo === "Fatalidade"
+    );
+
+    const dataBase =
+carregarDados(
+    "dataBaseAcidente"
+);
+
+const hoje =
+new Date();
+
+if(
+    acidentesReais.length === 0
+){
+
+    if(!dataBase){
+        return 0;
+    }
+
+    return Math.floor(
+
+        (
+            hoje -
+            new Date(dataBase)
+        )
+
+        /
+
+        (1000*60*60*24)
+
+    );
+
+}
+    const ultimoAcidente =
+
+    acidentesReais.sort(
+        (a,b) =>
+
+        new Date(b.data) -
+        new Date(a.data)
+    )[0];
+
+    return Math.floor(
+
+        (
+            new Date() -
+            new Date(
+                ultimoAcidente.data
+            )
+        )
+
+        /
+
+        (1000*60*60*24)
+
+    );
+
+}
+window.calcularDiasSemAcidente =
+calcularDiasSemAcidente;
+
+
+function salvarDataBaseAcidente(){
+
+    const data =
+    document.getElementById(
+        "dataBaseAcidente"
+    ).value;
+
+    salvarDados(
+        "dataBaseAcidente",
+        data
+    );
+
+    atualizarDashboard();
+
+}
+
+function carregarDataBaseAcidente(){
+
+    const dataBase =
+    carregarDados(
+        "dataBaseAcidente"
+    );
+
+    const campo =
+    document.getElementById(
+        "dataBaseAcidente"
+    );
+
+    if(
+        campo &&
+        dataBase
+    ){
+
+        campo.value =
+        dataBase;
+
+    }
+
+}
+
+let indiceEdicaoOcorrenciaHSE = null;
+
+
+
+
+function atualizarOcorrenciasHSE(){
+
+    const tbody =
+    document.querySelector(
+        "#tabelaOcorrenciasHSE tbody"
+    );
+
+    if(!tbody) return;
+
+    tbody.innerHTML = "";
+
+    ocorrenciasHSEFiltradas.forEach(
+        (item,index) => {
+
+            tbody.innerHTML += `
+
+            <tbody>
+
+<tr>
+
+    <td>${item.data}</td>
+
+    <td>${item.tipo}</td>
+
+    <td>${item.area}</td>
+
+    <td>${item.local}</td>
+
+    <td>${item.colaborador}</td>
+
+    <td>${item.diasPerdidos}</td>
+
+    <td>${item.status}</td>
+
+    <td>
+
+        <button
+            onclick="
+                editarOcorrenciaHSE(${index})
+            "
+        >
+            ✏️
+        </button>
+
+        <button
+            onclick="
+                imprimirOcorrenciaHSE(${index})
+            "
+        >
+            🖨️
+        </button>
+
+        <button
+            onclick="
+                eliminarOcorrenciaHSE(${index})
+            "
+        >
+            🗑️
+        </button>
+
+    </td>
+
+</tr>
+            `;
+
+        }
+    );
+
+
+    
+document.getElementById(
+    "totalOcorrenciasHSE"
+).textContent =
+ocorrenciasHSEFiltradas.length;
+
+document.getElementById(
+    "nearMissHSE"
+).textContent =
+ocorrenciasHSEFiltradas.filter(
+    item => item.tipo === "Near Miss"
+).length;
+
+document.getElementById(
+    "saaHSE"
+).textContent =
+ocorrenciasHSEFiltradas.filter(
+    item => item.tipo === "SAA"
+).length;
+
+document.getElementById(
+    "asaHSE"
+).textContent =
+ocorrenciasHSEFiltradas.filter(
+    item => item.tipo === "ASA"
+).length;
+
+document.getElementById(
+    "acaHSE"
+).textContent =
+ocorrenciasHSEFiltradas.filter(
+    item => item.tipo === "ACA"
+).length;
+
+document.getElementById(
+    "fatalidadeHSE"
+).textContent =
+ocorrenciasHSEFiltradas.filter(
+    item => item.tipo === "Fatalidade"
+).length;
+
+document.getElementById(
+    "diasPerdidosTotal"
+).textContent =
+ocorrenciasHSE.reduce(
+    (total,item) =>
+    total +
+    Number(
+        item.diasPerdidos || 0
+    ),
+    0
+);
+
+}
+function eliminarOcorrenciaHSE(index){
+
+    if(
+        !confirm(
+            "Eliminar ocorrência?"
+        )
+    ) return;
+
+    ocorrenciasHSE.splice(
+        index,
+        1
+    );
+
+    salvarDados(
+        "ocorrenciasHSE",
+        ocorrenciasHSE
+    );
+
+    ocorrenciasHSEFiltradas =
+    [...ocorrenciasHSE];
+
+    atualizarOcorrenciasHSE();
+
+    atualizarDashboard();
+
+}
+async function imprimirOcorrenciaHSE(index){
+
+    const item =
+    ocorrenciasHSEFiltradas[index];
+
+    const { jsPDF } =
+    window.jspdf;
+
+    const pdf =
+    new jsPDF();
+
+    pdf.setFontSize(18);
+
+    pdf.text(
+        "TALANGA HSE",
+        20,
+        20
+    );
+
+    pdf.setFontSize(14);
+
+    pdf.text(
+        "RELATÓRIO DE OCORRÊNCIA",
+        20,
+        35
+    );
+
+    pdf.line(
+        20,
+        40,
+        190,
+        40
+    );
+
+    pdf.setFontSize(11);
+
+    pdf.text(
+        `Data: ${item.data}`,
+        20,
+        55
+    );
+
+    pdf.text(
+        `Tipo: ${item.tipo}`,
+        20,
+        70
+    );
+
+    pdf.text(
+        `Área: ${item.area}`,
+        20,
+        85
+    );
+
+    pdf.text(
+        `Local: ${item.local}`,
+        20,
+        100
+    );
+
+    pdf.text(
+        `Empresa: ${item.empresa}`,
+        20,
+        115
+    );
+
+    pdf.text(
+        `Colaborador: ${item.colaborador}`,
+        20,
+        130
+    );
+
+    pdf.text(
+        `Dias Perdidos: ${item.diasPerdidos}`,
+        20,
+        145
+    );
+
+    pdf.text(
+        `Status: ${item.status}`,
+        20,
+        160
+    );
+
+    pdf.text(
+        `Descrição: ${item.descricao || ""}`,
+        20,
+        175
+    );
+
+    pdf.save(
+        `Ocorrencia_${item.tipo}_${item.data}.pdf`
+    );
+
+}
+
+function editarOcorrenciaHSE(index){
+
+    const item =
+    ocorrenciasHSE[index];
+
+    document.getElementById(
+        "dataOcorrenciaHSE"
+    ).value = item.data;
+
+    document.getElementById(
+        "tipoOcorrenciaHSE"
+    ).value = item.tipo;
+
+    document.getElementById(
+        "areaOcorrenciaHSE"
+    ).value = item.area;
+
+    document.getElementById(
+        "localOcorrenciaHSE"
+    ).value = item.local;
+
+    document.getElementById(
+        "empresaOcorrenciaHSE"
+    ).value = item.empresa;
+
+    document.getElementById(
+        "colaboradorOcorrenciaHSE"
+    ).value = item.colaborador;
+
+    document.getElementById(
+        "diasPerdidosHSE"
+    ).value = item.diasPerdidos;
+
+    document.getElementById(
+        "descricaoOcorrenciaHSE"
+    ).value = item.descricao;
+
+    document.getElementById(
+        "statusOcorrenciaHSE"
+    ).value = item.status;
+
+    indiceEdicaoOcorrenciaHSE =
+    index;
+
+}
+
+/* ==========================================
+   inicicio HHT
+========================================== */
+
+
+
+let registosHHT =
+carregarDados(
+    "registosHHT"
+) || [];
+
+let registosHHTFiltrados =
+[...registosHHT];
+
+let indiceEdicaoHHT = null;
+
+const formHHT =
+document.getElementById(
+    "formHHT"
+);
+
+const btnRegistarHHT =
+document.getElementById(
+    "btnRegistarHHT"
+);
+
+if(btnRegistarHHT){
+
+    btnRegistarHHT.addEventListener(
+        "click",
+        registarHHT
+    );
+
+}
+
+if(formHHT){
+
+    formHHT.addEventListener(
+        "submit",
+        registarHHT
+    );
+
+}
+function registarHHT(e){
+
+   
+   
+    if(e){
+        e.preventDefault();
+    }
+
+    const inicioSemana =
+    document.getElementById(
+        "inicioSemanaHHT"
+    ).value;
+
+    const fimSemana =
+    document.getElementById(
+        "fimSemanaHHT"
+    ).value;
+
+    if(
+        !inicioSemana ||
+        !fimSemana
+    ){
+
+        alert(
+            "Informe a data inicial e a data final."
+        );
+
+        return;
+
+    }
+
+    if(
+        inicioSemana > fimSemana
+    ){
+
+        alert(
+            "A data inicial não pode ser superior à data final."
+        );
+
+
+
+
+        
+        return;
+
+    }
+
+    const dias = [
+
+        ["seg",8],
+        ["ter",8],
+        ["qua",8],
+        ["qui",8],
+        ["sex",8],
+        ["sab",7.5],
+        ["dom",7.5]
+
+    ];
+
+    let principalTotal = 0;
+    let subTotal = 0;
+    let hhtSemana = 0;
+
+    dias.forEach(([dia,hora])=>{
+
+        const principal =
+
+            (Number(document.getElementById(`${dia}PMOD`).value) || 0)
+
+            +
+
+            (Number(document.getElementById(`${dia}PMOI`).value) || 0);
+
+        const sub =
+
+            (Number(document.getElementById(`${dia}SMOD`).value) || 0)
+
+            +
+
+            (Number(document.getElementById(`${dia}SMOI`).value) || 0);
+
+        const efetivoDia =
+
+            principal + sub;
+
+        principalTotal += principal;
+
+        subTotal += sub;
+
+        hhtSemana +=
+
+            efetivoDia * hora;
+
+    });
+
+    const efetivoSemana =
+
+        Math.round(
+
+            (principalTotal + subTotal)
+
+            / 7
+
+        );
+
+    const efetivoPrincipal =
+
+        Math.round(
+            principalTotal / 7
+        );
+
+    const efetivoSub =
+
+        Math.round(
+            subTotal / 7
+        );
+
+    const registo = {
+
+        semana:
+        document.getElementById(
+            "semanaHHT"
+        ).value,
+
+        dataInicial:
+        document.getElementById(
+            "inicioSemanaHHT"
+        ).value,
+
+        dataFinal:
+        document.getElementById(
+            "fimSemanaHHT"
+        ).value,
+
+        empresaPrincipal:
+        document.getElementById(
+            "empresaPrincipalHHT"
+        ).value,
+
+        empresaSub:
+        document.getElementById(
+            "empresaSubHHT"
+        ).value,
+
+        segPMOD:
+        document.getElementById("segPMOD").value,
+
+        segPMOI:
+        document.getElementById("segPMOI").value,
+
+        segSMOD:
+        document.getElementById("segSMOD").value,
+
+        segSMOI:
+        document.getElementById("segSMOI").value,
+
+        terPMOD:
+        document.getElementById("terPMOD").value,
+
+        terPMOI:
+        document.getElementById("terPMOI").value,
+
+        terSMOD:
+        document.getElementById("terSMOD").value,
+
+        terSMOI:
+        document.getElementById("terSMOI").value,
+
+        quaPMOD:
+        document.getElementById("quaPMOD").value,
+
+        quaPMOI:
+        document.getElementById("quaPMOI").value,
+
+        quaSMOD:
+        document.getElementById("quaSMOD").value,
+
+        quaSMOI:
+        document.getElementById("quaSMOI").value,
+
+        quiPMOD:
+        document.getElementById("quiPMOD").value,
+
+        quiPMOI:
+        document.getElementById("quiPMOI").value,
+
+        quiSMOD:
+        document.getElementById("quiSMOD").value,
+
+        quiSMOI:
+        document.getElementById("quiSMOI").value,
+
+        sexPMOD:
+        document.getElementById("sexPMOD").value,
+
+        sexPMOI:
+        document.getElementById("sexPMOI").value,
+
+        sexSMOD:
+        document.getElementById("sexSMOD").value,
+
+        sexSMOI:
+        document.getElementById("sexSMOI").value,
+
+        sabPMOD:
+        document.getElementById("sabPMOD").value,
+
+        sabPMOI:
+        document.getElementById("sabPMOI").value,
+
+        sabSMOD:
+        document.getElementById("sabSMOD").value,
+
+        sabSMOI:
+        document.getElementById("sabSMOI").value,
+
+        domPMOD:
+        document.getElementById("domPMOD").value,
+
+        domPMOI:
+        document.getElementById("domPMOI").value,
+
+        domSMOD:
+        document.getElementById("domSMOD").value,
+
+        domSMOI:
+        document.getElementById("domSMOI").value,
+
+        efetivoPrincipal,
+
+        efetivoSub,
+
+        efetivoSemana,
+
+        hhtSemana
+
+    };
+    const existePeriodo =
+
+registosHHT.some(
+    (item,index)=>
+
+    item.dataInicial === registo.dataInicial
+
+    &&
+
+    item.dataFinal === registo.dataFinal
+
+    &&
+
+    index !== indiceEdicaoHHT
+);
+
+if(
+    existePeriodo
+){
+
+    alert(
+        "Já existe um registo para este período."
+    );
+
+    return;
+
+}
+
+    if(indiceEdicaoHHT !== null){
+
+        const registoAntigo =
+        registosHHTFiltrados[
+            indiceEdicaoHHT
+        ];
+
+        const indiceReal =
+        registosHHT.findIndex(
+            r =>
+
+            r.semana === registoAntigo.semana
+
+            &&
+
+            r.dataInicial === registoAntigo.dataInicial
+
+            &&
+
+            r.dataFinal === registoAntigo.dataFinal
+        );
+
+        if(indiceReal > -1){
+
+            registosHHT[indiceReal] =
+            registo;
+
+        }
+
+        indiceEdicaoHHT = null;
+
+    }else{
+
+        registosHHT.push(
+            registo
+        );
+
+    }
+
+    registosHHTFiltrados =
+    [...registosHHT];
+
+    salvarDados(
+        "registosHHT",
+        registosHHT
+    );
+
+    atualizarHHT();
+
+    formHHT.reset();
+
+}
+function filtrarHHT(){
+
+    const inicio =
+    document.getElementById(
+        "dataInicioHHT"
+    ).value;
+
+    const fim =
+    document.getElementById(
+        "dataFimHHT"
+    ).value;
+
+    registosHHTFiltrados =
+registosHHT.filter(
+        item=>{
+
+            const data =
+            new Date(
+                item.dataInicial
+            );
+
+            const dtInicio =
+            new Date(inicio);
+
+            const dtFim =
+            new Date(fim);
+
+            dtFim.setHours(
+                23,
+                59,
+                59,
+                999
+            );
+
+            return (
+                data >= dtInicio &&
+                data <= dtFim
+            );
+
+        }
+    );
+
+    atualizarHHT();
+
+}
+
+function limparFiltroHHT(){
+
+    document.getElementById(
+        "dataInicioHHT"
+    ).value = "";
+
+    document.getElementById(
+        "dataFimHHT"
+    ).value = "";
+
+    document.getElementById(
+        "pesquisaHHT"
+    ).value = "";
+
+    registosHHTFiltrados =
+    [...registosHHTFiltrados];
+
+    atualizarHHT();
+
+}
+
+const pesquisaHHT =
+document.getElementById(
+    "pesquisaHHT"
+);
+
+if(pesquisaHHT){
+
+    pesquisaHHT.addEventListener(
+        "input",
+        ()=>{
+
+            const termo =
+
+            pesquisaHHT.value
+            .toLowerCase();
+
+           registosHHTFiltrados =
+
+registosHHT.filter(
+                item =>
+
+                item.semana
+                .toLowerCase()
+                .includes(
+                    termo
+                )
+
+                ||
+
+                item.empresaPrincipal
+                .toLowerCase()
+                .includes(
+                    termo
+                )
+
+                ||
+
+                item.empresaSub
+                .toLowerCase()
+                .includes(
+                    termo
+                )
+            );
+
+            atualizarHHT();
+
+        }
+    );
+
+}
+
+document
+.getElementById("pesquisaHHT")
+.addEventListener(
+    "input",
+    function(){
+
+        if(
+            this.value.trim() === ""
+        ){
+
+            registosHHTFiltrados =
+            [...registosHHT];
+
+            atualizarHHT();
+
+        }
+
+    }
+);
+
+
+
+document
+.getElementById("dataInicioHHT")
+.addEventListener(
+    "change",
+    verificarLimpezaFiltro
+);
+
+document
+.getElementById("dataFimHHT")
+.addEventListener(
+    "change",
+    verificarLimpezaFiltro
+);
+function verificarLimpezaFiltro(){
+
+    const inicio =
+    document.getElementById(
+        "dataInicioHHT"
+    ).value;
+
+    const fim =
+    document.getElementById(
+        "dataFimHHT"
+    ).value;
+
+    if(
+        !inicio &&
+        !fim
+    ){
+
+        registosHHTFiltrados =
+        [...registosHHT];
+
+        atualizarHHT();
+
+    }
+
+}
+
+
+function atualizarHHT(){
+
+    const tbody =
+    document.querySelector(
+        "#tabelaHHT tbody"
+    );
+
+
+    
+    if(!tbody) return;
+
+    tbody.innerHTML = "";
+
+    registosHHTFiltrados.forEach(
+        (item,index) => {
+
+            tbody.innerHTML += `
+
+            <tr>
+
+                <td>${item.semana}</td>
+
+                <td>${item.dataInicial}</td>
+
+                <td>${item.dataFinal}</td>
+
+                <td>${item.efetivoPrincipal}</td>
+
+                <td>${item.efetivoSub}</td>
+
+                <td>${item.efetivoSemana}</td>
+
+                <td>${item.hhtSemana}</td>
+
+               <td>
+
+    <button
+        onclick="
+        editarHHT(${index})
+        "
+    >
+        ✏️
+    </button>
+
+    <button
+        onclick="
+        eliminarHHT(${index})
+        "
+    >
+        🗑️
+    </button>
+
+</td>
+            </tr>
+
+            `;
+
+            
+        }
+    );
+document.getElementById(
+    "hhtMes"
+).textContent =
+
+calcularHHTMes()
+.toLocaleString(
+    "pt-PT"
+);
+
+document.getElementById(
+    "hhtAcumulado"
+).textContent =
+
+calcularHHTAcumulado()
+.toLocaleString(
+    "pt-PT"
+);
+
+document.getElementById(
+    "efetivoMesHHT"
+).textContent =
+
+calcularEfetivoMes();
+
+const ocorrenciasHSE =
+carregarDados(
+    "ocorrenciasHSE"
+) || [];
+
+const totalACA =
+
+ocorrenciasHSE.filter(
+    item =>
+
+    item.tipo ===
+
+    "ACA"
+).length;
+
+const totalDiasPerdidos =
+
+ocorrenciasHSE.reduce(
+    (total,item)=>
+
+    total +
+
+    Number(
+        item.diasPerdidos || 0
+    ),
+
+    0
+);
+
+const hhtAcumulado =
+
+registosHHTFiltrados.reduce(
+    (total,item)=>
+
+    total +
+
+    item.hhtSemana,
+
+    0
+);
+
+const tf =
+
+hhtAcumulado > 0
+
+?
+
+(
+    totalACA * 1000000
+)
+
+/
+
+hhtAcumulado
+
+: 0;
+
+const tg =
+
+hhtAcumulado > 0
+
+?
+
+(
+    totalDiasPerdidos
+    *
+    1000000
+)
+
+/
+
+hhtAcumulado
+
+: 0;
+document.getElementById(
+    "taxaFrequencia"
+).textContent =
+
+tf.toFixed(2);
+
+document.getElementById(
+    "taxaGravidade"
+).textContent =
+
+tg.toFixed(2);
+
+if(registosHHTFiltrados.length){
+
+    const ultimo =
+    registosHHTFiltrados[
+        registosHHTFiltrados.length - 1
+    ];
+
+    const mediaEfetivo =
+
+    Math.round(
+
+        registosHHTFiltrados.reduce(
+            (total,item)=>
+            total +
+            item.efetivoSemana,
+            0
+        )
+
+        /
+
+        registosHHTFiltrados.length
+
+    );
+
+    const totalHHT =
+
+    registosHHTFiltrados.reduce(
+        (total,item)=>
+        total +
+        item.hhtSemana,
+        0
+    );
+
+    document.getElementById(
+        "efetivoPrincipal"
+    ).textContent =
+    ultimo.efetivoPrincipal;
+
+    document.getElementById(
+        "efetivoSubcontratada"
+    ).textContent =
+    ultimo.efetivoSub;
+
+    document.getElementById(
+        "efetivoSemanaHHT"
+    ).textContent =
+    ultimo.efetivoSemana;
+
+    document.getElementById(
+        "efetivoMesHHT"
+    ).textContent =
+    mediaEfetivo;
+
+    document.getElementById(
+        "hhtSemana"
+    ).textContent =
+    ultimo.hhtSemana;
+
+    document.getElementById(
+        "hhtMes"
+    ).textContent =
+    totalHHT;
+
+    document.getElementById(
+        "hhtAcumulado"
+    ).textContent =
+    totalHHT;
+
+    document.getElementById(
+        "semanaAtualHHT"
+    ).textContent =
+    ultimo.semana;
+
+}
+
+}
+
+function editarHHT(index){
+
+    const item =
+    registosHHTFiltrados[index];
+
+    document.getElementById(
+        "semanaHHT"
+    ).value =
+    item.semana;
+
+    document.getElementById(
+        "inicioSemanaHHT"
+    ).value =
+    item.dataInicial;
+
+    document.getElementById(
+        "fimSemanaHHT"
+    ).value =
+    item.dataFinal;
+
+    document.getElementById(
+        "empresaPrincipalHHT"
+    ).value =
+    item.empresaPrincipal;
+
+    document.getElementById(
+        "empresaSubHHT"
+    ).value =
+    item.empresaSub;
+
+    document.getElementById("segPMOD").value = item.segPMOD || "";
+    document.getElementById("segPMOI").value = item.segPMOI || "";
+    document.getElementById("segSMOD").value = item.segSMOD || "";
+    document.getElementById("segSMOI").value = item.segSMOI || "";
+
+    document.getElementById("terPMOD").value = item.terPMOD || "";
+    document.getElementById("terPMOI").value = item.terPMOI || "";
+    document.getElementById("terSMOD").value = item.terSMOD || "";
+    document.getElementById("terSMOI").value = item.terSMOI || "";
+
+    document.getElementById("quaPMOD").value = item.quaPMOD || "";
+    document.getElementById("quaPMOI").value = item.quaPMOI || "";
+    document.getElementById("quaSMOD").value = item.quaSMOD || "";
+    document.getElementById("quaSMOI").value = item.quaSMOI || "";
+
+    document.getElementById("quiPMOD").value = item.quiPMOD || "";
+    document.getElementById("quiPMOI").value = item.quiPMOI || "";
+    document.getElementById("quiSMOD").value = item.quiSMOD || "";
+    document.getElementById("quiSMOI").value = item.quiSMOI || "";
+
+    document.getElementById("sexPMOD").value = item.sexPMOD || "";
+    document.getElementById("sexPMOI").value = item.sexPMOI || "";
+    document.getElementById("sexSMOD").value = item.sexSMOD || "";
+    document.getElementById("sexSMOI").value = item.sexSMOI || "";
+
+    document.getElementById("sabPMOD").value = item.sabPMOD || "";
+    document.getElementById("sabPMOI").value = item.sabPMOI || "";
+    document.getElementById("sabSMOD").value = item.sabSMOD || "";
+    document.getElementById("sabSMOI").value = item.sabSMOI || "";
+
+    document.getElementById("domPMOD").value = item.domPMOD || "";
+    document.getElementById("domPMOI").value = item.domPMOI || "";
+    document.getElementById("domSMOD").value = item.domSMOD || "";
+    document.getElementById("domSMOI").value = item.domSMOI || "";
+
+    indiceEdicaoHHT = index;
+
+    window.scrollTo({
+        top: document.getElementById("formHHT").offsetTop,
+        behavior: "smooth"
+    });
+
+}
+function eliminarHHT(index){
+
+    if(!confirm("Eliminar registo?")){
+        return;
+    }
+
+    const registo =
+    registosHHTFiltrados[index];
+
+    const indiceReal =
+    registosHHT.findIndex(
+        item =>
+
+        item.semana === registo.semana
+
+        &&
+
+        item.dataInicial === registo.dataInicial
+
+        &&
+
+        item.dataFinal === registo.dataFinal
+    );
+
+    if(indiceReal > -1){
+
+        registosHHT.splice(
+            indiceReal,
+            1
+        );
+
+    }
+
+    registosHHTFiltrados =
+    [...registosHHT];
+
+    salvarDados(
+        "registosHHT",
+        registosHHT
+    );
+
+    atualizarHHT();
+
+}
+function calcularHHTMes(){
+
+    const hoje = new Date();
+
+    const mesAtual =
+    hoje.getMonth();
+
+    const anoAtual =
+    hoje.getFullYear();
+
+    return registosHHTFiltrados
+    .filter(item=>{
+
+        const data =
+        new Date(
+            item.dataInicial
+        );
+
+        return (
+
+            data.getMonth() ===
+            mesAtual
+
+            &&
+
+            data.getFullYear() ===
+            anoAtual
+
+        );
+
+    })
+    .reduce(
+        (total,item)=>
+        total + item.hhtSemana,
+        0
+    );
+
+}
+function calcularHHTAcumulado(){
+
+    return registosHHTFiltrados
+    .reduce(
+        (total,item)=>
+        total + item.hhtSemana,
+        0
+    );
+
+}
+function calcularEfetivoMes(){
+
+    if(
+        registosHHTFiltrados.length === 0
+    ){
+        return 0;
+    }
+
+    const soma =
+
+    registosHHTFiltrados.reduce(
+        (total,item)=>
+
+        total +
+        item.efetivoSemana,
+
+        0
+    );
+
+    return soma;
+
+}
+atualizarHHT();
+
+/* ==========================================
+   final HHT
+========================================== */
+
+
+atualizarOcorrenciasHSE();
+carregarDataBaseAcidente();
 atualizarInspecoes();

@@ -18,7 +18,9 @@
 </head>
 
 <body>
-
+<button id="menuMobile" class="menu-mobile">
+    ☰
+</button>
     <!-- SIDEBAR -->
 
     <div class="sidebar">
@@ -54,7 +56,10 @@ class="logo"
 >
     🌙 Modo Escuro
 </button>
-        <ul>
+       
+
+
+<ul>
 
 <li onclick="mostrarModulo('dashboard')">
 
@@ -341,24 +346,32 @@ class="logo"
 
     <div class="cards-dashboard">
 
-        <div class="card-kpi">
+        <div class="card-indicador">
             <h3>📊 Conformidade</h3>
             <span id="cardConformidade">0%</span>
         </div>
 
-        <div class="card-kpi">
+        <div class="card-indicador">
             <h3>👷 Colaboradores</h3>
             <span id="cardColaboradores">0</span>
         </div>
 
-        
-        <div class="card-kpi">
+       <div class="card-indicador">
+
+    <h3>🏆 Dias sem Acidente com Afastamento</h3>
+
+    <span id="diasSemAcidente">
+        0
+    </span>
+
+</div>
+
+        <div class="card-indicador">
             <h3>📚 Treinamentos</h3>
             <span id="cardTreinamentos">0</span>
         </div>
 
-        
-        <div class="card-kpi">
+        <div class="card-indicador">
             <h3>🔍 Inspeções</h3>
             <span id="cardInspecoes">0</span>
         </div>
@@ -387,22 +400,22 @@ class="logo"
 
         <div class="cards-dashboard">
 
-            <div class="card-kpi">
+            <div class="card-indicador">
                 <h3>Ocorrências</h3>
                 <span id="segOcorrencias">0</span>
             </div>
 
-            <div class="card-kpi">
+            <div class="card-indicador">
                 <h3>EPI</h3>
                 <span id="segEPI">0</span>
             </div>
 
-            <div class="card-kpi">
+            <div class="card-indicador">
                 <h3>DDS</h3>
                 <span id="segDDS">0</span>
             </div>
 
-            <div class="card-kpi">
+            <div class="card-indicador">
                 <h3>Fala Talanga</h3>
                 <span id="segFalaTalanga">0</span>
             </div>
@@ -419,22 +432,22 @@ class="logo"
 
         <div class="cards-dashboard">
 
-            <div class="card-kpi">
+            <div class="card-indicador">
                 <h3>ASO</h3>
                 <span id="saudeASO">0</span>
             </div>
 
-            <div class="card-kpi">
+            <div class="card-indicador">
                 <h3>Ambulatório</h3>
                 <span id="saudeAmbulatorio">0</span>
             </div>
 
-            <div class="card-kpi">
+            <div class="card-indicador">
                 <h3>Medicamentos</h3>
                 <span id="saudeMedicamentos">0</span>
             </div>
 
-            <div class="card-kpi">
+            <div class="card-indicador">
                 <h3>Emergências</h3>
                 <span id="saudeEmergencias">0</span>
             </div>
@@ -451,22 +464,22 @@ class="logo"
 
         <div class="cards-dashboard">
 
-            <div class="card-kpi">
+            <div class="card-indicador">
                 <h3>Requisitos Legais</h3>
                 <span id="ambRequisitos">0</span>
             </div>
 
-            <div class="card-kpi">
+            <div class="card-indicador">
                 <h3>Resíduos</h3>
                 <span id="ambResiduos">0</span>
             </div>
 
-            <div class="card-kpi">
+            <div class="card-indicador">
                 <h3>Consumos</h3>
                 <span id="ambConsumos">0</span>
             </div>
 
-            <div class="card-kpi">
+            <div class="card-indicador">
                 <h3>Fauna</h3>
                 <span id="ambFauna">0</span>
             </div>
@@ -499,26 +512,615 @@ class="logo"
 
     </div>
 
-</section>  </section>
+</section>
 
 </div> 
-
+<!-- acidentes -->
 <!-- SEGURANÇA -->
 
         <section id="seguranca" class="modulo">
 
     <h2>🦺 Gestão de Segurança</h2>
+    
 
+<!-- OCORRÊNCIAS -->
+
+<button
+class="secao-toggle"
+onclick="alternarSecao('ocorrenciasHSE')">
+📋 Ocorrências</button>
+
+<div id="ocorrenciasHSE"style="display:none;"
+
+>
+    <h3>
+        📋 Gestão de Ocorrências
+    </h3>
+
+    <div class="cards-dashboard">
+<label>
+    Data Inicial para Contagem de Dias Sem Acidente
+</label>
+
+<input
+    type="date"
+    id="dataBaseAcidente"
+>
+
+<button
+    type="button"
+    onclick="salvarDataBaseAcidente()"
+>
+    Guardar Data Base
+</button>
+        <div class="card-indicador">
+            
+            <h3>Total</h3>
+            <span id="totalOcorrenciasHSE">
+                0
+            </span>
+        
+        </div>
+
+        <div class="card-indicador">
+            <h3>Near Miss</h3>
+            <span id="nearMissHSE">
+                0
+            </span>
+        </div>
+
+        <div class="card-indicador">
+            <h3>SAA</h3>
+            <span id="saaHSE">
+                0
+            </span>
+        </div>
+
+        <div class="card-indicador">
+            <h3>ASA</h3>
+            <span id="asaHSE">
+                0
+            </span>
+        </div>
+
+        <div class="card-indicador">
+            <h3>ACA</h3>
+            <span id="acaHSE">
+                0
+            </span>
+        </div>
+<div class="card-indicador">
+    <h3>⚫ Fatalidades</h3>
+    <span id="fatalidadeHSE">0</span>
+</div>
+
+<div class="card-indicador">
+    <h3>🟤 Dias Perdidos</h3>
+    <span id="diasPerdidosTotal">0</span>
+</div>
+   
+<form id="formOcorrenciasHSE">
+</div>
+
+<label>
+    Pesquisar
+</label>
+
+<input
+    type="text"
+    id="pesquisaOcorrenciaHSE"
+    placeholder="Pesquisar..."
+><label>Data inicial</label>
+<input
+    type="date"
+    id="dataInicioOcorrenciaHSE"
+><label>Data final</label>
+
+<input
+    type="date"
+    id="dataFimOcorrenciaHSE"
+>
+
+<button
+    type="button"
+    onclick="filtrarOcorrenciasHSE()"
+>
+    Filtrar
+</button>
+
+<button
+    type="button"
+    onclick="limparFiltroOcorrenciasHSE()"
+>
+    Limpar
+</button>
+
+<label>Data da Ocorrência</label>
+<input
+    type="date"
+    id="dataOcorrenciaHSE"
+    required
+>
+
+<label>Tipo de Ocorrência</label>
+<select
+    id="tipoOcorrenciaHSE"
+    required
+>
+
+    <option value="">
+        Selecione
+    </option>
+
+    <option>Near Miss</option>
+
+    <option>SAA</option>
+
+    <option>ASA</option>
+
+    <option>ACA</option>
+
+    <option>Fatalidade</option>
+
+    <option>Dano Material</option>
+
+    <option>Incidente Ambiental</option>
+
+</select>
+
+<label>Área</label>
+<input
+    type="text"
+    id="areaOcorrenciaHSE"
+>
+
+<label>Local</label>
+<input
+    type="text"
+    id="localOcorrenciaHSE"
+>
+
+<label>Empresa</label>
+<input
+    type="text"
+    id="empresaOcorrenciaHSE"
+>
+
+<label>Colaborador Envolvido</label>
+<input
+    type="text"
+    id="colaboradorOcorrenciaHSE"
+>
+
+<label>Dias Perdidos</label>
+<input
+    type="number"
+    id="diasPerdidosHSE"
+    value="0"
+>
+
+<label>Descrição</label>
+<textarea
+    id="descricaoOcorrenciaHSE"
+></textarea>
+
+<label>Status</label>
+<select
+    id="statusOcorrenciaHSE"
+>
+
+    <option>Aberto</option>
+
+    <option>Em Investigação</option>
+
+    <option>Encerrado</option>
+
+</select>
+<button type="submit">
+
+    Registrar Ocorrência
+
+</button>
+<table id="tabelaOcorrenciasHSE">
+
+    <thead>
+
+        <tr>
+
+            <th>Data</th>
+            <th>Tipo</th>
+            <th>Área</th>
+            <th>Local</th>
+            <th>Colaborador</th>
+            <th>Dias Perdidos</th>
+            <th>Status</th>
+<th>Ações</th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+    </tbody>
+
+</table>
+
+</div></form>
+<button
+    class="secao-toggle"
+    onclick="alternarSecao('secaoHHT')"
+>
+    👷 HHT
+</button>
+
+<div
+    id="secaoHHT"
+    style="display:none;"
+>
+
+    <h3>
+        👷 Gestão de HHT
+    </h3>
+<div class="indicadores-ambientais">
+<div class="indicadores-ambientais">
+
+    <div class="card-indicador">
+
+        <h4>🏢 Efetivo Empresa Principal</h4>
+
+        <span id="efetivoPrincipal">
+            0
+        </span>
+
+    </div>
+
+    <div class="card-indicador">
+
+        <h4>🤝 Efetivo Subcontratado</h4>
+
+        <span id="efetivoSubcontratada">
+            0
+        </span>
+
+    </div>
+
+    <div class="card-indicador">
+
+        <h4>👷 Efetivo Semanal</h4>
+
+        <span id="efetivoSemanaHHT">
+            0
+        </span>
+
+    </div>
+
+    <div class="card-indicador">
+
+        <h4>👷 Efetivo Médio Mês</h4>
+
+        <span id="efetivoMesHHT">
+            0
+        </span>
+
+    </div>
+
+    <div class="card-indicador">
+
+        <h4>⏱️ HHT Semana</h4>
+
+        <span id="hhtSemana">
+            0
+        </span>
+
+    </div>
+
+    <div class="card-indicador">
+
+        <h4>📅 HHT Mês</h4>
+
+        <span id="hhtMes">
+            0
+        </span>
+
+    </div>
+
+    <div class="card-indicador">
+
+        <h4>📈 HHT Acumulado</h4>
+
+        <span id="hhtAcumulado">
+            0
+        </span>
+
+    </div>
+<div class="card-indicador">
+
+    <h4>
+        📆 Última Semana Registrada
+    </h4>
+
+    <span id="semanaAtualHHT">
+        -
+    </span>
+
+</div>
+<div class="card-indicador">
+
+    <h4>📊 TF</h4>
+
+    <span id="taxaFrequencia">
+        0.00
+    </span>
+
+</div>
+
+<div class="card-indicador">
+
+    <h4>📊 TG</h4>
+
+    <span id="taxaGravidade">
+        0.00
+    </span>
+
+</div>
+</div>
+
+<label>
+    Pesquisar HHT
+</label>
+
+<input
+    type="text"
+    id="pesquisaHHT"
+    placeholder="
+    Semana,
+    Ano ou Empresa
+    "
+>
+
+<label>
+    Data Inicial
+</label>
+
+<input
+    type="date"
+    id="dataInicioHHT"
+>
+
+<label>
+    Data Final
+</label>
+
+<input
+    type="date"
+    id="dataFimHHT"
+>
+
+<button
+    type="button"
+    onclick="filtrarHHT()"
+>
+    Filtrar
+</button>
+
+<button
+    type="button"
+    onclick="limparFiltroHHT()"
+>
+    Limpar
+</button>
+
+</div>
+<form id="formHHT">
+
+<label>Semana</label>
+
+<input
+    type="text"
+    id="semanaHHT"
+    placeholder="Semana 01"
+>
+
+<label>Data Inicial</label>
+
+<input
+    type="date"
+    id="inicioSemanaHHT"
+>
+
+<label>Data Final</label>
+
+<input
+    type="date"
+    id="fimSemanaHHT"
+>
+<table class="tabela-hht">
+
+<thead>
+
+<tr>
+
+    <th>Dia</th>
+
+    <th>Principal MOD</th>
+
+    <th>Principal MOI</th>
+
+    <th>Sub MOD</th>
+
+    <th>Sub MOI</th>
+
+</tr>
+
+</thead>
+<label>Empresa Principal</label>
+
+<input
+    type="text"
+    id="empresaPrincipalHHT"
+>
+
+<label>Subcontratada Principal</label>
+
+<input
+    type="text"
+    id="empresaSubHHT"
+>
+<tbody>
+
+<tr>
+
+<td>Segunda</td>
+
+<td><input type="number" id="segPMOD"></td>
+
+<td><input type="number" id="segPMOI"></td>
+
+<td><input type="number" id="segSMOD"></td>
+
+<td><input type="number" id="segSMOI"></td>
+
+</tr>
+
+<tr>
+
+<td>Terça</td>
+
+<td><input type="number" id="terPMOD"></td>
+
+<td><input type="number" id="terPMOI"></td>
+
+<td><input type="number" id="terSMOD"></td>
+
+<td><input type="number" id="terSMOI"></td>
+
+</tr>
+
+<tr>
+
+<td>Quarta</td>
+
+<td><input type="number" id="quaPMOD"></td>
+
+<td><input type="number" id="quaPMOI"></td>
+
+<td><input type="number" id="quaSMOD"></td>
+
+<td><input type="number" id="quaSMOI"></td>
+
+</tr>
+
+<tr>
+
+<td>Quinta</td>
+
+<td><input type="number" id="quiPMOD"></td>
+
+<td><input type="number" id="quiPMOI"></td>
+
+<td><input type="number" id="quiSMOD"></td>
+
+<td><input type="number" id="quiSMOI"></td>
+
+</tr>
+
+<tr>
+
+<td>Sexta</td>
+
+<td><input type="number" id="sexPMOD"></td>
+
+<td><input type="number" id="sexPMOI"></td>
+
+<td><input type="number" id="sexSMOD"></td>
+
+<td><input type="number" id="sexSMOI"></td>
+
+</tr>
+
+<tr>
+
+<td>Sábado</td>
+
+<td><input type="number" id="sabPMOD"></td>
+
+<td><input type="number" id="sabPMOI"></td>
+
+<td><input type="number" id="sabSMOD"></td>
+
+<td><input type="number" id="sabSMOI"></td>
+
+</tr>
+
+<tr>
+
+<td>Domingo</td>
+
+<td><input type="number" id="domPMOD"></td>
+
+<td><input type="number" id="domPMOI"></td>
+
+<td><input type="number" id="domSMOD"></td>
+
+<td><input type="number" id="domSMOI"></td>
+
+</tr>
+
+</tbody>
+
+</table>
+<button
+    type="submit"
+>
+
+    Registar Semana HHT
+
+</button>
+
+
+</form>
+<table id="tabelaHHT">
+
+<thead>
+
+<tr>
+
+<th>Semana</th>
+<th>Data Inicial</th>
+<th>Data Final</th>
+<th>Principal</th>
+<th>Subcontratada</th>
+<th>Efetivo Total</th>
+<th>HHT Semana</th>
+<th>Ações</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+</tbody>
+
+</table>
+ </thead>
+
+       
+
+</div>
+     <!-- fim acidentes -->
     <button
         class="secao-toggle"
-        onclick="
-            alternarSecao(
-                'secaoOcorrencias'
-            )
-        "
-    >
-        🚨 Desvios e Ocorrências
+        onclick="alternarSecao('secaoOcorrencias')">
+    🚨 Desvios
+    
     </button>
+    
+    
+     
+ 
+    
 
     <div
         id="secaoOcorrencias"
@@ -563,7 +1165,7 @@ class="logo"
 
 </div>
   
-<label>Pesquisar Ocorrência</label>
+<label>Pesquisar Desvio</label>
 
 <input
     type="text"
@@ -649,7 +1251,7 @@ class="logo"
                 </select>
 
                 <button type="submit">
-                    Registrar Ocorrência
+                    Registrar Desvio
                 </button>
 
             </form>
@@ -1316,6 +1918,7 @@ class="logo"
 
 </table>
 </div>
+
 </section>
         <!-- SAÚDE -->
          <section id="saude" class="modulo">
@@ -3862,7 +4465,48 @@ Produtos Químicos
 </footer>
     </div>
 
+<div id="talanguinhaBot">
 
+    👷‍♀️
+
+</div>
+
+<div id="talanguinhaChat">
+
+    <div id="talanguinhaHeader">
+
+        👷‍♀️ Talanguinha
+
+    </div>
+
+    <div id="talanguinhaMensagens">
+
+        <div class="msgBot">
+
+            Olá! Sou a Talanguinha.
+            Como posso ajudar?
+
+        </div>
+
+    </div>
+
+    <div class="talanguinhaRodape">
+
+        <input
+            type="text"
+            id="perguntaTalanguinha"
+            placeholder="Escreva uma pergunta..."
+        >
+
+        <button
+            id="btnTalanguinha"
+        >
+            Enviar
+        </button>
+
+    </div>
+
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
