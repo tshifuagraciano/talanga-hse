@@ -1965,21 +1965,4 @@ body.dark
 
 
     }
-    @media (max-width: 768px) {
-  body {
-    font-size: 14px;
-  }
-  .menu {
-    flex-direction: column;
-  }
-}
-.container {
-  display: flex;
-  flex-wrap: wrap;
-}
-img {
-  max-width: 100%;
-  height: auto;
-}
-
-
+    
