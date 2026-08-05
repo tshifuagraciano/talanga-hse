@@ -67,42 +67,179 @@ function atualizarDashboard(){
     ).textContent =
     treinamentos.length;
 
-    document.getElementById(
-        "cardOcorrencias"
-    ).textContent =
+    const cardOcorrencias =
+document.getElementById(
+    "cardOcorrencias"
+);
+
+if(cardOcorrencias){
+
+    cardOcorrencias.textContent =
     ocorrencias.length;
 
-    document.getElementById(
-        "cardASO"
-    ).textContent =
+}
+    const cardASO =
+document.getElementById(
+    "cardASO"
+);
+
+if(cardASO){
+
+    cardASO.textContent =
     asos.length;
 
+}
     document.getElementById(
         "cardInspecoes"
     ).textContent =
     inspecoes.length;
 
-    /* SEGURANÇA */
+    const registosHHT =
+carregarDados(
+    "registosHHT"
+) || [];
+
+
+
+
+
+const hhtAcumulado =
+
+registosHHT.reduce(
+    (total,item)=>
+
+    total +
+    Number(item.hhtSemana || 0),
+
+    0
+);
+
+const ocorrenciasHSE =
+carregarDados(
+    "ocorrenciasHSE"
+) || [];
+
+const totalACA =
+
+ocorrenciasHSE.filter(
+    item =>
+
+    item.tipo === "ACA"
+).length;
+
+const totalDiasPerdidos =
+
+ocorrenciasHSE.reduce(
+    (total,item)=>
+
+    total +
+
+    Number(
+        item.diasPerdidos || 0
+    ),
+
+    0
+);
+const tf =
+
+hhtAcumulado > 0
+
+?
+
+(
+    totalACA * 1000000
+)
+
+/
+
+hhtAcumulado
+
+: 0;
+const tg =
+
+hhtAcumulado > 0
+
+?
+
+(
+    totalDiasPerdidos
+    *
+    1000000
+)
+
+/
+
+hhtAcumulado
+
+: 0;
+let efetivoAtual = 0;
+
+if(
+    registosHHT.length
+){
+
+    efetivoAtual =
+
+    registosHHT[
+        registosHHT.length - 1
+    ].efetivoSemana;
+
+}
+document.getElementById(
+    "cardHHTAcumulado"
+).textContent =
+
+hhtAcumulado.toLocaleString(
+    "pt-PT"
+);
+
+document.getElementById(
+    "cardTF"
+).textContent =
+
+tf.toFixed(2);
+
+document.getElementById(
+    "cardTG"
+).textContent =
+
+tg.toFixed(2);
+
+document.getElementById(
+    "cardEfetivoAtual"
+).textContent =
+
+efetivoAtual;
+
+if(tf === 0){
 
     document.getElementById(
-        "segOcorrencias"
-    ).textContent =
-    ocorrencias.length;
+        "cardTF"
+    ).style.color = "#22c55e";
+
+}else{
 
     document.getElementById(
-        "segEPI"
-    ).textContent =
-    solicitacoesEPI.length;
+        "cardTF"
+    ).style.color = "#dc2626";
+
+}
+
+if(tg === 0){
 
     document.getElementById(
-        "segDDS"
-    ).textContent =
-    ddsAtivos.length;
+        "cardTG"
+    ).style.color = "#22c55e";
+
+}else{
 
     document.getElementById(
-        "segFalaTalanga"
-    ).textContent =
-    falaTalanga.length;
+        "cardTG"
+    ).style.color = "#dc2626";
+
+}
+
+   
 
     /* SAÚDE */
 
@@ -169,7 +306,7 @@ if(
             data:{
 
                 labels:[
-                    "Ocorrências",
+                    "Desvios",
                     "EPI",
                     "DDS",
                     "Fala Talanga"
@@ -425,6 +562,165 @@ if(
         }
 
     );
+const labelsHHT =
+
+registosHHT.map(
+    item => item.semana
+);
+
+const dadosHHT =
+
+registosHHT.map(
+    item => item.hhtSemana
+);
+
+if(window.graficoHHTObj){
+
+    window.graficoHHTObj.destroy();
+
+}
+
+const ctxHHT =
+document.getElementById(
+    "graficoHHT"
+);
+
+if(ctxHHT){
+
+    window.graficoHHTObj =
+    new Chart(
+        ctxHHT,
+        {
+
+            type:"line",
+
+            data:{
+
+                labels:
+                labelsHHT,
+
+                datasets:[
+
+                    {
+
+                        label:
+                        "HHT",
+
+                        data:
+                        dadosHHT,
+
+                        borderColor:
+                        "#2563eb",
+
+                        backgroundColor:
+                        "rgba(37,99,235,.2)",
+
+                        fill:true,
+
+                        tension:.3
+
+                    }
+
+                ]
+
+            }
+
+        }
+    );
+
+}
+const labelsEfetivo =
+
+registosHHT.map(
+    item => item.semana
+);
+
+const dadosEfetivo =
+
+registosHHT.map(
+    item => item.efetivoSemana
+);
+if(window.graficoEfetivoObj){
+
+    window.graficoEfetivoObj.destroy();
+
+}
+
+const ctxEfetivo =
+document.getElementById(
+    "graficoEfetivo"
+);
+
+if(ctxEfetivo){
+
+    window.graficoEfetivoObj =
+    new Chart(
+        ctxEfetivo,
+        {
+
+            type:"bar",
+
+            data:{
+
+                labels:
+                labelsEfetivo,
+
+                datasets:[
+
+                    {
+
+                        label:
+                        "Efetivo",
+
+                        data:
+                        dadosEfetivo,
+
+                        backgroundColor:
+                        "#22c55e",
+
+                        borderColor:
+                        "#16a34a",
+
+                        borderWidth:1
+
+                    }
+
+                ]
+
+            },
+
+            options:{
+
+                responsive:true,
+
+                maintainAspectRatio:false,
+
+                plugins:{
+
+                    legend:{
+
+                        display:true
+
+                    }
+
+                },
+
+                scales:{
+
+                    y:{
+
+                        beginAtZero:true
+
+                    }
+
+                }
+
+            }
+
+        }
+    );
+
+}
 
 }
 
@@ -485,7 +781,7 @@ if(
 
                 datasets:[{
 
-    label:"Ocorrências por Mês",
+    
 
     data:totais,
 
@@ -529,7 +825,119 @@ if(
         }
 
     );
+const ocorrenciasHSE =
+carregarDados(
+    "ocorrenciasHSE"
+) || [];
 
+const totalACA =
+
+ocorrenciasHSE.filter(
+    item => item.tipo === "ACA"
+).length;
+
+const totalFatalidades =
+
+ocorrenciasHSE.filter(
+    item => item.tipo === "Fatalidade"
+).length;
+
+
+const totalNearMiss =
+
+ocorrenciasHSE.filter(
+    item => item.tipo === "Near Miss"
+).length;
+``
+if(window.graficoSegurancaObj){
+
+    window.graficoSegurancaObj.destroy();
+
+}
+const ctxSeguranca =
+document.getElementById(
+    "graficoSegurancaEvolucao"
+);
+
+if(ctxSeguranca){
+
+    window.graficoSegurancaObj =
+    new Chart(
+        ctxSeguranca,
+        {
+
+            type:"bar",
+
+            data:{
+
+                labels:[
+
+                    "ACA",
+                    "Fatalidades",
+                    
+                    "Near Miss"
+
+                ],
+
+                datasets:[
+
+                    {
+
+                        label:
+                        "Ocorrências",
+
+                        data:[
+
+                            totalACA,
+                            totalFatalidades,
+                            
+                            totalNearMiss
+
+                        ],
+
+                        backgroundColor:[
+
+                            "#ef4444",
+                            "#7f1d1d",
+                            "#f59e0b",
+                            "#3b82f6"
+
+                        ]
+
+                    }
+
+                ]
+
+            },
+
+            options:{
+
+                responsive:true,
+
+                maintainAspectRatio:false,
+
+                scales:{
+
+                    y:{
+
+                        beginAtZero:true,
+
+                        ticks:{
+
+                            precision:0
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+    );
+
+}
 }
 {
 
@@ -734,31 +1142,44 @@ if(cardConformidade){
 
     if(conformidadeGeral >= 90){
 
-        cardConformidade.style.color =
-        "#22c55e";
+    cardConformidade.style.color =
+    "#22c55e";
+
+    if(statusConformidade){
 
         statusConformidade.textContent =
         "🟢 Conforme";
 
     }
+
+}
     else if(conformidadeGeral >= 70){
 
-        cardConformidade.style.color =
-        "#f59e0b";
+    cardConformidade.style.color =
+    "#f59e0b";
+
+    if(statusConformidade){
 
         statusConformidade.textContent =
         "🟡 Atenção";
 
     }
-    else{
 
-        cardConformidade.style.color =
-        "#dc2626";
+}
+else{
+
+    cardConformidade.style.color =
+    "#dc2626";
+
+    if(statusConformidade){
 
         statusConformidade.textContent =
         "🔴 Não Conforme";
 
     }
+
+
+}
 
 }
     new Chart(

@@ -260,28 +260,105 @@ document
     exportarAmbienteExcel
 );
 function gerarRelatorioExecutivo(){
-console.log("PDF iniciou");
-
 
     const { jsPDF } = window.jspdf;
 
-    const pdf =
-    new jsPDF();
+    const pdf = new jsPDF();
 
     const dataAtual =
-    new Date().toLocaleDateString(
-        "pt-PT"
-    );
+    new Date().toLocaleDateString("pt-PT");
 
     const horaAtual =
-    new Date().toLocaleTimeString(
-        "pt-PT"
-    );
-const elementoConformidade =
-document.getElementById(
-    "cardConformidade"
-);
+    new Date().toLocaleTimeString("pt-PT");
 
+    const registosHHT =
+    carregarDados("registosHHT") || [];
+
+    const hhtAcumulado =
+    registosHHT.reduce(
+        (t,item)=>
+        t + Number(item.hhtSemana || 0),
+        0
+    );
+
+    const efetivoAtual =
+    registosHHT.length
+    ?
+    registosHHT[
+        registosHHT.length - 1
+    ].efetivoSemana
+    :
+    0;
+
+   const ocorrenciasHSE =
+
+carregarDados(
+    "ocorrenciasHSE"
+) || [];
+
+const totalACA =
+
+ocorrenciasHSE.filter(
+    item =>
+
+    item.tipo === "ACA"
+).length;
+
+const totalFatalidades =
+
+ocorrenciasHSE.filter(
+    item =>
+
+    item.tipo === "Fatalidade"
+).length;
+
+const totalDiasPerdidos =
+
+ocorrenciasHSE.reduce(
+    (total,item)=>
+
+    total +
+
+    Number(
+        item.diasPerdidos || 0
+    ),
+
+    0
+);
+const totalNearMiss =
+
+ocorrenciasHSE.filter(
+    item =>
+
+    item.tipo === "Near Miss"
+).length;
+    const tf =
+    hhtAcumulado > 0
+    ?
+    (
+        totalACA * 1000000
+    ) /
+    hhtAcumulado
+    :
+    0;
+
+    const tg =
+    hhtAcumulado > 0
+    ?
+    (
+        totalDiasPerdidos * 1000000
+    ) /
+    hhtAcumulado
+    :
+    0;
+
+    const diasSemAcidente =
+    typeof calcularDiasSemAcidente ===
+    "function"
+    ?
+    calcularDiasSemAcidente()
+    :
+    0;
 
     const hoje =
     new Date();
@@ -289,17 +366,14 @@ document.getElementById(
     let asoVencido = 0;
     let asoProximo = 0;
 
-    let treinamentoVencido = 0;
-    let treinamentoProximo = 0;
-
-    asos.forEach(item => {
+    asos.forEach(item=>{
 
         const validade =
         new Date(item.validade);
 
         const dias =
-        (validade - hoje) /
-        (1000 * 60 * 60 * 24);
+        (validade-hoje) /
+        (1000*60*60*24);
 
         if(dias < 0){
 
@@ -314,14 +388,17 @@ document.getElementById(
 
     });
 
-    treinamentos.forEach(item => {
+    let treinamentoVencido = 0;
+    let treinamentoProximo = 0;
+
+    treinamentos.forEach(item=>{
 
         const validade =
         new Date(item.validade);
 
         const dias =
-        (validade - hoje) /
-        (1000 * 60 * 60 * 24);
+        (validade-hoje) /
+        (1000*60*60*24);
 
         if(dias < 0){
 
@@ -336,80 +413,28 @@ document.getElementById(
 
     });
 
-    const totalInspecoes =
-    carregarDados(
-        "inspecoes"
+    const ambientalVencido =
+    ambiental.filter(
+        item =>
+        item.status === "Vencido"
     ).length;
 
-    const registosAmbientais =
-    carregarDados(
-        "ambiental"
-    ) || [];
-const ambientalVencido =
-registosAmbientais.filter(
-    item => item.status === "Vencido"
-).length;
+    const totalItens =
+        asos.length +
+        treinamentos.length +
+        ambiental.length +
+        ocorrencias.length +
+        inspecoes.length;
 
-const ambientalAVencer =
-registosAmbientais.filter(
-    item => item.status === "A Vencer"
-).length;
+    const totalNaoConformes =
+        asoVencido +
+        treinamentoVencido +
+        ambientalVencido;
 
-let medicamentosVencidos = 0;
-let medicamentosAVencer = 0;
-
-medicamentos.forEach(item => {
-
-    const validade =
-    new Date(item.validade);
-
-    const dias =
-    (validade - hoje) /
-    (1000 * 60 * 60 * 24);
-
-    if(dias < 0){
-
-        medicamentosVencidos++;
-
-    }
-
-
-
-    
-    else if(dias <= 90){
-
-        medicamentosAVencer++;
-
-    }
-
-});
-const ocorrenciasAbertas =
-ocorrencias.filter(
-    item => item.status !== "Fechado"
-).length;
-
-const inspecoesAbertas =
-inspecoes.filter(
-    item => item.status !== "Fechado"
-).length;
-
-const totalItens =
-    asos.length +
-    treinamentos.length +
-    ambiental.length +
-    ocorrencias.length +
-    inspecoes.length;
-
-const totalNaoConformes =
-    asoVencido +
-    treinamentoVencido +
-    ambientalVencido +
-    ocorrenciasAbertas +
-    inspecoesAbertas;
-
-const conformidade =
+    const conformidade =
 totalItens > 0
-? `${Math.max(
+?
+Math.max(
     0,
     Math.round(
         (
@@ -417,12 +442,13 @@ totalItens > 0
             totalItens
         ) * 100
     )
-)}%`
-: "100%";
+)
+:
+100;
 
-    /* ============================
-       CABEÇALHO
-    ============================ */
+    /* =================================
+       PAGINA 1
+    ================================= */
 
     pdf.setFont(
         "helvetica",
@@ -445,25 +471,7 @@ totalItens > 0
         32
     );
 
-    pdf.setDrawColor(
-        0,
-        102,
-        204
-    );
-
-    pdf.line(
-        20,
-        36,
-        120,
-        36
-    );
-
-    pdf.setFont(
-        "helvetica",
-        "normal"
-    );
-
-    pdf.setFontSize(11);
+    pdf.setFontSize(10);
 
     pdf.text(
         `Data: ${dataAtual}`,
@@ -484,36 +492,291 @@ totalItens > 0
         50
     );
 
-    /* ============================
-       INDICADORES HSE
-    ============================ */
-
-    pdf.setFont(
-        "helvetica",
-        "bold"
-    );
-
     pdf.setFontSize(14);
 
     pdf.text(
-        "INDICADORES HSE",
+        "INDICADORES EXECUTIVOS",
         20,
         65
     );
 
-   pdf.setFontSize(16);
+    pdf.setFontSize(11);
 
-pdf.text(
-    `CONFORMIDADE HSE: ${conformidade}`,
+    pdf.text(
+        `Conformidade HSE: ${conformidade}%`,
+        25,
+        85
+    );
+
+    pdf.text(
+        `Dias Sem Acidente: ${diasSemAcidente}`,
+        25,
+        95
+    );
+
+    pdf.text(
+        `Efetivo Atual: ${efetivoAtual}`,
+        25,
+        105
+    );
+
+    pdf.text(
+        `HHT Acumulado: ${hhtAcumulado.toLocaleString("pt-PT")}`,
+        25,
+        115
+    );
+
+    pdf.text(
+        `TF: ${tf.toFixed(2)}`,
+        25,
+        125
+    );
+
+    pdf.text(
+        `TG: ${tg.toFixed(2)}`,
+        25,
+        135
+    );
+
+    pdf.text(
+    `ACA: ${totalACA}`,
     25,
-    80
+    145
 );
 
-pdf.setFontSize(11);
+pdf.text(
+    `Fatalidades: ${totalFatalidades}`,
+    25,
+    155
+);
 
-    pdf.setFont(
-        "helvetica",
-        "normal"
+pdf.text(
+    `Near Miss: ${totalNearMiss}`,
+    25,
+    165
+);
+
+pdf.text(
+    `Dias Perdidos: ${totalDiasPerdidos}`,
+    25,
+    175
+);
+
+    /* =================================
+       PAGINA 2
+    ================================= */
+
+    pdf.addPage();
+
+    pdf.setFontSize(18);
+
+    pdf.text(
+        "SEGURANCA E HHT",
+        20,
+        20
+    );
+
+    pdf.setFontSize(11);
+
+    pdf.text(
+        `Desvios: ${ocorrencias.length}`,
+        25,
+        45
+    );
+
+    pdf.text(
+        `ACA: ${totalACA}`,
+        25,
+        55
+    );
+
+    pdf.text(
+        `Fatalidades: ${totalFatalidades}`,
+        25,
+        65
+    );
+
+    pdf.text(
+        `Near Miss: ${totalNearMiss}`,
+        25,
+        75
+    );
+
+    pdf.text(
+        `Dias Perdidos: ${totalDiasPerdidos}`,
+        25,
+        85
+    );
+
+    pdf.line(
+        20,
+        100,
+        190,
+        100
+    );
+
+    pdf.text(
+        `Efetivo Atual: ${efetivoAtual}`,
+        25,
+        120
+    );
+
+    pdf.text(
+        `HHT Acumulado: ${hhtAcumulado.toLocaleString("pt-PT")}`,
+        25,
+        130
+    );
+
+    pdf.text(
+        `TF: ${tf.toFixed(2)}`,
+        25,
+        140
+    );
+
+    pdf.text(
+        `TG: ${tg.toFixed(2)}`,
+        25,
+        150
+    );
+
+    /* =================================
+       PAGINA 3
+    ================================= */
+
+    pdf.addPage();
+
+    pdf.setFontSize(18);
+
+    pdf.text(
+        "SAUDE OCUPACIONAL",
+        20,
+        20
+    );
+
+    pdf.setFontSize(11);
+
+    pdf.text(
+        `ASO: ${asos.length}`,
+        25,
+        45
+    );
+
+    pdf.text(
+        `ASO Vencidos: ${asoVencido}`,
+        25,
+        55
+    );
+
+    pdf.text(
+        `ASO a Vencer: ${asoProximo}`,
+        25,
+        65
+    );
+
+    pdf.text(
+        `Atendimentos Ambulatório: ${atendimentosAmbulatorio.length}`,
+        25,
+        75
+    );
+
+    pdf.text(
+        `Medicamentos: ${medicamentos.length}`,
+        25,
+        85
+    );
+
+    pdf.text(
+        `Emergências: ${emergencias.length}`,
+        25,
+        95
+    );
+    pdf.text(
+    `Taxa de ASO Válidos: ${
+        asos.length
+        ?
+        Math.round(
+            (
+                (asos.length - asoVencido)
+                /
+                asos.length
+            ) * 100
+        )
+        :
+        100
+    }%`,
+    25,
+    105
+);
+
+    /* =================================
+       PAGINA 4
+    ================================= */
+
+    pdf.addPage();
+
+    pdf.setFontSize(18);
+
+    pdf.text(
+        "AMBIENTE",
+        20,
+        20
+    );
+
+    pdf.setFontSize(11);
+
+    pdf.text(
+        `Requisitos Ambientais: ${ambiental.length}`,
+        25,
+        45
+    );
+
+    pdf.text(
+        `Resíduos: ${residuos.length}`,
+        25,
+        55
+    );
+
+    pdf.text(
+        `Consumos: ${consumos.length}`,
+        25,
+        65
+    );
+
+    pdf.text(
+        `Fauna: ${fauna.length}`,
+        25,
+        75
+    );
+
+    pdf.text(
+    `Conformidade Ambiental: ${
+        ambiental.length
+        ?
+        Math.round(
+            (
+                (ambiental.length - ambientalVencido)
+                /
+                ambiental.length
+            ) * 100
+        )
+        :
+        100
+    }%`,
+    25,
+    95
+);
+    /* =================================
+       PAGINA 5
+    ================================= */
+
+    pdf.addPage();
+
+    pdf.setFontSize(18);
+
+    pdf.text(
+        "RH E SISTEMA",
+        20,
+        20
     );
 
     pdf.setFontSize(11);
@@ -521,1284 +784,94 @@ pdf.setFontSize(11);
     pdf.text(
         `Colaboradores: ${colaboradores.length}`,
         25,
-        95
+        45
     );
 
     pdf.text(
         `Treinamentos: ${treinamentos.length}`,
         25,
-        105
+        55
     );
 
     pdf.text(
-        `ASOs: ${asos.length}`,
+        `Utilizadores: ${utilizadores.length}`,
         25,
-        115
+        65
     );
 
-    pdf.text(
-    `Ocorrencias: ${ocorrencias.length}`,
-    25,
-    125
-);
-
-pdf.text(
-    `Utilizadores: ${utilizadores.length}`,
-    25,
-    135
-);
-
-    pdf.text(
-        `Inspecoes: ${totalInspecoes}`,
-        25,
-        145
-    );
-
-    pdf.text(
-        `Registos Ambientais: ${registosAmbientais.length}`,
-        25,
-        155
-    );
-
-    /* ============================
-       ALERTAS CRITICOS
-    ============================ */
-
-    pdf.line(
-        20,
-        165,
-        190,
-        165
-    );
-
-    pdf.setFont(
-        "helvetica",
-        "bold"
-    );
-
-    pdf.setFontSize(14);
-
-    pdf.text(
-        "ALERTAS CRITICOS",
-        20,
-        180
-    );
-
-    pdf.setFont(
-        "helvetica",
-        "normal"
-    );
-
-    pdf.setFontSize(11);
-
-    pdf.text(
-        `ASO vencidos: ${asoVencido}`,
-        25,
-        195
-    );
-
-    pdf.text(
-        `ASO a vencer (30 dias): ${asoProximo}`,
-        25,
-        205
-    );
-
-    pdf.text(
-        `Treinamentos vencidos: ${treinamentoVencido}`,
-        25,
-        215
-    );
-
-    pdf.text(
-        `Treinamentos a vencer (30 dias): ${treinamentoProximo}`,
-        25,
-        225
-    );
-pdf.text(
-    `Ambiental vencido: ${ambientalVencido}`,
-    25,
-    235
-);
-
-pdf.text(
-    `Ambiental a vencer: ${ambientalAVencer}`,
-    25,
-    245
-);
-
-pdf.text(
-    `Medicamentos vencidos: ${medicamentosVencidos}`,
-    25,
-    255
-);
-
-pdf.text(
-    `Medicamentos a vencer: ${medicamentosAVencer}`,
-    25,
-    265
-);
-    /* ============================
-       RESUMO EXECUTIVO
-    ============================ */
+    /* =================================
+       PAGINA 6
+    ================================= */
 
     pdf.addPage();
 
-pdf.setFont(
-    "helvetica",
-    "bold"
-);
-
-pdf.setFontSize(16);
-
-pdf.text(
-    "RESUMO EXECUTIVO",
-    20,
-    25
-);
-
-    pdf.setFont(
-        "helvetica",
-        "normal"
-    );
-
-    pdf.setFontSize(11);
-const resumo =
-
-`O Talanga HSE apresenta atualmente ${conformidade} de conformidade geral.
-
-Existem ${colaboradores.length} colaboradores registados, ${treinamentos.length} treinamentos, ${asos.length} ASOs emitidos e ${totalInspecoes} inspecoes realizadas.
-
-Foram registadas ${ocorrencias.length} ocorrencias de seguranca e ${registosAmbientais.length} registos ambientais.
-
-Existem ${asoVencido} ASOs vencidos, ${treinamentoVencido} treinamentos vencidos, ${ambientalVencido} requisitos ambientais vencidos e ${medicamentosVencidos} medicamentos vencidos que requerem acompanhamento prioritario.`;
+    pdf.setFontSize(18);
 
     pdf.text(
-    resumo,
-    20,
-    45,
-    {
-        maxWidth:170
-    }
-);
+        "ANALISE DA TALANGUINHA",
+        20,
+        20
+    );
 
-    /* ============================
-       RODAPE
-    ============================ */
+    const parecer =
 
-    pdf.line(
-    20,
-    270,
-    190,
-    270
-);
+`RESUMO EXECUTIVO
 
-pdf.text(
-    "GT Engenharia e Servicos",
-    20,
-    278
-);
+O sistema apresenta actualmente ${conformidade}% de conformidade HSE.
 
-pdf.text(
-    "Relatorio gerado automaticamente pelo Talanga HSE",
-    20,
-    284
-);
-console.log("PDF terminou");
-/* ============================
-   PAGINA 2 - SEGURANCA
-============================ */
+A organização possui um efetivo operacional de ${efetivoAtual} colaboradores e acumula ${hhtAcumulado.toLocaleString("pt-PT")} Horas-Homem Trabalhadas.
 
-pdf.addPage();
+Foram registados ${totalACA} acidentes com afastamento, ${totalFatalidades} fatalidades e ${totalDiasPerdidos} dias perdidos.
 
-pdf.setFont(
-    "helvetica",
-    "bold"
-);
+A Taxa de Frequência encontra-se em ${tf.toFixed(2)} e a Taxa de Gravidade em ${tg.toFixed(2)}.
 
-pdf.setFontSize(18);
+PONTOS POSITIVOS
 
-pdf.text(
-    "SEGURANCA",
-    20,
-    20
-);
+ Conformidade HSE de ${conformidade}%.
 
-pdf.setFontSize(14);
+ ${asoVencido} ASO vencidos.
 
-pdf.text(
-    "Ocorrencias",
-    20,
-    40
-);
+ ${treinamentoVencido} treinamentos vencidos.
 
-pdf.setFont(
-    "helvetica",
-    "normal"
-);
+ ${ambientalVencido} requisitos ambientais vencidos.
 
-pdf.setFontSize(11);
+PONTOS DE ATENÇÃO
 
-pdf.text(
-    `Total Ocorrencias: ${ocorrencias.length}`,
-    25,
-    55
-);
+ ${totalACA} acidentes com afastamento registados.
 
-pdf.text(
-    `Abertas: ${
-        ocorrencias.filter(
-            item => item.status === "Aberto"
-        ).length
-    }`,
-    25,
-    65
-);
+ ${totalFatalidades} fatalidades registadas.
 
-pdf.text(
-    `Em Tratamento: ${
-        ocorrencias.filter(
-            item => item.status === "Em Tratamento"
-        ).length
-    }`,
-    25,
-    75
-);
+ ${totalDiasPerdidos} dias perdidos acumulados.
 
-pdf.text(
-    `Fechadas: ${
-        ocorrencias.filter(
-            item => item.status === "Fechado"
-        ).length
-    }`,
-    25,
-    85
-);
 
-/* ============================
-   EPI
-============================ */
 
-pdf.setFont(
-    "helvetica",
-    "bold"
-);
+RECOMENDAÇÃO DA TALANGUINHA
 
-pdf.text(
-    "Gestao de EPI",
-    20,
-    110
-);
+Manter o controlo contínuo dos indicadores HSE, reforçar a prevenção de acidentes com afastamento, garantir o encerramento das ações corretivas e promover melhorias contínuas nos processos de Segurança, Saúde Ocupacional e Ambiente.
 
-pdf.setFont(
-    "helvetica",
-    "normal"
-);
+CLASSIFICAÇÃO GERAL
 
-pdf.text(
-    `Solicitacoes: ${solicitacoesEPI.length}`,
-    25,
-    125
-);
+${conformidade >= 90
+? "EXCELENTE"
+: conformidade >= 70
+? "SATISFATÓRIA"
+: "CRÍTICA"}`;
+    pdf.setFontSize(11);
 
-pdf.text(
-    `Pendentes: ${
-        solicitacoesEPI.filter(
-            item => item.status === "Pendente"
-        ).length
-    }`,
-    25,
-    135
-);
+    pdf.text(
+        parecer,
+        20,
+        45,
+        {
+            maxWidth:170
+        }
+    );
 
-pdf.text(
-    `Aprovadas: ${
-        solicitacoesEPI.filter(
-            item => item.status === "Aprovado"
-        ).length
-    }`,
-    25,
-    145
-);
-
-pdf.text(
-    `Entregues: ${
-        solicitacoesEPI.filter(
-            item => item.status === "Entregue"
-        ).length
-    }`,
-    25,
-    155
-);
-
-pdf.text(
-    `Rejeitadas: ${
-        solicitacoesEPI.filter(
-            item => item.status === "Rejeitado"
-        ).length
-    }`,
-    25,
-    165
-);
-
-/* ============================
-   DDS
-============================ */
-
-pdf.setFont(
-    "helvetica",
-    "bold"
-);
-
-pdf.text(
-    "DDS",
-    20,
-    190
-);
-
-pdf.setFont(
-    "helvetica",
-    "normal"
-);
-
-pdf.text(
-    `DDS Realizados: ${ddsAtivos.length}`,
-    25,
-    205
-);
-
-const participantesDDS =
-ddsAtivos.reduce(
-    (total, dds) =>
-        total + (
-            dds.participantes
-            ? dds.participantes.length
-            : 0
-        ),
-    0
-);
-
-pdf.text(
-    `Participacoes: ${participantesDDS}`,
-    25,
-    215
-);
-
-/* ============================
-   INSPECOES
-============================ */
-
-pdf.setFont(
-    "helvetica",
-    "bold"
-);
-
-pdf.text(
-    "Inspecoes",
-    20,
-    240
-);
-
-pdf.setFont(
-    "helvetica",
-    "normal"
-);
-
-pdf.text(
-    `Total Inspecoes: ${inspecoes.length}`,
-    25,
-    255
-);
-
-pdf.text(
-    `Abertas: ${
-        inspecoes.filter(
-            item => item.status === "Aberto"
-        ).length
-    }`,
-    25,
-    265
-);
-/* ============================
-   FALA TALANGA
-============================ */
-
-pdf.setFont(
-    "helvetica",
-    "bold"
-);
-
-pdf.text(
-    "Fala Talanga",
-    110,
-    190
-);
-
-pdf.setFont(
-    "helvetica",
-    "normal"
-);
-
-pdf.text(
-    `Total: ${falaTalanga.length}`,
-    115,
-    205
-);
-
-pdf.text(
-    `Sugestoes: ${
-        falaTalanga.filter(
-            item => item.tipo === "Sugestão"
-        ).length
-    }`,
-    115,
-    215
-);
-
-pdf.text(
-    `Reclamacoes: ${
-        falaTalanga.filter(
-            item => item.tipo === "Reclamação"
-        ).length
-    }`,
-    115,
-    225
-);
-
-pdf.text(
-    `Denuncias: ${
-        falaTalanga.filter(
-            item => item.tipo === "Denúncia"
-        ).length
-    }`,
-    115,
-    235
-);
-
-pdf.text(
-    `Elogios: ${
-        falaTalanga.filter(
-            item => item.tipo === "Elogio"
-        ).length
-    }`,
-    115,
-    245
-);
-
-pdf.text(
-    `Em Tratamento: ${
-        falaTalanga.filter(
-            item => item.status === "Em Tratamento"
-        ).length
-    }`,
-    115,
-    255
-);
-
-pdf.text(
-    `Fechados: ${
-        falaTalanga.filter(
-            item => item.status === "Fechado"
-        ).length
-    }`,
-    115,
-    265
-);
-
-/* ============================
-   PAGINA 3 - SAUDE OCUPACIONAL
-============================ */
-
-pdf.addPage();
-
-pdf.setFont(
-    "helvetica",
-    "bold"
-);
-
-pdf.setFontSize(18);
-
-pdf.text(
-    "SAUDE OCUPACIONAL",
-    20,
-    20
-);
-
-/* ============================
-   ASO
-============================ */
-
-pdf.setFontSize(14);
-
-pdf.text(
-    "ASO",
-    20,
-    40
-);
-
-pdf.setFont(
-    "helvetica",
-    "normal"
-);
-
-pdf.setFontSize(11);
-
-pdf.text(
-    `Total ASO: ${asos.length}`,
-    25,
-    55
-);
-
-pdf.text(
-    `Validos: ${
-        asos.filter(
-            item => item.status === "Válido"
-        ).length
-    }`,
-    25,
-    65
-);
-
-pdf.text(
-    `Vencidos: ${
-        asos.filter(
-            item => item.status === "Vencido"
-        ).length
-    }`,
-    25,
-    75
-);
-
-pdf.text(
-    `Proximos a vencer: ${asoProximo}`,
-    25,
-    85
-);
-
-/* ============================
-   AMBULATORIO
-============================ */
-
-pdf.setFont(
-    "helvetica",
-    "bold"
-);
-
-pdf.text(
-    "Ambulatorio",
-    20,
-    110
-);
-
-pdf.setFont(
-    "helvetica",
-    "normal"
-);
-
-pdf.text(
-    `Atendimentos: ${atendimentosAmbulatorio.length}`,
-    25,
-    125
-);
-
-pdf.text(
-    `Casos de Malaria: ${
-        atendimentosAmbulatorio.filter(
-            item => item.doenca === "Malária"
-        ).length
-    }`,
-    25,
-    135
-);
-
-/* ============================
-   MEDICAMENTOS
-============================ */
-
-pdf.setFont(
-    "helvetica",
-    "bold"
-);
-
-pdf.text(
-    "Medicamentos",
-    20,
-    160
-);
-
-pdf.setFont(
-    "helvetica",
-    "normal"
-);
-
-pdf.text(
-    `Total: ${medicamentos.length}`,
-    25,
-    175
-);
-
-pdf.text(
-    `Vencidos: ${medicamentosVencidos}`,
-    25,
-    185
-);
-
-pdf.text(
-    `A vencer: ${medicamentosAVencer}`,
-    25,
-    195
-);
-
-const estoqueMedicamentos =
-medicamentos.reduce(
-    (total,item) =>
-    total + Number(
-        item.quantidade || 0
-    ),
-    0
-);
-
-pdf.text(
-    `Estoque Total: ${estoqueMedicamentos}`,
-    25,
-    205
-);
-
-/* ============================
-   EMERGENCIAS
-============================ */
-
-pdf.setFont(
-    "helvetica",
-    "bold"
-);
-
-pdf.text(
-    "Emergencias",
-    20,
-    230
-);
-
-pdf.setFont(
-    "helvetica",
-    "normal"
-);
-
-pdf.text(
-    `Total Emergencias: ${emergencias.length}`,
-    25,
-    245
-);
-
-/* ============================
-   PAGINA 4 - AMBIENTE
-============================ */
-
-pdf.addPage();
-
-pdf.setFont(
-    "helvetica",
-    "bold"
-);
-
-pdf.setFontSize(18);
-
-pdf.text(
-    "AMBIENTE",
-    20,
-    20
-);
-
-/* ============================
-   REQUISITOS LEGAIS
-============================ */
-
-pdf.setFontSize(14);
-
-pdf.text(
-    "Requisitos Legais",
-    20,
-    40
-);
-
-pdf.setFont(
-    "helvetica",
-    "normal"
-);
-
-pdf.setFontSize(11);
-
-pdf.text(
-    `Total Registos: ${ambiental.length}`,
-    25,
-    55
-);
-
-pdf.text(
-    `Validos: ${
-        ambiental.filter(
-            item => item.status === "Valido"
-        ).length
-    }`,
-    25,
-    65
-);
-
-pdf.text(
-    `A Vencer: ${
-        ambiental.filter(
-            item => item.status === "A Vencer"
-        ).length
-    }`,
-    25,
-    75
-);
-
-pdf.text(
-    `Vencidos: ${
-        ambiental.filter(
-            item => item.status === "Vencido"
-        ).length
-    }`,
-    25,
-    85
-);
-
-/* ============================
-   RESIDUOS
-============================ */
-
-pdf.setFont(
-    "helvetica",
-    "bold"
-);
-
-pdf.text(
-    "Residuos",
-    20,
-    115
-);
-
-pdf.setFont(
-    "helvetica",
-    "normal"
-);
-
-const quantidadeResiduos =
-residuos.reduce(
-    (total,item) =>
-    total + Number(item.quantidade || 0),
-    0
-);
-
-pdf.text(
-    `Total Registos: ${residuos.length}`,
-    25,
-    130
-);
-
-pdf.text(
-    `Quantidade Total: ${quantidadeResiduos}`,
-    25,
-    140
-);
-
-pdf.text(
-    `Reciclagem: ${
-        residuos.filter(
-            item => item.destino === "Reciclagem"
-        ).length
-    }`,
-    25,
-    150
-);
-
-pdf.text(
-    `Reutilizacao: ${
-        residuos.filter(
-            item => item.destino === "Reutilização"
-        ).length
-    }`,
-    25,
-    160
-);
-
-pdf.text(
-    `Aterro: ${
-        residuos.filter(
-            item => item.destino === "Aterro"
-        ).length
-    }`,
-    25,
-    170
-);
-
-/* ============================
-   CONSUMOS
-============================ */
-
-pdf.setFont(
-    "helvetica",
-    "bold"
-);
-
-pdf.text(
-    "Consumos",
-    20,
-    200
-);
-
-pdf.setFont(
-    "helvetica",
-    "normal"
-);
-
-pdf.text(
-    `Registos: ${consumos.length}`,
-    25,
-    215
-);
-
-pdf.text(
-    `Agua: ${
-        consumos.filter(
-            item =>
-            item.tipo === "Água Potável" ||
-            item.tipo === "Água Bruta"
-        ).length
-    }`,
-    25,
-    225
-);
-
-pdf.text(
-    `Energia: ${
-        consumos.filter(
-            item =>
-            item.tipo === "Energia - Rede Pública" ||
-            item.tipo === "Energia - Gerador"
-        ).length
-    }`,
-    25,
-    235
-);
-
-pdf.text(
-    `Combustiveis: ${
-        consumos.filter(
-            item =>
-            item.tipo === "Gasóleo" ||
-            item.tipo === "Gasolina"
-        ).length
-    }`,
-    25,
-    245
-);
-
-/* ============================
-   FAUNA
-============================ */
-
-pdf.setFont(
-    "helvetica",
-    "bold"
-);
-
-pdf.text(
-    "Fauna",
-    110,
-    40
-);
-
-pdf.setFont(
-    "helvetica",
-    "normal"
-);
-
-pdf.text(
-    `Registos: ${fauna.length}`,
-    115,
-    55
-);
-
-pdf.text(
-    `Especies: ${
-        new Set(
-            fauna.map(
-                item => item.animal
-            )
-        ).size
-    }`,
-    115,
-    65
-);
-/* ============================
-   PAGINA 5 - RH E SISTEMA
-============================ */
-
-pdf.addPage();
-
-pdf.setFont(
-    "helvetica",
-    "bold"
-);
-
-pdf.setFontSize(18);
-
-pdf.text(
-    "RECURSOS HUMANOS E SISTEMA",
-    20,
-    20
-);
-
-/* ============================
-   COLABORADORES
-============================ */
-
-pdf.setFontSize(14);
-
-pdf.text(
-    "Colaboradores",
-    20,
-    40
-);
-
-pdf.setFont(
-    "helvetica",
-    "normal"
-);
-
-pdf.setFontSize(11);
-
-pdf.text(
-    `Total: ${colaboradores.length}`,
-    25,
-    55
-);
-
-pdf.text(
-    `Ativos: ${
-        colaboradores.filter(
-            item => item.status === "Ativo"
-        ).length
-    }`,
-    25,
-    65
-);
-
-pdf.text(
-    `Inativos: ${
-        colaboradores.filter(
-            item => item.status === "Inativo"
-        ).length
-    }`,
-    25,
-    75
-);
-
-pdf.text(
-    `Homens: ${
-        colaboradores.filter(
-            item => item.genero === "Masculino"
-        ).length
-    }`,
-    25,
-    85
-);
-
-pdf.text(
-    `Mulheres: ${
-        colaboradores.filter(
-            item => item.genero === "Feminino"
-        ).length
-    }`,
-    25,
-    95
-);
-
-/* ============================
-   TREINAMENTOS
-============================ */
-
-pdf.setFont(
-    "helvetica",
-    "bold"
-);
-
-pdf.text(
-    "Treinamentos",
-    20,
-    125
-);
-
-pdf.setFont(
-    "helvetica",
-    "normal"
-);
-
-pdf.text(
-    `Total: ${treinamentos.length}`,
-    25,
-    140
-);
-
-pdf.text(
-    `Validos: ${
-        treinamentos.filter(
-            item => item.status === "Válido"
-        ).length
-    }`,
-    25,
-    150
-);
-
-pdf.text(
-    `Vencidos: ${
-        treinamentos.filter(
-            item => item.status === "Vencido"
-        ).length
-    }`,
-    25,
-    160
-);
-
-pdf.text(
-    `A vencer em 30 dias: ${treinamentoProximo}`,
-    25,
-    170
-);
-
-/* ============================
-   UTILIZADORES
-============================ */
-
-pdf.setFont(
-    "helvetica",
-    "bold"
-);
-
-pdf.text(
-    "Utilizadores",
-    20,
-    200
-);
-
-pdf.setFont(
-    "helvetica",
-    "normal"
-);
-
-pdf.text(
-    `Total: ${utilizadores.length}`,
-    25,
-    215
-);
-
-pdf.text(
-    `Ativos: ${
-        utilizadores.filter(
-            item => (item.status || "Ativo") === "Ativo"
-        ).length
-    }`,
-    25,
-    225
-);
-
-pdf.text(
-    `Inativos: ${
-        utilizadores.filter(
-            item => item.status === "Inativo"
-        ).length
-    }`,
-    25,
-    235
-);
-
-pdf.text(
-    `Administradores: ${
-        utilizadores.filter(
-            item => item.perfil === "Administrador"
-        ).length
-    }`,
-    25,
-    245
-);
-
-pdf.text(
-    `Tecnicos HSE: ${
-        utilizadores.filter(
-            item => item.perfil === "Técnico HSE"
-        ).length
-    }`,
-    25,
-    255
-);
-
-/* ============================
-   PAGINA 6 - ALERTAS E CONCLUSAO
-============================ */
-
-pdf.addPage();
-
-pdf.setFont(
-    "helvetica",
-    "bold"
-);
-
-pdf.setFontSize(18);
-
-pdf.text(
-    "ALERTAS CRITICOS",
-    20,
-    20
-);
-
-pdf.setFont(
-    "helvetica",
-    "normal"
-);
-
-pdf.setFontSize(11);
-
-let y = 40;
-
-pdf.text(
-    `ASOs vencidos: ${asoVencido}`,
-    25,
-    y
-);
-y += 12;
-
-pdf.text(
-    `ASOs a vencer: ${asoProximo}`,
-    25,
-    y
-);
-y += 12;
-
-pdf.text(
-    `Treinamentos vencidos: ${treinamentoVencido}`,
-    25,
-    y
-);
-y += 12;
-
-pdf.text(
-    `Treinamentos a vencer: ${treinamentoProximo}`,
-    25,
-    y
-);
-y += 12;
-
-pdf.text(
-    `Requisitos ambientais vencidos: ${ambientalVencido}`,
-    25,
-    y
-);
-y += 12;
-
-pdf.text(
-    `Requisitos ambientais a vencer: ${ambientalAVencer}`,
-    25,
-    y
-);
-y += 12;
-
-pdf.text(
-    `Medicamentos vencidos: ${medicamentosVencidos}`,
-    25,
-    y
-);
-y += 12;
-
-pdf.text(
-    `Medicamentos a vencer: ${medicamentosAVencer}`,
-    25,
-    y
-);
-y += 20;
-
-/* ============================
-   CONCLUSAO EXECUTIVA
-============================ */
-
-pdf.setFont(
-    "helvetica",
-    "bold"
-);
-
-pdf.setFontSize(16);
-
-pdf.text(
-    "CONCLUSAO EXECUTIVA",
-    20,
-    y
-);
-
-y += 15;
-
-pdf.setFont(
-    "helvetica",
-    "normal"
-);
-
-pdf.setFontSize(11);
-
-const conclusao =
-
-`O Talanga HSE apresenta atualmente ${conformidade} de conformidade geral.
-
-Foram registados ${ocorrencias.length} desvios ou ocorrencias de seguranca, ${inspecoes.length} inspecoes, ${asos.length} ASOs, ${treinamentos.length} treinamentos e ${ambiental.length} registos ambientais.
-
-A organizacao possui ${colaboradores.length} colaboradores registados e ${utilizadores.length} utilizadores ativos na plataforma.
-
-Recomenda-se atencao especial aos indicadores vencidos ou proximos do vencimento identificados neste relatorio, garantindo a manutencao da conformidade HSE e a melhoria continua do desempenho organizacional.
-
-Relatorio gerado automaticamente pelo Talanga HSE.`;
-
-pdf.text(
-    conclusao,
-    20,
-    y,
-    {
-        maxWidth: 170
-    }
-);
-
-/* ============================
-   RODAPE FINAL
-============================ */
-
-pdf.line(
-    20,
-    270,
-    190,
-    270
-);
-
-pdf.text(
-    "GT Engenharia e Servicos",
-    20,
-    280
-);
-
-pdf.text(
-    "Relatorio gerado automaticamente pelo Talanga HSE",
-    20,
-    287
-);
-pdf.text(
-    `CONFORMIDADE HSE: ${conformidade}`,
-    25,
-    80
-);
-/* NO FINAL DA FUNÇÃO */
-
-pdf.save(
-    "Relatorio_Executivo_HSE.pdf"
-);
+    pdf.save(
+        "Relatorio_Executivo_HSE.pdf"
+    );
 
 }
-
 document
 .getElementById(
     "relatorioExecutivo"

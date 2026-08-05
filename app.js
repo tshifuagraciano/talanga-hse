@@ -2,6 +2,9 @@ console.clear();
 
 console.log("Talanga HSE iniciado");
 
+
+
+
 /* ==========================================
    FUNÇÃO GENÉRICA TABELAS
 ========================================== */
