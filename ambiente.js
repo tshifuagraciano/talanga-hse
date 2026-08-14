@@ -1086,131 +1086,66 @@ atualizarIndicadoresConsumos();
 }
 function atualizarIndicadoresConsumos(){
 
-    document.getElementById(
-        "totalConsumos"
-    ).textContent =
-    consumos.length;
+    const aguaPotavel = consumos
+        .filter(item => item.tipo === "Água Potável")
+        .reduce((t,item) => t + Number(item.quantidade || 0), 0);
 
-   document.getElementById(
-    "aguaPotavel"
-).textContent =
+    const aguaBruta = consumos
+        .filter(item => item.tipo === "Água Bruta")
+        .reduce((t,item) => t + Number(item.quantidade || 0), 0);
 
-consumos.filter(
-    item =>
-    item.tipo ===
-    "Água Potável"
-).length;
+    const energiaRede = consumos
+        .filter(item => item.tipo === "Energia - Rede Pública")
+        .reduce((t,item) => t + Number(item.quantidade || 0), 0);
 
+    const energiaGerador = consumos
+        .filter(item => item.tipo === "Energia - Gerador")
+        .reduce((t,item) => t + Number(item.quantidade || 0), 0);
 
-document.getElementById(
-    "aguaBruta"
-).textContent =
+    const gasoleo = consumos
+        .filter(item => item.tipo === "Gasóleo")
+        .reduce((t,item) => t + Number(item.quantidade || 0), 0);
 
-consumos.filter(
-    item =>
-    item.tipo ===
-    "Água Bruta"
-).length;
+    const gasolina = consumos
+        .filter(item => item.tipo === "Gasolina")
+        .reduce((t,item) => t + Number(item.quantidade || 0), 0);
 
+    const co2 = consumos
+        .filter(item => item.tipo === "CO₂")
+        .reduce((t,item) => t + Number(item.quantidade || 0), 0);
 
-document.getElementById(
-    "aguaConsumos"
-).textContent =
+    document.getElementById("totalConsumos").textContent =
+        consumos.length;
 
-consumos.filter(
-    item =>
+    document.getElementById("aguaPotavel").textContent =
+        aguaPotavel;
 
-    item.tipo ===
-    "Água Potável"
+    document.getElementById("aguaBruta").textContent =
+        aguaBruta;
 
-    ||
+    document.getElementById("aguaConsumos").textContent =
+        aguaPotavel + aguaBruta;
 
-    item.tipo ===
-    "Água Bruta"
+    document.getElementById("energiaRede").textContent =
+        energiaRede;
 
-).length;
+    document.getElementById("energiaGerador").textContent =
+        energiaGerador;
 
-    document.getElementById(
-    "energiaRede"
-).textContent =
+    document.getElementById("energiaConsumos").textContent =
+        energiaRede + energiaGerador;
 
-consumos.filter(
-    item =>
-    item.tipo ===
-    "Energia - Rede Pública"
-).length;
+    document.getElementById("gasoleoConsumos").textContent =
+        gasoleo;
 
+    document.getElementById("gasolinaConsumos").textContent =
+        gasolina;
 
-document.getElementById(
-    "energiaGerador"
-).textContent =
+    document.getElementById("combustivelConsumos").textContent =
+        gasoleo + gasolina;
 
-consumos.filter(
-    item =>
-    item.tipo ===
-    "Energia - Gerador"
-).length;
-
-
-document.getElementById(
-    "energiaConsumos"
-).textContent =
-
-consumos.filter(
-    item =>
-
-    item.tipo ===
-    "Energia - Rede Pública"
-
-    ||
-
-    item.tipo ===
-    "Energia - Gerador"
-
-).length;
-
-    document.getElementById(
-    "gasoleoConsumos"
-).textContent =
-
-consumos.filter(
-    item =>
-    item.tipo === "Gasóleo"
-).length;
-
-document.getElementById(
-    "gasolinaConsumos"
-).textContent =
-
-consumos.filter(
-    item =>
-    item.tipo === "Gasolina"
-).length;
-
-document.getElementById(
-    "combustivelConsumos"
-).textContent =
-
-consumos.filter(
-    item =>
-
-    item.tipo === "Gasóleo"
-
-    ||
-
-    item.tipo === "Gasolina"
-
-).length;
-
-    document.getElementById(
-        "co2Consumos"
-    ).textContent =
-
-    consumos.filter(
-        item =>
-        item.tipo === "CO₂"
-    ).length;
-
+    document.getElementById("co2Consumos").textContent =
+        co2;
 }
 function atualizarIndicadoresConsumosPeriodo(lista){
 
