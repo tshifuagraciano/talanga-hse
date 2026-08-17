@@ -19,7 +19,6 @@ gtag('js', new Date());
 gtag('config', 'G-RYD5JLM0VK');
 </script>
 
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -148,7 +147,10 @@ class="logo"
 </li>
 
 
-<li onclick="mostrarModulo('login')">
+<li onclick="
+gtag('event','abrir_login');
+mostrarModulo('login');
+">
 
  Login
 
@@ -199,13 +201,19 @@ class="logo"
 </div>
             <div class="hero-botoes">
 
-                <button onclick="mostrarModulo('login')">
-                     Iniciar Sessão
-                </button>
+                <button onclick="
+gtag('event','abrir_login');
+mostrarModulo('login');
+">
+     Iniciar Sessão
+</button>
 
                 <button
     class="btn-demo"
-    onclick="solicitarDemonstracao()"
+    onclick="
+    gtag('event','solicitar_demonstracao');
+    solicitarDemonstracao();
+    "
 >
      Solicitar Demonstração
 </button>
@@ -330,13 +338,22 @@ class="logo"
             numa única plataforma moderna.
         </p>
 
-        <button onclick="mostrarModulo('login')">
-             Iniciar Sessão
-        </button>
+        <button onclick="
+gtag('event','abrir_login');
+mostrarModulo('login');
+">
+     Iniciar Sessão
+</button>
 
-        <button class="btn-demo">
-             Solicitar Demonstração
-        </button>
+        <button
+    class="btn-demo"
+    onclick="
+    gtag('event','solicitar_demonstracao');
+    solicitarDemonstracao();
+    "
+>
+     Solicitar Demonstração
+</button>
 
     </section>
 
@@ -4513,7 +4530,7 @@ Produtos Químicos
 
     <div class="credenciais-demo">
 
-    <h3> Credenciais da fase Gratis</h3>
+    <h3> Credenciais de Teste</h3>
 
     <div class="demo-user">
 
@@ -4537,7 +4554,7 @@ Produtos Químicos
 
 </div>
 <p style="color:#f59e0b;font-weight:bold;">
- Ambiente Gratis (15 dias)
+ Ambiente de Testes (Beta)
 </p>
 </form>
         </section>

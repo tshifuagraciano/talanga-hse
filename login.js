@@ -49,6 +49,11 @@ if(formLogin){
 
             if(!utilizador){
 
+                if(typeof gtag === "function"){
+    gtag('event', 'login_falhado');
+}
+
+
                 alert(
                     "Email ou palavra-passe inválidos."
                 );
@@ -90,6 +95,11 @@ atualizarIndicadoresLogin();
 
             );
             mostrarUtilizadorLogado();
+            if(typeof gtag === "function"){
+    gtag('event', 'login_sucesso', {
+        email: utilizador.email
+    });
+}
 
             alert(
     `Bem-vindo ${utilizador.nome}`
@@ -222,7 +232,9 @@ if(formAlterarSenha){
                 )
 
             );
-
+if(typeof gtag === "function"){
+    gtag('event', 'alterar_senha');
+}
             alert(
                 "Palavra-passe alterada com sucesso!"
             );

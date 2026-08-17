@@ -313,24 +313,34 @@ document
 }
 function solicitarDemonstracao(){
 
-    const mensagem =
+    if(typeof gtag === "function"){
+        gtag('event', 'solicitar_demonstracao');
+    }
+
+    const assunto =
     encodeURIComponent(
-`Olá!
+        "Solicitação de Demonstração - Talanga HSE"
+    );
+
+    const corpo =
+    encodeURIComponent(
+`Olá,
 
 Tenho interesse em conhecer o Talanga HSE.
 
 Nome:
 Empresa:
-Sector:
-Nº de colaboradores:
+Setor:
+Nº de Colaboradores:
+Telefone:
 
-Gostaria de solicitar uma demonstração da plataforma.`
+Gostaria de solicitar uma demonstração da plataforma.
+
+Obrigado.`
     );
 
-    window.open(
-        `https://wa.me/921630180?text=${mensagem}`,
-        "_blank"
-    );
+    window.location.href =
+    `mailto:gtengenhariaservicos@gmail.com?subject=${assunto}&body=${corpo}`;
 
 }
 function limparTexto(texto){
