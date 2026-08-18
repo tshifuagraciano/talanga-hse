@@ -1,5 +1,6 @@
 let colaboradorPortal = null;
-window.onload = function(){
+window.onload = async function(){
+
 const parametros =
 new URLSearchParams(
     window.location.search
