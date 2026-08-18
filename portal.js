@@ -118,15 +118,7 @@ if(asoColaborador){
 
 }
 
-const treinamentosColaborador =
-
-treinamentos.filter(
-    item =>
-
-    item.colaborador ===
-
-    colaboradorPortal.nome
-);
+const treinamentosColaborador = [];
 
 let htmlTreinamentos = "";
 
