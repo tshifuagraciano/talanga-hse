@@ -776,6 +776,9 @@ if(btnFalaTalanga){
 }
 async function enviarFalaTalanga(){
 
+    alert("A enviar...");
+    console.log(supabaseClient);
+
     const novoRegistro = {
 
         colaborador:
