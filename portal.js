@@ -59,6 +59,29 @@ console.log(
     "ASO:",
     asoColaborador
 );
+const {
+    data: treinamentos,
+    error: erroTreinamentos
+} =
+await supabaseClient
+.from("treinamentos")
+.select("*")
+.eq(
+    "colaborador_id",
+    colaboradorPortal.id
+);
+console.log(
+    "TREINAMENTOS:",
+    treinamentos
+);
+
+if(erroTreinamentos){
+
+    console.error(
+        "ERRO TREINAMENTOS:",
+        erroTreinamentos
+    );
+}
 
 let htmlASO =
 "⚪ ASO não encontrado";
@@ -118,7 +141,9 @@ if(asoColaborador){
 
 }
 
-const treinamentosColaborador = [];
+const treinamentosColaborador =
+treinamentos || [];
+
 
 let htmlTreinamentos = "";
 
@@ -530,8 +555,11 @@ data || [];
 
                                 <p>
                                     📅
-                                    ${new Date(item.data)
-                                    .toLocaleDateString("pt-PT")}
+                                  ${new Date(
+    item.data_solicitacao
+).toLocaleDateString(
+    "pt-PT"
+)}
                                 </p>
 
                                 <p>
