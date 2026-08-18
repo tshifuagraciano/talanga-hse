@@ -931,7 +931,11 @@ data || [];
                                 <p>
 
                                     📅
-                                    ${item.data}
+                                   ${new Date(
+    item.created_at
+).toLocaleString(
+    "pt-PT"
+)}
 
                                 </p>
 
