@@ -373,23 +373,9 @@ listaEPIs.map(
     );
 
 };
-function enviarSolicitacaoPortal(){
-
-    console.log(
-        "ENVIANDO SOLICITACAO"
-    );
-
-    const solicitacoesEPI =
-    JSON.parse(
-        localStorage.getItem(
-            "solicitacoesEPI"
-        )
-    ) || [];
+async function enviarSolicitacaoPortal(){
 
     const solicitacao = {
-
-        data:
-        new Date().toISOString(),
 
         colaborador:
         colaboradorPortal.nome,
@@ -409,9 +395,11 @@ function enviarSolicitacaoPortal(){
         ).value,
 
         quantidade:
-        document.getElementById(
-            "quantidadePortal"
-        ).value,
+        Number(
+            document.getElementById(
+                "quantidadePortal"
+            ).value
+        ),
 
         motivo:
         document.getElementById(
@@ -420,24 +408,53 @@ function enviarSolicitacaoPortal(){
 
         status:
         "Pendente"
-
     };
 
-    solicitacoesEPI.push(
-        solicitacao
-    );
+    const { error } =
+    await supabaseClient
+    .from("epi_solicitacoes")
+    .insert([{
 
-    localStorage.setItem(
-        "solicitacoesEPI",
-        JSON.stringify(
-            solicitacoesEPI
-        )
-    );
+        colaborador:
+        solicitacao.colaborador,
+
+        matricula:
+        solicitacao.matricula,
+
+        empresa:
+        solicitacao.empresa,
+
+        funcao:
+        solicitacao.funcao,
+
+        epi:
+        solicitacao.epi,
+
+        quantidade:
+        solicitacao.quantidade,
+
+        motivo:
+        solicitacao.motivo,
+
+        status:
+        solicitacao.status
+
+    }]);
+
+    if(error){
+
+        console.error(error);
+
+        alert(
+            "Erro ao enviar solicitação."
+        );
+
+        return;
+    }
 
     alert(
-        "Solicitação enviada com sucesso!"
+        "✅ Solicitação enviada com sucesso!"
     );
-
 }
 const btnHistoricoEPI =
 document.getElementById(
@@ -447,18 +464,27 @@ document.getElementById(
 if(btnHistoricoEPI){
 
     btnHistoricoEPI.addEventListener(
+    "click",
+    async () => {
 
-        "click",
+            const { data, error } =
+await supabaseClient
+.from("epi_solicitacoes")
+.select("*")
+.eq(
+    "matricula",
+    colaboradorPortal.matricula
+);
 
-        () => {
+if(error){
 
-            const solicitacoes =
+    console.error(error);
 
-            JSON.parse(
-                localStorage.getItem(
-                    "solicitacoesEPI"
-                )
-            ) || [];
+    return;
+}
+
+const solicitacoes =
+data || [];
 
             const historico =
 
@@ -931,12 +957,11 @@ data || [];
                                 <p>
 
                                     📅
-                                   ${new Date(
+                                    ${new Date(
     item.created_at
 ).toLocaleString(
     "pt-PT"
 )}
-
                                 </p>
 
                                 <p>
