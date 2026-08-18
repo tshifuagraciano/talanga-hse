@@ -28,25 +28,36 @@ document.getElementById(
     "dadosColaborador"
 );
 
-const asos =
-JSON.parse(
-    localStorage.getItem(
-        "asos"
-    )
-) || [];
+const {
+    data: asoColaborador,
+    error: erroASO
+} =
+await supabaseClient
+.from("asos")
+.select("*")
+.eq(
+    "colaborador_id",
+    colaboradorPortal.id
+)
+.order(
+    "validade",
+    {
+        ascending:false
+    }
+)
+.limit(1)
+.single();
 
-const treinamentos =
-JSON.parse(
-    localStorage.getItem(
-        "treinamentos"
-    )
-) || [];
+if(erroASO){
+    console.error(
+        "ERRO ASO:",
+        erroASO
+    );
+}
 
-const asoColaborador =
-asos.find(
-    item =>
-    item.colaborador ===
-    colaboradorPortal.nome
+console.log(
+    "ASO:",
+    asoColaborador
 );
 
 let htmlASO =
