@@ -10,18 +10,17 @@ parametros.get(
     "matricula"
 );
 
-const colaboradores =
-JSON.parse(
-    localStorage.getItem(
-        "colaboradores"
-    )
-) || [];
+const { data, error } =
+await supabaseClient
+.from("colaboradores")
+.select("*")
+.eq(
+    "matricula",
+    matricula
+)
+.single();
 
-colaboradorPortal =
-colaboradores.find(
-    item =>
-    item.matricula == matricula
-);
+colaboradorPortal = data;
 
 const dados =
 document.getElementById(
@@ -774,66 +773,81 @@ if(btnFalaTalanga){
     );
 
 }
-function enviarFalaTalanga(){
-
-    const registros =
-
-    JSON.parse(
-        localStorage.getItem(
-            "falaTalanga"
-        )
-    ) || [];
+async function enviarFalaTalanga(){
 
     const novoRegistro = {
 
-    data:
-    new Date()
-    .toISOString()
-    .split("T")[0],
+        colaborador:
+        colaboradorPortal.nome,
 
-    colaborador:
-    colaboradorPortal.nome,
+        matricula:
+        colaboradorPortal.matricula,
 
-    matricula:
-    colaboradorPortal.matricula,
+        empresa:
+        colaboradorPortal.empresa,
 
-    empresa:
-    colaboradorPortal.empresa,
+        funcao:
+        colaboradorPortal.funcao,
 
-    funcao:
-    colaboradorPortal.funcao,
+        tipo:
+        document.getElementById(
+            "tipoFalaTalanga"
+        ).value,
 
-    tipo:
-    document.getElementById(
-        "tipoFalaTalanga"
-    ).value,
+        mensagem:
+        document.getElementById(
+            "mensagemFalaTalanga"
+        ).value,
 
-    mensagem:
-    document.getElementById(
-        "mensagemFalaTalanga"
-    ).value,
+        status:
+        "Aberto",
 
-    status:
-    "Aberto",
+        resposta:
+        ""
 
-    resposta:
-    ""
+    };
 
-};
+    const { error } =
+    await supabaseClient
+    .from("fala_talanga")
+    .insert([{
 
-    registros.push(
-        novoRegistro
-    );
+        colaborador:
+        novoRegistro.colaborador,
 
-    localStorage.setItem(
+        matricula:
+        novoRegistro.matricula,
 
-        "falaTalanga",
+        empresa:
+        novoRegistro.empresa,
 
-        JSON.stringify(
-            registros
-        )
+        funcao:
+        novoRegistro.funcao,
 
-    );
+        tipo:
+        novoRegistro.tipo,
+
+        mensagem:
+        novoRegistro.mensagem,
+
+        status:
+        novoRegistro.status,
+
+        resposta:
+        novoRegistro.resposta
+
+    }]);
+
+    if(error){
+
+        console.error(error);
+
+        alert(
+            "Erro ao enviar mensagem."
+        );
+
+        return;
+    }
 
     alert(
         "✅ Mensagem enviada com sucesso!"
@@ -847,19 +861,26 @@ document.getElementById(
 
 if(btnMinhasMensagens){
 
-    btnMinhasMensagens.addEventListener(
+    btnMinhasMensagens
+.addEventListener(
+    "click",
+    async () => {
 
-        "click",
 
-        () => {
+           const { data, error } =
+await supabaseClient
+.from("fala_talanga")
+.select("*");
 
-            const mensagens =
+if(error){
 
-            JSON.parse(
-                localStorage.getItem(
-                    "falaTalanga"
-                )
-            ) || [];
+    console.error(error);
+
+    return;
+}
+
+const mensagens =
+data || [];
 
             const minhasMensagens =
 
