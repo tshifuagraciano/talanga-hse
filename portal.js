@@ -646,10 +646,8 @@ await supabaseClient
 
             }
 
-            const dds =
-            ddsAtivos[
-                ddsAtivos.length - 1
-            ];
+           const dds =
+ddsAtivos[0];
 
             document.getElementById(
                 "conteudoPortal"
