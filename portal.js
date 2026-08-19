@@ -675,11 +675,7 @@ await supabaseClient
                 </p>
 
                 <button
-                    onclick="
-                        registrarParticipacaoDDS(
-                            ${dds.id}
-                        )
-                    "
+                    onclick="registrarParticipacaoDDS('${dds.id}')"
                 >
                     ✅ Registrar Participação
                 </button>
