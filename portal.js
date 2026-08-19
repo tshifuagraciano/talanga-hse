@@ -608,15 +608,21 @@ if(btnDDS){
 
         "click",
 
-        () => {
+        async () => {
 
-            const ddsAtivos =
-
-            JSON.parse(
-                localStorage.getItem(
-                    "ddsAtivos"
-                )
-            ) || [];
+           const {
+    data: ddsAtivos,
+    error
+} =
+await supabaseClient
+.from("dds")
+.select("*")
+.order(
+    "data_dds",
+    {
+        ascending:false
+    }
+);
 
             if(
                 ddsAtivos.length === 0
@@ -660,7 +666,7 @@ if(btnDDS){
 
                 <p>
                     <strong>Data:</strong>
-                    ${dds.data}
+                    ${dds.data_dds}
                 </p>
 
                 <p>
@@ -685,74 +691,70 @@ if(btnDDS){
     );
 
 }
-function registrarParticipacaoDDS(idDDS){
+async function registrarParticipacaoDDS(idDDS){
 
-    const ddsAtivos =
-
-    JSON.parse(
-        localStorage.getItem(
-            "ddsAtivos"
-        )
-    ) || [];
-
-    const dds =
-    ddsAtivos.find(
-        item =>
-        item.id === idDDS
-    );
-
-    if(!dds){
-
-        alert(
-            "DDS não encontrado."
-        );
-
-        return;
-
-    }
-
-    const jaParticipou =
-
-    dds.participantes.some(
-        participante =>
-
-        participante.matricula ===
-
+    const { data: participacoes, error } =
+    await supabaseClient
+    .from("dds_participantes")
+    .select("*")
+    .eq(
+        "dds_id",
+        idDDS
+    )
+    .eq(
+        "matricula",
         colaboradorPortal.matricula
     );
 
-    if(jaParticipou){
+    if(error){
+
+        console.error(error);
+
+        return;
+    }
+
+    if(
+        participacoes.length > 0
+    ){
 
         alert(
             "Você já participou deste DDS."
         );
 
         return;
-
     }
 
-    dds.participantes.push({
+    const { error: erroInsert } =
+    await supabaseClient
+    .from("dds_participantes")
+    .insert([{
+
+        dds_id:
+        idDDS,
 
         matricula:
         colaboradorPortal.matricula,
 
-        nome:
+        colaborador:
         colaboradorPortal.nome,
 
         empresa:
         colaboradorPortal.empresa
 
-    });
+    }]);
 
-    localStorage.setItem(
+    if(erroInsert){
 
-        "ddsAtivos",
+        console.error(
+            erroInsert
+        );
 
-        JSON.stringify(
-            ddsAtivos
-        )
+        alert(
+            "Erro ao registrar participação."
+        );
 
-    );
+        return;
+    }
 
     alert(
         "✅ Participação registada com sucesso!"
