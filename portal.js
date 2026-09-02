@@ -13,21 +13,50 @@ parametros.get(
 
 const { data, error } =
 await supabaseClient
-.from("colaboradores")
+.from("portal_colaboradores")
 .select("*")
 .eq(
     "matricula",
     matricula
-)
-.single();
+);
 
-colaboradorPortal = data;
+if(error){
 
+    console.error(error);
+
+    return;
+
+}
+
+if(!data || data.length === 0){
+
+    alert("Colaborador não encontrado.");
+
+    return;
+
+}
+
+colaboradorPortal = data[0];
+console.log(
+    "COLABORADOR:",
+    colaboradorPortal
+);
 const dados =
 document.getElementById(
     "dadosColaborador"
 );
+if(
+    !colaboradorPortal ||
+    !colaboradorPortal.id
+){
 
+    console.error(
+        "ID do colaborador não encontrado."
+    );
+
+    return;
+
+}
 const {
     data: asoColaborador,
     error: erroASO
@@ -35,6 +64,8 @@ const {
 await supabaseClient
 .from("asos")
 .select("*")
+
+
 .eq(
     "colaborador_id",
     colaboradorPortal.id
