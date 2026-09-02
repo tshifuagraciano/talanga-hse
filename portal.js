@@ -13,12 +13,13 @@ parametros.get(
 
 const { data, error } =
 await supabaseClient
-.from("portal_colaboradores")
+.from("colaboradores")
 .select("*")
 .eq(
     "matricula",
     matricula
-);
+)
+.single();
 
 if(error){
 
@@ -28,15 +29,13 @@ if(error){
 
 }
 
-if(!data || data.length === 0){
+colaboradorPortal = data;
 
-    alert("Colaborador não encontrado.");
+console.log(
+    "COLABORADOR:",
+    colaboradorPortal
+);
 
-    return;
-
-}
-
-colaboradorPortal = data[0];
 console.log(
     "COLABORADOR:",
     colaboradorPortal
