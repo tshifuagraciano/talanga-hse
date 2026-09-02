@@ -12,10 +12,71 @@ const tabelaTreinamentos =
         "#tabelaTreinamentos tbody"
     );
 
-let treinamentos =
-carregarDados(
-    "treinamentos"
-);
+let treinamentos = [];
+
+async function carregarTreinamentosSupabase(){
+    if(!window.empresaAtual){
+    return;
+}
+
+    const { data, error } =
+    await supabaseClient
+    .from("treinamentos")
+    .select(`
+        *,
+        colaboradores (
+            id,
+            nome
+        )
+    `)
+.eq("empresa_id",window.empresaAtual)
+    .order(
+        "data_treinamento",
+        {
+            ascending:false
+        }
+    );
+
+    if(error){
+
+        console.error(
+            "Erro Treinamentos:",
+            error
+        );
+
+        return;
+    }
+
+    treinamentos =
+    (data || []).map(item => ({
+
+        id: item.id,
+
+        colaboradorId:
+        item.colaborador_id,
+
+        colaborador:
+        item.colaboradores?.nome || "-",
+
+        data:
+        item.data_treinamento,
+
+        tipo:
+        item.tipo,
+
+        instrutor:
+        item.instrutor,
+
+        validade:
+        item.validade,
+
+        status:
+        item.status
+
+    }));
+
+    atualizarTreinamentos();
+}
 
 function atualizarTreinamentos(
     lista = treinamentos
@@ -455,7 +516,6 @@ function atualizarIndicadoresTreinamentosPeriodo(lista){
 function pesquisarColaboradorTreinamento(){
 
     const termo =
-
     document.getElementById(
         "pesquisaColaboradorTreinamento"
     )
@@ -468,9 +528,7 @@ function pesquisarColaboradorTreinamento(){
     );
 
     const colaboradores =
-    carregarDados(
-        "colaboradores"
-    );
+    window.colaboradores || [];
 
     select.innerHTML = "";
 
@@ -482,21 +540,17 @@ function pesquisarColaboradorTreinamento(){
         &&
 
         (
-
-            item.nome
+            (item.nome || "")
             .toLowerCase()
             .includes(termo)
 
             ||
 
-            item.matricula
+            (item.matricula || "")
             .toLowerCase()
             .includes(termo)
-
         )
-
     )
-
     .forEach(item => {
 
         const option =
@@ -508,7 +562,6 @@ function pesquisarColaboradorTreinamento(){
         item.nome;
 
         option.textContent =
-
         `${item.nome} (${item.matricula})`;
 
         select.appendChild(
@@ -578,7 +631,7 @@ function limparFiltroTreinamentos(){
     atualizarIndicadoresTreinamentos();
 
 }
-function eliminarTreinamento(index){
+async function eliminarTreinamento(index){
 
     if(
         !confirm(
@@ -586,19 +639,28 @@ function eliminarTreinamento(index){
         )
     ) return;
 
-    treinamentos.splice(
-        index,
-        1
+    const item =
+    treinamentos[index];
+
+    const { error } =
+    await supabaseClient
+    .from("treinamentos")
+    .delete()
+    .eq(
+        "id",
+        item.id
     );
 
-    salvarDados(
-        "treinamentos",
-        treinamentos
-    );
+    if(error){
 
-    atualizarTreinamentos();
+        console.error(error);
 
+        return;
+    }
+
+    await carregarTreinamentosSupabase();
 }
+
 function editarTreinamento(index){
 
     const item =
@@ -630,7 +692,8 @@ function editarTreinamento(index){
     item.validade || "";
 
     indiceEdicaoTreinamento =
-    index;
+item.id;
+
 
 }
 
@@ -677,9 +740,9 @@ function carregarColaboradoresAtivos(){
 
 if (formTreinamento && tabelaTreinamentos) {
 
-    formTreinamento.addEventListener(
+  formTreinamento.addEventListener(
     "submit",
-    e => {
+    async e => {
 
         e.preventDefault();
 
@@ -692,7 +755,20 @@ if (formTreinamento && tabelaTreinamentos) {
         document.getElementById(
             "colaboradorTreinamento"
         ).value;
+const colaboradorSelecionado =
+colaboradores.find(
+    item =>
+    item.nome === colaborador
+);
 
+if(!colaboradorSelecionado){
+
+    alert(
+        "Colaborador não encontrado."
+    );
+
+    return;
+}
         const tipo =
         document.getElementById(
             "tipoTreinamento"
@@ -737,31 +813,85 @@ if (formTreinamento && tabelaTreinamentos) {
 
         };
 
-        if(
-            indiceEdicaoTreinamento !== null
-        ){
+        let error;
 
-            treinamentos[
-                indiceEdicaoTreinamento
-            ] = novoTreinamento;
+if(
+    indiceEdicaoTreinamento !== null
+){
 
-            indiceEdicaoTreinamento =
-            null;
+    ({ error } =
+    await supabaseClient
+    .from("treinamentos")
+    .update({
 
-        }
-        else{
+        colaborador_id:
+        colaboradorSelecionado.id,
 
-            treinamentos.push(
-                novoTreinamento
-            );
+        data_treinamento:
+        data,
 
-        }
+        tipo:
+        tipo,
 
-        salvarDados(
-            "treinamentos",
-            treinamentos
-        );
+        instrutor:
+        instrutor,
 
+        validade:
+        validade,
+
+        status:
+        status
+
+    })
+    .eq(
+        "id",
+        indiceEdicaoTreinamento
+    ));
+
+    indiceEdicaoTreinamento =
+    null;
+
+}else{
+
+    ({ error } =
+    await supabaseClient
+    .from("treinamentos")
+    .insert([{
+empresa_id:
+window.empresaAtual,
+        colaborador_id:
+        colaboradorSelecionado.id,
+
+        data_treinamento:
+        data,
+
+        tipo:
+        tipo,
+
+        instrutor:
+        instrutor,
+
+        validade:
+        validade,
+
+        status:
+        status
+
+    }]));
+}
+
+if(error){
+
+    console.error(error);
+
+    alert(
+        "Erro ao gravar treinamento."
+    );
+
+    return;
+}
+
+await carregarTreinamentosSupabase();
         atualizarTreinamentos();
 
         formTreinamento.reset();
@@ -835,4 +965,4 @@ function imprimirTreinamento(index){
 
 }
 carregarColaboradoresAtivos();
-atualizarTreinamentos();
+carregarTreinamentosSupabase();

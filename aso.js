@@ -10,8 +10,47 @@ document.querySelector(
     "#tabelaASO tbody"
 );
 
-let asos =
-carregarDados("asos");
+let asos = [];
+async function carregarASOSupabase(){
+    if(!window.empresaAtual){
+    return;
+}
+
+   const {
+    data,
+    error
+} = await supabaseClient
+    .from("asos")
+    .select(`
+        *,
+        colaboradores (
+            nome,
+            funcao
+        )
+    `)
+    .eq(
+        "empresa_id",
+        window.empresaAtual
+    );
+
+        console.log("DADOS ASO:", data);
+
+    if(error){
+
+        console.error(
+            "Erro ASO:",
+            error
+        );
+
+        return;
+    }
+
+    asos = data || [];
+
+    asosFiltrados = [...asos];
+
+    atualizarASO();
+}
 
 let asosFiltrados =
 [...asos];
@@ -26,16 +65,9 @@ function atualizarASO(){
     tabelaASO.innerHTML = "";
 
    asosFiltrados.forEach(
-    item => {
+    (item,index) => {
 
-        const index =
-        asos.findIndex(
-            aso =>
-
-            aso.dataRegisto ===
-            item.dataRegisto
-        );
-
+        
             const linha =
             document.createElement("tr");
 
@@ -78,11 +110,11 @@ else{
 
             linha.innerHTML = `
 
-                <td>${item.colaborador || "-"}</td>
+                <td>${item.colaboradores?.nome || "-"}</td>
 
-                <td>${item.funcao || "-"}</td>
+                <td>${item.colaboradores?.funcao || "-"}</td>
 
-                <td>${item.dataASO || "-"}</td>
+                <td>${item.data_exame || "-"}</td>
 
                 <td>${item.tipo || "-"}</td>
 
@@ -108,11 +140,9 @@ else{
 
                 <td>
 
-                    ${
-                        item.aptidoes
-                        ? item.aptidoes.join(", ")
-                        : "-"
-                    }
+                   ${
+    item.aptidoes || "-"
+}
 
                 </td>
 
@@ -315,7 +345,7 @@ document.getElementById(
 ).textContent =
 proximosVencer;
 }
-function eliminarASO(index){
+async function eliminarASO(index){
 
     if(
         !confirm(
@@ -323,29 +353,30 @@ function eliminarASO(index){
         )
     ) return;
 
-    asos.splice(
-        index,
-        1
+    const item =
+    asos[index];
+
+    const { error } =
+    await supabaseClient
+    .from("asos")
+    .delete()
+    .eq(
+        "id",
+        item.id
     );
-salvarDados(
-    "asos",
-    asos
-);
 
-asosFiltrados =
-[...asos];
+    if(error){
 
-console.log(
-    "ASOS:",
-    asos
-);
+        console.error(
+            "ERRO DELETE:",
+            error
+        );
 
-console.log(
-    "ASOS FILTRADOS:",
-    asosFiltrados
-);
+        return;
 
-atualizarASO();
+    }
+
+    await carregarASOSupabase();
 
 }
 function filtrarASO(){
@@ -436,10 +467,9 @@ console.log(item);
 
 
 
-  const colaboradorEncontrado =
-carregarDados(
-    "colaboradores"
-).find(
+  const colaboradorSelecionado =
+(window.colaboradores || [])
+.find(
     colaborador =>
     colaborador.nome ===
     item.colaborador
@@ -448,9 +478,7 @@ carregarDados(
 document.getElementById(
     "colaboradorASO"
 ).value =
-colaboradorEncontrado
-? colaboradorEncontrado.matricula
-: "";
+item.colaborador_id;
 
 
     document.getElementById(
@@ -459,9 +487,9 @@ colaboradorEncontrado
     item.funcao || "";
 
     document.getElementById(
-        "dataASO"
-    ).value =
-    item.dataASO || "";
+    "dataASO"
+).value =
+item.data_exame || "";
 
     document.getElementById(
         "tipoASO"
@@ -498,8 +526,19 @@ atualizarFuncaoASO();
 }
 function imprimirASO(index){
 
+
+    
     const item =
     asos[index];
+
+const nomeColaborador =
+(window.colaboradores || [])
+.find(
+    c => c.id === item.colaborador_id
+)?.nome || "Colaborador";
+
+
+
 
     const { jsPDF } =
     window.jspdf;
@@ -534,7 +573,10 @@ function imprimirASO(index){
 
     pdf.text(
     `Colaborador: ${
-        item.colaborador || "-"
+       (window.colaboradores || [])
+.find(
+    c => c.id === item.colaborador_id
+)?.nome || "-"
     }`,
     20,
     55
@@ -542,7 +584,10 @@ function imprimirASO(index){
 
 pdf.text(
     `Funcao: ${
-        item.funcao || "-"
+        (window.colaboradores || [])
+.find(
+    c => c.id === item.colaborador_id
+)?.funcao
     }`,
     20,
     70
@@ -550,7 +595,7 @@ pdf.text(
 
 pdf.text(
     `Data Exame: ${
-        item.dataASO || "-"
+        item.data_exame || "-"
     }`,
     20,
     85
@@ -614,22 +659,25 @@ pdf.setTextColor(
 let corFundo = [0,128,0];
 let textoSelo = "APTO";
 
-if(item.status === "Inapto"){
+if(item.resultado === "Inapto"){
 
     corFundo = [255,0,0];
     textoSelo = "INAPTO";
 
 }
 else if(
-    item.status ===
-    "Apto com Restricoes"
+    item.resultado ===
+    "Apto com Restrição"
 ){
 
-    corFundo =
-    [255,140,0];
+    corFundo = [255,140,0];
+    textoSelo = "RESTRIÇÕES";
 
-    textoSelo =
-    "RESTRICOES";
+}
+else{
+
+    corFundo = [0,128,0];
+    textoSelo = "APTO";
 
 }
 
@@ -671,13 +719,8 @@ pdf.setTextColor(
         150
     );
 
-    const textoAptidoes =
-    item.aptidoes &&
-    item.aptidoes.length > 0
-
-    ? item.aptidoes.join(", ")
-
-    : "Nenhuma";
+   const textoAptidoes =
+item.aptidoes || "Nenhuma";
 
     pdf.text(
         textoAptidoes,
@@ -688,9 +731,9 @@ pdf.setTextColor(
         }
     );
 
-    pdf.save(
-        `ASO_${item.nome}.pdf`
-    );
+   pdf.save(
+    `ASO_${nomeColaborador}.pdf`
+);
 
 }
 function carregarColaboradoresAtivosASO(){
@@ -704,12 +747,14 @@ function carregarColaboradoresAtivosASO(){
 
     select.innerHTML = "";
 
-    const colaboradores =
-    carregarDados(
-        "colaboradores"
-    );
+    const lista =
+    Array.isArray(window.colaboradores)
+    ? window.colaboradores
+    : [];
 
-    colaboradores
+    
+
+    lista
     .filter(
         item =>
         item.status === "Ativo"
@@ -721,8 +766,8 @@ function carregarColaboradoresAtivosASO(){
             "option"
         );
 
-       option.value =
-item.matricula;
+        option.value =
+        item.id;
 
         option.textContent =
         `${item.nome} (${item.matricula})`;
@@ -737,27 +782,22 @@ item.matricula;
 
 function atualizarFuncaoASO(){
 
-    const matriculaSelecionada =
-
+    const colaboradorId =
     document.getElementById(
         "colaboradorASO"
     ).value;
 
-    const colaboradores =
-    carregarDados(
-        "colaboradores"
-    );
+    const lista =
+    Array.isArray(
+        window.colaboradores
+    )
+    ? window.colaboradores
+    : [];
 
     const colaborador =
-    colaboradores.find(
+    lista.find(
         item =>
-        item.matricula ==
-        matriculaSelecionada
-    );
-
-    console.log(
-        "Encontrado:",
-        colaborador
+        item.id == colaboradorId
     );
 
     const campoFuncao =
@@ -769,10 +809,8 @@ function atualizarFuncaoASO(){
         campoFuncao &&
         colaborador
     ){
-
         campoFuncao.value =
-        colaborador.funcao;
-
+        colaborador.funcao || "";
     }
 
 }
@@ -782,149 +820,166 @@ if (
 ){
 
     formASO.addEventListener(
-        "submit",
-        e => {
+    "submit",
+    async e => {
 
-            e.preventDefault();
+        e.preventDefault();
 
-     const matricula =
-document.getElementById(
-    "colaboradorASO"
-).value;
+        console.log(
+            "SUBMIT ASO"
+        );
 
-const colaboradorSelecionado =
+        const colaboradorId =
+        document.getElementById(
+            "colaboradorASO"
+        ).value;
 
-carregarDados(
-    "colaboradores"
-).find(
-    item =>
-    item.matricula ===
-    matricula
-);
-const colaborador =
-colaboradorSelecionado
-? colaboradorSelecionado.nome
-: "";
-const funcao =
-document.getElementById(
-    "funcao"
-).value;
+        const dataASO =
+        document.getElementById(
+            "dataASO"
+        ).value;
 
-const dataASO =
-document.getElementById(
-    "dataASO"
-).value;
+        const tipo =
+        document.getElementById(
+            "tipoASO"
+        ).value;
 
-const tipo =
-document.getElementById(
-    "tipoASO"
-).value;
-
-const validade =
-document.getElementById(
-    "validadeASO"
-).value;
-
-const resultado =
-document.getElementById(
-    "resultadoASO"
-).value;
-
-            const hoje =
-new Date()
-.toISOString()
-.split("T")[0];
-
+        const validade =
+        document.getElementById(
+            "validadeASO"
+        ).value;
 const status =
 
-validade >= hoje
+new Date(validade) < new Date()
 
-? "Válido"
+? "Vencido"
 
-: "Vencido";
-            const aptidoes =
+: "Válido";
+        const resultado =
+        document.getElementById(
+            "resultadoASO"
+        ).value;
 
-            Array.from(
+        const aptidoes =
+        [
+            ...document.querySelectorAll(
+                ".aptidao:checked"
+            )
+        ].map(
+            item => item.value
+        );
 
-                document.querySelectorAll(
-                    ".aptidao:checked"
-                )
-
-            ).map(
-
-                item => item.value
-
-            );
-console.log({
-    colaborador,
-    funcao,
-    dataASO,
-    tipo,
-    validade,
-    resultado,
-    status,
-    aptidoes
-});
-           const novoASO = {
-
-    colaborador,
-
-    funcao,
-
-    dataASO,
-
-    tipo,
-
-    validade,
-
-    resultado,
-
-    status,
-
-    aptidoes,
-
-    dataRegisto:
-
+if(
     indiceEdicaoASO !== null
+){
+const status =
 
-    ? asos[
-        indiceEdicaoASO
-      ].dataRegisto
+new Date(validade) < new Date()
 
-    : new Date().toISOString()
+? "Vencido"
 
-};            if(
-                indiceEdicaoASO !== null
-            ){
+: "Válido";
+    const { error } =
+    await supabaseClient
+    .from("asos")
+    .update({
 
-                asos[
-                    indiceEdicaoASO
-                ] = novoASO;
+    colaborador_id:
+    colaboradorId,
 
-                indiceEdicaoASO =
-                null;
+    data_exame:
+    dataASO,
 
-            }
-            else{
+    tipo:
+    tipo,
 
-                asos.push(
-                    novoASO
-                );
+    validade:
+    validade,
 
-            }
-            asosFiltrados =
-[...asos];
+    resultado:
+    resultado,
 
-            salvarDados(
-                "asos",
-                asos
+    status:
+    status,
+
+    aptidoes:
+    aptidoes.join(", ")
+
+})
+    .eq(
+        "id",
+        asos[indiceEdicaoASO].id
+    );
+
+    if(error){
+
+        console.error(error);
+
+        return;
+
+    }
+
+    indiceEdicaoASO = null;
+
+    await carregarASOSupabase();
+
+    formASO.reset();
+
+    return;
+
+}
+
+        const { error } =
+        await supabaseClient
+        .from("asos")
+        .insert([{
+empresa_id:
+window.empresaAtual,
+    colaborador_id:
+    colaboradorId,
+
+    data_exame:
+    dataASO,
+
+    tipo:
+    tipo,
+
+    validade:
+    validade,
+
+    resultado:
+    resultado,
+
+    status:
+    status,
+
+    aptidoes:
+    aptidoes.join(", ")
+
+}]);
+        
+
+        if(error){
+
+            console.error(
+                "ERRO INSERT:",
+                error
             );
 
-            atualizarASO();
-
-            formASO.reset();
+            return;
 
         }
+
+        console.log(
+            "ASO gravado!"
+        );
+
+        await carregarASOSupabase();
+
+        formASO.reset();
+
+    }
+
     );
 
 }
@@ -1073,13 +1128,12 @@ function carregarColaboradoresAmbulatorio(){
 
     select.innerHTML = "";
 
-    const colaboradores =
-    carregarDados(
-        "colaboradores"
-    );
+  const colaboradores =
+Array.isArray(window.colaboradores)
+? window.colaboradores
+: [];
 
-    colaboradores
-    .filter(
+    colaboradores.filter(
         item =>
         item.status ===
         "Ativo"
@@ -1092,7 +1146,7 @@ function carregarColaboradoresAmbulatorio(){
         );
 
         option.value =
-        item.nome;
+item.id;
 
         option.textContent =
 
@@ -1109,23 +1163,24 @@ function carregarColaboradoresAmbulatorio(){
 }
 function atualizarDadosAmbulatorio(){
 
-    const colaboradorSelecionado =
+    const colaboradorId =
 
     document.getElementById(
         "colaboradorAmbulatorio"
     ).value;
 
     const colaboradores =
-    carregarDados(
-        "colaboradores"
-    );
+    Array.isArray(
+        window.colaboradores
+    )
+    ? window.colaboradores
+    : [];
 
     const colaborador =
 
     colaboradores.find(
         item =>
-        item.nome ===
-        colaboradorSelecionado
+        item.id == colaboradorId
     );
 
     document.getElementById(
@@ -1161,9 +1216,7 @@ function pesquisarColaboradorAmbulatorio(){
     );
 
     const colaboradores =
-    carregarDados(
-        "colaboradores"
-    );
+window.colaboradores || [];
 
     select.innerHTML = "";
 
@@ -1198,7 +1251,7 @@ function pesquisarColaboradorAmbulatorio(){
         );
 
         option.value =
-        item.nome;
+item.id;
 
         option.textContent =
 
@@ -1217,8 +1270,18 @@ function pesquisarColaboradorAmbulatorio(){
         atualizarDadosAmbulatorio();
 
     }
+    if(select.options.length > 0){
+
+    select.selectedIndex = 0;
+
+    atualizarDadosAmbulatorio();
 
 }
+
+}
+
+window.pesquisarColaboradorASO =
+pesquisarColaboradorASO;
 function pesquisarDoencaAmbulatorio(){
 
     const termo =
@@ -1268,12 +1331,9 @@ function pesquisarDoencaAmbulatorio(){
 
 }
 
-let atendimentosAmbulatorio =
-carregarDados(
-    "atendimentosAmbulatorio"
-);
-let atendimentosAmbulatorioFiltrados =
-[...atendimentosAmbulatorio];
+let atendimentosAmbulatorio = [];
+
+let atendimentosAmbulatorioFiltrados = [];
 
 let indiceEdicaoAmbulatorio =
 null;
@@ -1283,77 +1343,179 @@ if(
 ){
 
     formAmbulatorio.addEventListener(
+    "submit",
+    async e => {
 
-        "submit",
+        e.preventDefault();
 
-        e => {
+        console.log(
+            "SUBMIT AMBULATORIO"
+        );
 
-            e.preventDefault();
+        const data =
+        document.getElementById(
+            "dataAmbulatorio"
+        ).value;
+if(!data){
 
-            const novoAtendimento = {
+    alert(
+        "Informe a data do atendimento."
+    );
 
-                data:
-                document.getElementById(
-                    "dataAmbulatorio"
-                ).value,
+    return;
 
-                colaborador:
-                document.getElementById(
-                    "colaboradorAmbulatorio"
-                ).value,
+}
+        const colaborador =
+        document.getElementById(
+            "colaboradorAmbulatorio"
+        ).value;
 
-                funcao:
-                document.getElementById(
-                    "funcaoAmbulatorio"
-                ).value,
+        const funcao =
+        document.getElementById(
+            "funcaoAmbulatorio"
+        ).value;
 
-                empresa:
-                document.getElementById(
-                    "empresaAmbulatorio"
-                ).value,
+        const empresa =
+        document.getElementById(
+            "empresaAmbulatorio"
+        ).value;
 
-                doenca:
-                document.getElementById(
-                    "doencaAmbulatorio"
-                ).value
+        const doenca =
+        document.getElementById(
+            "doencaAmbulatorio"
+        ).value;
 
-            };
+const colaboradorSelecionado =
+(window.colaboradores || [])
+.find(
+    item =>
+    item.id == colaborador
+);
 if(
-    indiceEdicaoAmbulatorio !== null
-)  {
+    indiceEdicaoAmbulatorio
+){
 
-    atendimentosAmbulatorio[
+    const { error } =
+    await supabaseClient
+    .from("ambulatorio")
+    .update({
+
+        data_atendimento:
+        data,
+
+        colaborador:
+        colaboradorSelecionado?.nome || "",
+
+        funcao:
+        funcao,
+
+        empresa:
+        empresa,
+
+        doenca:
+        doenca
+
+    })
+    .eq(
+        "id",
         indiceEdicaoAmbulatorio
-    ] = novoAtendimento;
+    );
+
+    if(error){
+
+        console.error(error);
+
+        return;
+
+    }
 
     indiceEdicaoAmbulatorio =
     null;
 
+    await carregarAmbulatorioSupabase();
+
+    formAmbulatorio.reset();
+
+    return;
+
 }
-else{
+        const { error } =
+        await supabaseClient
+        .from("ambulatorio")
+        .insert([{
+empresa_id:
+window.empresaAtual,
+            data_atendimento:
+            data,
 
-    atendimentosAmbulatorio.push(
-        novoAtendimento
+           colaborador:
+colaboradorSelecionado?.nome || "",
+
+            funcao:
+            funcao,
+
+            empresa:
+            empresa,
+
+            doenca:
+            doenca
+
+        }]);
+
+       if(error){
+
+    console.error(
+        "ERRO INSERT:",
+        error
     );
 
+    return;
 
+}
 
+await carregarAmbulatorioSupabase();
 
-            }
+formAmbulatorio.reset();
 
-            salvarDados(
-                "atendimentosAmbulatorio",
-                atendimentosAmbulatorio
-            );
-atendimentosAmbulatorioFiltrados =
-[...atendimentosAmbulatorio];
-            atualizarAmbulatorio();
+}
+);
+}
+async function carregarAmbulatorioSupabase(){
+    if(!window.empresaAtual){
+    return;
+}
 
-            formAmbulatorio.reset();
+    const {
+        data,
+        error
+    } = await supabaseClient
+        .from("ambulatorio")
+        .select("*")
+.eq("empresa_id",window.empresaAtual)
 
-        }
+    if(error){
 
-    );
+        console.error(
+            "Erro Ambulatório:",
+            error
+        );
+
+        return;
+
+    }
+
+    console.log(
+    "DADOS AMBULATÓRIO:",
+    data
+);
+
+    atendimentosAmbulatorio =
+    data || [];
+
+    atendimentosAmbulatorioFiltrados =
+    [...atendimentosAmbulatorio];
+
+   atualizarAmbulatorio();
 
 }
 function atualizarAmbulatorio(){
@@ -1376,7 +1538,7 @@ function atualizarAmbulatorio(){
 
             linha.innerHTML = `
 
-                <td>${item.data}</td>
+                <td>${item.data_atendimento || "-"}</td>
 
                 <td>${item.colaborador}</td>
 
@@ -1437,30 +1599,26 @@ function filtrarAmbulatorio(){
         "filtroDataFimAmbulatorio"
     ).value;
 
-    atendimentosAmbulatorioFiltrados =
+   atendimentosAmbulatorioFiltrados =
+atendimentosAmbulatorio.filter(
+    item => {
 
-    atendimentosAmbulatorio.filter(
-        item => {
+        return (
 
-            return (
+            (!dataInicio ||
+             item.data_atendimento >= dataInicio)
 
-                (!dataInicio ||
+            &&
 
-                 item.data >= dataInicio)
+            (!dataFim ||
+             item.data_atendimento <= dataFim)
 
-                &&
+        );
 
-                (!dataFim ||
-
-                 item.data <= dataFim)
-
-            );
-
-        }
-    );
-
-    atualizarAmbulatorio();
-
+    }
+);
+ 
+atualizarAmbulatorio();
 }
 
 function limparFiltroAmbulatorio(){
@@ -1473,15 +1631,16 @@ function limparFiltroAmbulatorio(){
         "filtroDataFimAmbulatorio"
     ).value = "";
 
-    atendimentosAmbulatorioFiltrados =
-    [...atendimentosAmbulatorio];
+   atendimentosAmbulatorioFiltrados =
+[...atendimentosAmbulatorio];
 
-    atualizarAmbulatorio();
+atualizarAmbulatorio();
+   
 
 }
 
 
-atualizarAmbulatorio();
+
 function editarAmbulatorio(index){
 
     const item =
@@ -1490,22 +1649,22 @@ function editarAmbulatorio(index){
     document.getElementById(
         "dataAmbulatorio"
     ).value =
-    item.data;
+    item.data_atendimento;
+
+    const colaboradorSelecionado =
+    (window.colaboradores || [])
+    .find(
+        c => c.nome === item.colaborador
+    );
 
     document.getElementById(
         "colaboradorAmbulatorio"
     ).value =
-    item.colaborador;
+    colaboradorSelecionado
+    ? colaboradorSelecionado.id
+    : "";
 
-    document.getElementById(
-        "funcaoAmbulatorio"
-    ).value =
-    item.funcao;
-
-    document.getElementById(
-        "empresaAmbulatorio"
-    ).value =
-    item.empresa;
+    atualizarDadosAmbulatorio();
 
     document.getElementById(
         "doencaAmbulatorio"
@@ -1513,8 +1672,7 @@ function editarAmbulatorio(index){
     item.doenca;
 
     indiceEdicaoAmbulatorio =
-    index;
-
+    item.id;
 }
 function imprimirAmbulatorio(index){
 
@@ -1535,8 +1693,6 @@ function imprimirAmbulatorio(index){
         20
     );
 
-    pdf.setFontSize(14);
-
     pdf.text(
         "ATENDIMENTO AMBULATORIAL",
         20,
@@ -1550,36 +1706,34 @@ function imprimirAmbulatorio(index){
         40
     );
 
-    pdf.setFontSize(11);
-
     pdf.text(
-        `Data: ${item.data}`,
+        `Data: ${item.data_atendimento}`,
         20,
-        55
+        60
     );
 
     pdf.text(
         `Colaborador: ${item.colaborador}`,
         20,
-        70
+        80
     );
 
     pdf.text(
-        `Funcao: ${item.funcao}`,
-        20,
-        85
-    );
-
-    pdf.text(
-        `Empresa: ${item.empresa}`,
+        `Função: ${item.funcao}`,
         20,
         100
     );
 
     pdf.text(
-        `Doenca: ${item.doenca}`,
+        `Empresa: ${item.empresa}`,
         20,
-        115
+        120
+    );
+
+    pdf.text(
+        `Doença: ${item.doenca}`,
+        20,
+        140
     );
 
     pdf.save(
@@ -1587,7 +1741,7 @@ function imprimirAmbulatorio(index){
     );
 
 }
-function eliminarAmbulatorio(index){
+async function eliminarAmbulatorio(index){
 
     if(
         !confirm(
@@ -1595,20 +1749,27 @@ function eliminarAmbulatorio(index){
         )
     ) return;
 
-    atendimentosAmbulatorio.splice(
-        index,
-        1
+    const item =
+    atendimentosAmbulatorioFiltrados[index];
+
+    const { error } =
+    await supabaseClient
+    .from("ambulatorio")
+    .delete()
+    .eq(
+        "id",
+        item.id
     );
 
-    salvarDados(
-        "atendimentosAmbulatorio",
-        atendimentosAmbulatorio
-    );
+    if(error){
 
-    atendimentosAmbulatorioFiltrados =
-    [...atendimentosAmbulatorio];
+        console.error(error);
 
-    atualizarAmbulatorio();
+        return;
+
+    }
+
+    await carregarAmbulatorioSupabase();
 
 }
 function pesquisarAmbulatorio(){
@@ -1626,28 +1787,27 @@ function pesquisarAmbulatorio(){
     atendimentosAmbulatorio.filter(
         item =>
 
-            (item.colaborador || "")
-            .toLowerCase()
-            .includes(termo)
+           (item.colaborador || "")
+.toLowerCase()
+.includes(termo)
 
-            ||
+||
 
-            (item.empresa || "")
-            .toLowerCase()
-            .includes(termo)
+(item.empresa || "")
+.toLowerCase()
+.includes(termo)
 
-            ||
+||
 
-            (item.doenca || "")
-            .toLowerCase()
-            .includes(termo)
+(item.doenca || "")
+.toLowerCase()
+.includes(termo)
 
-            ||
+||
 
-            (item.funcao || "")
-            .toLowerCase()
-            .includes(termo)
-
+(item.funcao || "")
+.toLowerCase()
+.includes(termo)
     );
 
     atualizarAmbulatorio();
@@ -1780,13 +1940,13 @@ const atendimentosMes =
 atendimentosAmbulatorio.filter(
     item => {
 
-        if(!item.data)
-        return false;
+       if(!item.data_atendimento)
+return false;
 
-        const data =
-        new Date(
-            item.data
-        );
+const data =
+new Date(
+    item.data_atendimento
+);
 
         return (
 
@@ -1957,7 +2117,7 @@ carregarDoencasAmbulatorio();
 
 carregarColaboradoresAmbulatorio();
 
-atualizarAmbulatorio();
+carregarAmbulatorioSupabase();
 /* ==========================================
    CONTROLE DE VALIDADE DE MEDICAMENTOS
 ========================================== */
@@ -1972,16 +2132,52 @@ document.querySelector(
     "#tabelaMedicamentos tbody"
 );
 
-let medicamentos =
-carregarDados(
-    "medicamentos"
-);
+let medicamentos = [];
 
-let medicamentosFiltrados =
-[...medicamentos];
+let medicamentosFiltrados = [];
 
 let indiceEdicaoMedicamento =
 null;
+
+async function carregarMedicamentosSupabase(){
+    if(!window.empresaAtual){
+    return;
+}
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+    .from("medicamentos")
+    .select("*")
+.eq("empresa_id",window.empresaAtual)
+
+    console.log(
+        "DADOS MEDICAMENTOS:",
+        data
+    );
+
+    if(error){
+
+        console.error(
+            "Erro Medicamentos:",
+            error
+        );
+
+        return;
+
+    }
+
+    medicamentos =
+    data || [];
+
+    medicamentosFiltrados =
+    [...medicamentos];
+
+    atualizarMedicamentos();
+
+}
+
 function atualizarMedicamentos(){
 
     if(
@@ -2112,80 +2308,120 @@ if(
 
         "submit",
 
-        e => {
+       async e => {
 
-            e.preventDefault();
+e.preventDefault();
 
-            const novoMedicamento = {
+console.log(
+    "SUBMIT MEDICAMENTO"
+);
+const nome =
+document.getElementById(
+    "nomeMedicamento"
+).value;
 
-                nome:
-                document.getElementById(
-                    "nomeMedicamento"
-                ).value,
+const fabricante =
+document.getElementById(
+    "fabricanteMedicamento"
+).value;
 
-                fabricante:
-                document.getElementById(
-                    "fabricanteMedicamento"
-                ).value,
+const lote =
+document.getElementById(
+    "loteMedicamento"
+).value;
 
-                lote:
-                document.getElementById(
-                    "loteMedicamento"
-                ).value,
+const quantidade =
+document.getElementById(
+    "quantidadeMedicamento"
+).value;
 
-                quantidade:
-                document.getElementById(
-                    "quantidadeMedicamento"
-                ).value,
+const fabricacao =
+document.getElementById(
+    "fabricacaoMedicamento"
+).value;
 
-                fabricacao:
-                document.getElementById(
-                    "fabricacaoMedicamento"
-                ).value,
+const validade =
+document.getElementById(
+    "validadeMedicamento"
+).value;
 
-                validade:
-                document.getElementById(
-                    "validadeMedicamento"
-                ).value,
+const local =
+document.getElementById(
+    "localMedicamento"
+).value;
+if(
+    indiceEdicaoMedicamento
+){
 
-                local:
-                document.getElementById(
-                    "localMedicamento"
-                ).value
+    const { error } =
+    await supabaseClient
+    .from("medicamentos")
+    .update({
 
-            };
+        nome,
+        fabricante,
+        lote,
+        quantidade,
+        fabricacao,
+        validade,
+        local
 
-            if(
-                indiceEdicaoMedicamento !== null
-            ){
+    })
+    .eq(
+        "id",
+        indiceEdicaoMedicamento
+    );
 
-                medicamentos[
-                    indiceEdicaoMedicamento
-                ] = novoMedicamento;
+    if(error){
 
-                indiceEdicaoMedicamento =
-                null;
+        console.error(error);
 
-            }
-            else{
+        return;
 
-                medicamentos.push(
-                    novoMedicamento
-                );
+    }
 
-            }
+    indiceEdicaoMedicamento =
+    null;
 
-            salvarDados(
-                "medicamentos",
-                medicamentos
-            );
+    await carregarMedicamentosSupabase();
 
-            medicamentosFiltrados =
-            [...medicamentos];
+    formMedicamento.reset();
 
-            atualizarMedicamentos();
+    return;
 
-            formMedicamento.reset();
+}
+
+const { error } =
+await supabaseClient
+.from("medicamentos")
+.insert([{
+empresa_id:
+window.empresaAtual,
+    nome,
+    fabricante,
+    lote,
+    quantidade,
+    fabricacao,
+    validade,
+    local
+
+}]);
+if(error){
+
+    console.error(
+        "ERRO INSERT:",
+        error
+    );
+
+    return;
+
+}
+
+await carregarMedicamentosSupabase();
+
+formMedicamento.reset();
+
+                       
 
         }
 
@@ -2196,7 +2432,7 @@ atualizarIndicadoresMedicamentos();
 function imprimirMedicamento(index){
 
     const item =
-    medicamentosFiltrados[index];
+medicamentosFiltrados[index];
 
     const { jsPDF } =
     window.jspdf;
@@ -2330,43 +2566,43 @@ function editarMedicamento(index){
     document.getElementById(
         "nomeMedicamento"
     ).value =
-    item.nome;
+    item.nome || "";
 
     document.getElementById(
         "fabricanteMedicamento"
     ).value =
-    item.fabricante;
+    item.fabricante || "";
 
     document.getElementById(
         "loteMedicamento"
     ).value =
-    item.lote;
+    item.lote || "";
 
     document.getElementById(
         "quantidadeMedicamento"
     ).value =
-    item.quantidade;
+    item.quantidade || "";
 
     document.getElementById(
         "fabricacaoMedicamento"
     ).value =
-    item.fabricacao;
+    item.fabricacao || "";
 
     document.getElementById(
         "validadeMedicamento"
     ).value =
-    item.validade;
+    item.validade || "";
 
     document.getElementById(
         "localMedicamento"
     ).value =
-    item.local;
+    item.local || "";
 
     indiceEdicaoMedicamento =
-    index;
+    item.id;
 
 }
-function eliminarMedicamento(index){
+async function eliminarMedicamento(index){
 
     if(
         !confirm(
@@ -2374,20 +2610,27 @@ function eliminarMedicamento(index){
         )
     ) return;
 
-    medicamentos.splice(
-        index,
-        1
+    const item =
+    medicamentosFiltrados[index];
+
+    const { error } =
+    await supabaseClient
+    .from("medicamentos")
+    .delete()
+    .eq(
+        "id",
+        item.id
     );
 
-    salvarDados(
-        "medicamentos",
-        medicamentos
-    );
+    if(error){
 
-    medicamentosFiltrados =
-    [...medicamentos];
+        console.error(error);
 
-    atualizarMedicamentos();
+        return;
+
+    }
+
+    await carregarMedicamentosSupabase();
 
 }
 function atualizarIndicadoresMedicamentos(){
@@ -2847,9 +3090,9 @@ function limparFiltroMedicamentos(){
     medicamentosFiltrados =
     [...medicamentos];
 
-    atualizarMedicamentos();
+    
 
-}
+}carregarMedicamentosSupabase();
 /* ==========================================
    EMERGÊNCIAS
 ========================================== */
@@ -2864,77 +3107,157 @@ const tabelaEmergencias =
         "#tabelaEmergencias tbody"
     );
 
-let emergencias =
-carregarDados(
-    "emergencias"
-);
+let emergencias = [];
 
 let indiceEdicaoEmergencia =
 null;
 
-if (formEmergencia && tabelaEmergencias) {    formEmergencia.addEventListener(
+if (formEmergencia && tabelaEmergencias) {  formEmergencia.addEventListener(
     "submit",
-    e => {
+    async e => {
 
         e.preventDefault();
 
-        const novaEmergencia = {
+        console.log(
+            "SUBMIT EMERGENCIA"
+        );
 
-    data:
-    document.getElementById(
-        "dataEmergencia"
-    ).value,
+        const data =
+        document.getElementById(
+            "dataEmergencia"
+        ).value;
 
-    tipo:
-    document.getElementById(
-        "tipoEmergencia"
-    ).value,
+        const tipo =
+        document.getElementById(
+            "tipoEmergencia"
+        ).value;
 
-    local:
-    document.getElementById(
-        "localEmergencia"
-    ).value,
+        const local =
+        document.getElementById(
+            "localEmergencia"
+        ).value;
 
-    descricao:
-    document.getElementById(
-        "descricaoEmergencia"
-    ).value
-
-};
-
+        const descricao =
+        document.getElementById(
+            "descricaoEmergencia"
+        ).value;
 if(
-    indiceEdicaoEmergencia !== null
+    indiceEdicaoEmergencia
 ){
 
-    emergencias[
+    const { error } =
+    await supabaseClient
+    .from("emergencias")
+    .update({
+
+        data_emergencia:
+        data,
+
+        tipo:
+        tipo,
+
+        local:
+        local,
+
+        descricao:
+        descricao
+
+    })
+    .eq(
+        "id",
         indiceEdicaoEmergencia
-    ] = novaEmergencia;
+    );
+
+    if(error){
+
+        console.error(error);
+
+        return;
+
+    }
 
     indiceEdicaoEmergencia =
     null;
 
-}
+    await carregarEmergenciasSupabase();
 
+    formEmergencia.reset();
 
-else{
-
-    emergencias.push(
-        novaEmergencia
-    );
+    return;
 
 }
+        const { error } =
+        await supabaseClient
+        .from("emergencias")
+        .insert([{
+empresa_id:
+window.empresaAtual,
+    data_emergencia:
+    data,
 
-        salvarDados(
-            "emergencias",
-            emergencias
-        );
+    tipo:
+    tipo,
 
-        atualizarEmergencias();
+    local:
+    local,
+
+    descricao:
+    descricao
+
+}]);
+        if(error){
+
+            console.error(
+                "ERRO INSERT:",
+                error
+            );
+
+            return;
+
+        }
+
+        await carregarEmergenciasSupabase();
 
         formEmergencia.reset();
 
     }
 );
+
+async function carregarEmergenciasSupabase(){
+    if(!window.empresaAtual){
+    return;
+}
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+    .from("emergencias")
+    .select("*")
+.eq("empresa_id",window.empresaAtual)
+
+    if(error){
+
+        console.error(
+            "Erro Emergências:",
+            error
+        );
+
+        return;
+
+    }
+
+    console.log(
+        "DADOS EMERGENCIAS:",
+        data
+    );
+
+    emergencias =
+    data || [];
+
+    atualizarEmergencias();
+
+}
 
 function atualizarEmergencias(
     lista = emergencias
@@ -2958,7 +3281,7 @@ lista.sort(
                 `
 
                 <td>
-                    ${item.data || "-"}
+                    ${item.data_emergencia}
                 </td>
 
                 <td>
@@ -3018,8 +3341,15 @@ atualizarIndicadoresEmergencias();
 
 function pesquisarColaboradorASO(){
 
-    const termo =
+    const listaColaboradores =
+    window.colaboradores || [];
 
+    console.log(
+        "ASO colaboradores:",
+        listaColaboradores
+    );
+
+    const termo =
     document.getElementById(
         "pesquisaColaboradorASO"
     )
@@ -3031,45 +3361,36 @@ function pesquisarColaboradorASO(){
         "colaboradorASO"
     );
 
-    const colaboradores =
-    carregarDados(
-        "colaboradores"
-    );
-
     select.innerHTML = "";
 
-    colaboradores
-    .filter(item =>
+   listaColaboradores
+.filter(item =>
 
-        item.status === "Ativo"
+    item.status === "Ativo"
 
-        &&
+    &&
 
-        (
+    (
+        item.nome
+        .toLowerCase()
+        .includes(termo)
 
-            item.nome
-            .toLowerCase()
-            .includes(termo)
+        ||
 
-            ||
-
-            item.matricula
-            .toLowerCase()
-            .includes(termo)
-
-        )
-
+        item.matricula
+        .toLowerCase()
+        .includes(termo)
     )
 
-    .forEach(item => {
-
+)
+.forEach(item => {
         const option =
         document.createElement(
             "option"
         );
 
         option.value =
-        item.matricula;
+item.id;
 
         option.textContent =
 
@@ -3104,7 +3425,7 @@ function filtrarEmergencias(){
         resultados =
         resultados.filter(
             item =>
-            item.data >= inicio
+            item.data_emergencia >= inicio
         );
 
     }
@@ -3114,7 +3435,7 @@ function filtrarEmergencias(){
         resultados =
         resultados.filter(
             item =>
-            item.data <= fim
+            item.data_emergencia <= fim
         );
 
     }
@@ -3122,10 +3443,13 @@ function filtrarEmergencias(){
     atualizarEmergencias(
         resultados
     );
-atualizarIndicadoresEmergenciasPeriodo(
-    resultados
-);
+
+    atualizarIndicadoresEmergenciasPeriodo(
+        resultados
+    );
+
 }
+
 function limparFiltroEmergencias(){
 
     document.getElementById(
@@ -3303,7 +3627,7 @@ else{
     ).size;
 
 }
-function eliminarEmergencia(index){
+async function eliminarEmergencia(index){
 
     if(
         !confirm(
@@ -3311,19 +3635,32 @@ function eliminarEmergencia(index){
         )
     ) return;
 
-    emergencias.splice(
-        index,
-        1
+    const item =
+    emergencias[index];
+
+    const { error } =
+    await supabaseClient
+    .from("emergencias")
+    .delete()
+    .eq(
+        "id",
+        item.id
     );
 
-    salvarDados(
-        "emergencias",
-        emergencias
-    );
+    if(error){
 
-    atualizarEmergencias();
+        console.error(error);
+
+        return;
+
+    }
+
+    await carregarEmergenciasSupabase();
 
 }
+window.eliminarEmergencia =
+eliminarEmergencia;
+
 function editarEmergencia(index){
 
     const item =
@@ -3332,25 +3669,25 @@ function editarEmergencia(index){
     document.getElementById(
         "dataEmergencia"
     ).value =
-    item.data || "";
+    item.data_emergencia || "";
 
     document.getElementById(
         "tipoEmergencia"
     ).value =
-    item.tipo;
+    item.tipo || "";
 
     document.getElementById(
         "localEmergencia"
     ).value =
-    item.local;
+    item.local || "";
 
     document.getElementById(
         "descricaoEmergencia"
     ).value =
-    item.descricao;
+    item.descricao || "";
 
     indiceEdicaoEmergencia =
-    index;
+    item.id;
 
 }
 function imprimirEmergencia(index){
@@ -3375,7 +3712,7 @@ function imprimirEmergencia(index){
     pdf.setFontSize(14);
 
     pdf.text(
-        "RELATORIO DE EMERGENCIA",
+        "RELATÓRIO DE EMERGÊNCIA",
         20,
         35
     );
@@ -3390,31 +3727,37 @@ function imprimirEmergencia(index){
     pdf.setFontSize(11);
 
     pdf.text(
-        `Data: ${item.data || "-"}`,
+        `Data: ${
+            item.data_emergencia || "-"
+        }`,
         20,
-        55
+        60
     );
 
     pdf.text(
-        `Tipo: ${item.tipo}`,
+        `Tipo: ${
+            item.tipo || "-"
+        }`,
         20,
-        70
+        80
     );
 
     pdf.text(
-        `Local: ${item.local}`,
+        `Local: ${
+            item.local || "-"
+        }`,
         20,
-        85
+        100
     );
 
     pdf.text(
-        `Descricao: ${
+        `Descrição: ${
             item.descricao || "-"
         }`,
         20,
-        100,
+        120,
         {
-            maxWidth: 160
+            maxWidth: 150
         }
     );
 
@@ -3423,7 +3766,14 @@ function imprimirEmergencia(index){
     );
 
 }
+carregarEmergenciasSupabase();
 
+setTimeout(() => {
 
-atualizarEmergencias();
+    
+
+}, 1000);
+
+carregarASOSupabase();
+
 }

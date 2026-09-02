@@ -12,8 +12,7 @@ document.querySelector(
     "#tabelaOcorrencias tbody"
 );
 
-let ocorrencias =
-carregarDados("ocorrencias");
+let ocorrencias = [];
 
 let indiceEdicao =
 null;
@@ -21,6 +20,10 @@ null;
 let ocorrenciasFiltradas =
 [...ocorrencias];
 
+let ocorrenciasHSE = [];
+
+
+let ocorrenciasHSEFiltradas = [];
 
 function editarOcorrencia(indice){
 
@@ -51,27 +54,79 @@ function editarOcorrencia(indice){
         "status"
     ).value = item.status;
 
-    indiceEdicao =
-    indice;
+   indiceEdicao =
+item.id;
+
 
 }
 
+async function carregarOcorrenciasSupabase(){
+    if(!window.empresaAtual){
+    return;
+}
 
+    const { data, error } =
+    await supabaseClient
+    .from("desvios")
+.select("*")
+.eq("empresa_id",window.empresaAtual)
+.eq(
+    "empresa_id",
+    window.empresaAtual
+)
+
+
+    if(error){
+        console.error(error);
+        return;
+    }
+
+    ocorrencias =
+    (data || []).map(item => ({
+
+        id: item.id,
+        titulo: item.titulo,
+        descricao: item.descricao,
+
+        fotoProblema:
+        item.foto_problema,
+
+        fotoSolucao:
+        item.foto_solucao,
+
+        severidade:
+        item.severidade,
+
+        area:
+        item.area,
+
+        responsavel:
+        item.responsavel,
+
+        status:
+        item.status,
+
+        data:
+        item.created_at
+
+    }));
+
+    ocorrenciasFiltradas =
+    [...ocorrencias];
+
+    atualizarOcorrencias();
+}
 
 async function imprimirOcorrencia(indice){
 
     const item =
     ocorrencias[indice];
 
-const evidencia =
+const fotoProblema =
+item.fotoProblema;
 
-item.evidenciaId
-
-? await obterEvidencia(
-    item.evidenciaId
-)
-
-: null;
+const fotoSolucao =
+item.fotoSolucao;
 
     const { jsPDF } =
     window.jspdf;
@@ -159,10 +214,7 @@ item.evidenciaId
     
 let y = 160;
 
-if(
-    evidencia &&
-    evidencia.fotoProblema
-){
+if(fotoProblema){
 
     pdf.text(
         "Foto do Problema:",
@@ -171,7 +223,7 @@ if(
     );
 
     pdf.addImage(
-        evidencia.fotoProblema,
+    fotoProblema,
         "JPEG",
         20,
         y + 5,
@@ -183,10 +235,7 @@ if(
 
 }
 
-if(
-    evidencia &&
-    evidencia.fotoSolucao
-){
+if(fotoSolucao){
 
     pdf.text(
         "Foto da Solucao:",
@@ -195,7 +244,7 @@ if(
     );
 
     pdf.addImage(
-        evidencia.fotoSolucao,
+    fotoSolucao,
         "JPEG",
         20,
         y + 5,
@@ -406,32 +455,33 @@ function atualizarIndicadoresOcorrencias(){
     responsavelFrequente;
 
 }
-function eliminarOcorrencia(indice){
+async function eliminarOcorrencia(indice){
 
     if(
-
         !confirm(
             "Deseja eliminar esta ocorrência?"
         )
-
     ) return;
 
-    ocorrencias.splice(
-        indice,
-        1
+    const item =
+    ocorrenciasFiltradas[indice];
+
+    const { error } =
+    await supabaseClient
+    .from("desvios")
+    .delete()
+    .eq(
+        "id",
+        item.id
     );
 
-    salvarDados(
-        "ocorrencias",
-        ocorrencias  
-    );
-    ocorrenciasHSEFiltradas =
-[...ocorrenciasHSE];
+    if(error){
+        console.error(error);
+        return;
+    }
 
-    atualizarOcorrencias();
-
-    atualizarDashboard();
-      }
+    await carregarOcorrenciasSupabase();
+}
 function filtrarOcorrenciasPeriodo(){
 
     const inicio =
@@ -522,23 +572,14 @@ console.log(
 );
 
 const fotoProblema =
-
-evidencia &&
-evidencia.fotoProblema
-
+item.fotoProblema
 ? "📷 Sim"
-
 : "-";
 
 const fotoSolucao =
-
-evidencia &&
-evidencia.fotoSolucao
-
+item.fotoSolucao
 ? "📷 Sim"
-
 : "-";
-
             linha.innerHTML = `
     <td>${item.titulo}</td>
 
@@ -591,32 +632,6 @@ atualizarIndicadoresOcorrencias();
 
 
 
-function eliminarOcorrencia(indice){
-
-    if(
-        !confirm(
-            "Deseja eliminar esta ocorrência?"
-        )
-    ) return;
-
-    ocorrencias.splice(
-        indice,
-        1
-    );
-
-    salvarDados(
-        "ocorrencias",
-        ocorrencias
-    );
-
-    ocorrenciasFiltradas =
-    [...ocorrencias];
-
-    atualizarOcorrencias();
-
-    atualizarDashboard();
-
-}
 
 function filtrarOcorrenciasPeriodo(){
 
@@ -864,55 +879,74 @@ console.log({
     data
 });
 
-const evidenciaId =
-await salvarEvidencia(
-
-    fotoProblema,
-
-    fotoSolucao
-
+let error;
+const itemAtual =
+ocorrencias.find(
+    item => item.id === indiceEdicao
 );
-console.log(
-    "evidenciaId:",
-    evidenciaId
-);
-
-
-const novaOcorrencia = {
-
-    titulo,
-    descricao,
-
-    evidenciaId,
-
-    severidade,
-    area,
-    responsavel,
-    status,
-    data
-
-};
 if(indiceEdicao !== null){
 
-    ocorrencias[indiceEdicao] =
-    novaOcorrencia;
+    ({ error } =
+    await supabaseClient
+    .from("desvios")
+    .update({
 
-    indiceEdicao =
-    null;
+        titulo,
+        descricao,
 
+        foto_problema:
+fotoProblema ||
+itemAtual.fotoProblema,
+
+foto_solucao:
+fotoSolucao ||
+itemAtual.fotoSolucao,
+
+        severidade,
+        area,
+        responsavel,
+        status
+
+    })
+    .eq(
+        "id",
+        indiceEdicao
+    ));
+
+    indiceEdicao = null;
+
+}else{
+
+    ({ error } =
+    await supabaseClient
+    .from("desvios")
+    .insert([{
+        empresa_id:
+window.empresaAtual,
+
+        titulo,
+        descricao,
+
+        foto_problema:
+        fotoProblema,
+
+        foto_solucao:
+        fotoSolucao,
+
+        severidade,
+        area,
+        responsavel,
+        status
+
+    }]));
 }
-else{
 
-    ocorrencias.push(
-        novaOcorrencia
-    );
-
+if(error){
+    console.error(error);
+    return;
 }
 
-            salvarDados(
-                "ocorrencias",
-                ocorrencias
-            );
+await carregarOcorrenciasSupabase();
             ocorrenciasFiltradas =
 [...ocorrencias];
 
@@ -1071,28 +1105,87 @@ document.querySelector(
     "#tabelaEPI tbody"
 );
 
-let solicitacoesEPI =
-carregarDados(
-    "solicitacoesEPI"
-);
+let solicitacoesEPI = [];
 
-let solicitacoesEPIFiltradas =
-[...solicitacoesEPI];
+let solicitacoesEPIFiltradas = [];
+
+
 
 const tabelaEstoqueEPI =
 document.querySelector(
     "#tabelaEstoqueEPI tbody"
 );
 
-let estoqueEPI =
-carregarDados(
-    "estoqueEPI"
-) || [];
+let estoqueEPI = [];
 
 const formEstoqueEPI =
 document.getElementById(
     "formEstoqueEPI"
 );
+
+async function carregarSolicitacoesEPISupabase(){
+    if(!window.empresaAtual){
+    return;
+}
+
+    const { data, error } =
+    await supabaseClient
+    .from("epi_solicitacoes")
+    .select("*")
+.eq("empresa_id",window.empresaAtual)
+    .order(
+        "data_solicitacao",
+        {
+            ascending:false
+        }
+    );
+
+    if(error){
+
+        console.error(error);
+
+        return;
+    }
+
+    solicitacoesEPI =
+    (data || []).map(item => ({
+
+        id: item.id,
+
+        data:
+        item.data_solicitacao,
+
+        colaborador:
+        item.colaborador,
+
+        matricula:
+        item.matricula,
+
+        empresa:
+        item.empresa,
+
+        funcao:
+        item.funcao,
+
+        epi:
+        item.epi,
+
+        quantidade:
+        item.quantidade,
+
+        motivo:
+        item.motivo,
+
+        status:
+        item.status
+
+    }));
+
+    solicitacoesEPIFiltradas =
+    [...solicitacoesEPI];
+
+    atualizarEPI();
+}
 
 function atualizarEPI(){
 
@@ -1271,7 +1364,7 @@ if(formEstoqueEPI){
 
         "submit",
 
-        e => {
+        async e => {
 
             e.preventDefault();
 
@@ -1321,16 +1414,29 @@ if(formEstoqueEPI){
 
             };
 
-            estoqueEPI.push(
-                novoItem
-            );
+            const { error } =
+await supabaseClient
+.from("epi_estoque")
+.insert([{
+empresa_id:
+window.empresaAtual,
+    epi: novoItem.epi,
+    ca: novoItem.ca,
+    fabricante: novoItem.fabricante,
+    fornecedor: novoItem.fornecedor,
+    quantidade: novoItem.quantidade,
+    data_entrada: novoItem.dataEntrada,
+    validade: novoItem.validade,
+    observacao: novoItem.observacao
 
-            salvarDados(
-                "estoqueEPI",
-                estoqueEPI
-            );
+}]);
 
-            atualizarEstoqueEPI();
+if(error){
+    console.error(error);
+    return;
+}
+
+await carregarEstoqueEPISupabase();
 
             formEstoqueEPI.reset();
 
@@ -1341,7 +1447,45 @@ if(formEstoqueEPI){
 }
 
 
+async function carregarEstoqueEPISupabase(){
+    if(!window.empresaAtual){
+    return;
+}
 
+    const { data, error } =
+    await supabaseClient
+    .from("epi_estoque")
+    .select("*")
+.eq("empresa_id",window.empresaAtual)
+    .order(
+        "created_at",
+        {
+            ascending:false
+        }
+    );
+
+    if(error){
+        console.error(error);
+        return;
+    }
+
+    estoqueEPI =
+    (data || []).map(item => ({
+
+        id: item.id,
+        epi: item.epi,
+        ca: item.ca,
+        fabricante: item.fabricante,
+        fornecedor: item.fornecedor,
+        quantidade: item.quantidade,
+        dataEntrada: item.data_entrada,
+        validade: item.validade,
+        observacao: item.observacao
+
+    }));
+
+    atualizarEstoqueEPI();
+}
 
 
 function atualizarEstoqueEPI(){
@@ -1399,7 +1543,7 @@ function atualizarEstoqueEPI(){
     );
 
 }
-function eliminarEstoqueEPI(index){
+async function eliminarEstoqueEPI(index){
 
     if(
         !confirm(
@@ -1407,22 +1551,28 @@ function eliminarEstoqueEPI(index){
         )
     ) return;
 
-    estoqueEPI.splice(
-        index,
-        1
+    const item =
+    estoqueEPI[index];
+
+    const { error } =
+    await supabaseClient
+    .from("epi_estoque")
+    .delete()
+    .eq(
+        "id",
+        item.id
     );
 
-    salvarDados(
-        "estoqueEPI",
-        estoqueEPI
-    );
+    if(error){
+        console.error(error);
+        return;
+    }
 
-    
-carregarEPIsEstoque();
+    await carregarEstoqueEPISupabase();
 
-atualizarEstoqueEPI();
+    carregarEPIsEstoque();
 }
-function eliminarSolicitacaoEPI(index){
+async function eliminarSolicitacaoEPI(index){
 
     if(
         !confirm(
@@ -1433,43 +1583,49 @@ function eliminarSolicitacaoEPI(index){
     const item =
     solicitacoesEPIFiltradas[index];
 
-    const indiceReal =
+const previewProblema =
+document.getElementById(
+    "previewFotoProblema"
+);
 
-    solicitacoesEPI.findIndex(
-        solicitacao =>
+if(previewProblema){
 
-        solicitacao.data === item.data
+    previewProblema.innerHTML =
+    item.fotoProblema
+    ? `${item.fotoProblema}`
+    : "";
+}
+const previewSolucao =
+document.getElementById(
+    "previewFotoSolucao"
+);
 
-        &&
+if(previewSolucao){
 
-        solicitacao.matricula === item.matricula
-
-        &&
-
-        solicitacao.epi === item.epi
-    );
-
-    if(
-        indiceReal === -1
-    ) return;
-
-    solicitacoesEPI.splice(
-        indiceReal,
-        1
-    );
-
-    salvarDados(
-        "solicitacoesEPI",
-        solicitacoesEPI
-    );
-
-    solicitacoesEPIFiltradas =
-    [...solicitacoesEPI];
-
-    atualizarEPI();
-
+    previewSolucao.innerHTML =
+    item.fotoSolucao
+    ? `${item.fotoSolucao}`
+    : "";
 }
 
+    const { error } =
+    await supabaseClient
+    .from("epi_solicitacoes")
+    .delete()
+    .eq(
+        "id",
+        item.id
+    );
+
+    if(error){
+
+        console.error(error);
+
+        return;
+    }
+
+    await carregarSolicitacoesEPISupabase();
+}
 function imprimirSolicitacaoEPI(index){
 
     const item =
@@ -1667,23 +1823,30 @@ function historicoEPI(matricula){
 
 }
 
-function aprovarEPI(index){
+async function aprovarEPI(index){
 
-    solicitacoesEPI[index].status =
-    "Aprovado";
+    const item =
+    solicitacoesEPIFiltradas[index];
 
-    salvarDados(
-        "solicitacoesEPI",
-        solicitacoesEPI
+    const { error } =
+    await supabaseClient
+    .from("epi_solicitacoes")
+    .update({
+        status:"Aprovado"
+    })
+    .eq(
+        "id",
+        item.id
     );
 
-    solicitacoesEPIFiltradas =
-    [...solicitacoesEPI];
+    if(error){
+        console.error(error);
+        return;
+    }
 
-    atualizarEPI();
-
+    await carregarSolicitacoesEPISupabase();
 }
-function entregarEPI(index){
+async function entregarEPI(index){
 
     const solicitacao =
     solicitacoesEPI[index];
@@ -1732,13 +1895,39 @@ function entregarEPI(index){
 
     }
 
-    itemEstoque.quantidade =
+    const novaQuantidade =
+quantidadeEstoque -
+quantidadeSolicitada;
 
-    quantidadeEstoque -
-    quantidadeSolicitada;
+await supabaseClient
+.from("epi_estoque")
+.update({
+    quantidade:
+    novaQuantidade
+})
+.eq(
+    "id",
+    itemEstoque.id
+);
+await carregarEstoqueEPISupabase();
 
-    solicitacao.status =
-    "Entregue";
+    const { error } =
+await supabaseClient
+.from("epi_solicitacoes")
+.update({
+    status:"Entregue"
+})
+.eq(
+    "id",
+    solicitacao.id
+);
+
+if(error){
+    console.error(error);
+    return;
+}
+
+await carregarSolicitacoesEPISupabase();
 
     salvarDados(
         "estoqueEPI",
@@ -1758,23 +1947,29 @@ function entregarEPI(index){
     atualizarEstoqueEPI();
 
 }
-function rejeitarEPI(index){
+async function rejeitarEPI(index){
 
-    solicitacoesEPI[index].status =
-    "Rejeitado";
+    const item =
+    solicitacoesEPIFiltradas[index];
 
-    salvarDados(
-        "solicitacoesEPI",
-        solicitacoesEPI
+    const { error } =
+    await supabaseClient
+    .from("epi_solicitacoes")
+    .update({
+        status:"Rejeitado"
+    })
+    .eq(
+        "id",
+        item.id
     );
 
-    solicitacoesEPIFiltradas =
-    [...solicitacoesEPI];
+    if(error){
+        console.error(error);
+        return;
+    }
 
-    atualizarEPI();
-
+    await carregarSolicitacoesEPISupabase();
 }
-
 function atualizarIndicadoresEPI(){
 
     document.getElementById(
@@ -2409,13 +2604,9 @@ document.getElementById(
     "formDDS"
 );
 
-let ddsAtivos =
-carregarDados(
-    "ddsAtivos"
-) || [];
+let ddsAtivos = [];
 
-let ddsFiltrados =
-[...ddsAtivos];
+let ddsFiltrados = [];
 
 /* ===========================
    CRIAR DDS
@@ -2427,53 +2618,47 @@ if(formDDS){
 
         "submit",
 
-        e => {
+        async e => {
 
             e.preventDefault();
 
-            const novoDDS = {
+           const { error } =
+await supabaseClient
+.from("dds")
+.insert([{
+empresa_id:
+window.empresaAtual,
+    data_dds:
+    document.getElementById(
+        "dataDDS"
+    ).value,
 
-                id:
-                Date.now(),
+    tema:
+    document.getElementById(
+        "temaDDS"
+    ).value,
 
-                data:
-                document.getElementById(
-                    "dataDDS"
-                ).value,
+    responsavel:
+    document.getElementById(
+        "responsavelDDS"
+    ).value
 
-                tema:
-                document.getElementById(
-                    "temaDDS"
-                ).value,
+}]);
 
-                responsavel:
-                document.getElementById(
-                    "responsavelDDS"
-                ).value,
+if(error){
 
-                participantes:[]
-            };
+    console.error(error);
 
-            ddsAtivos.push(
-                novoDDS
-            );
+    return;
+}
 
-            salvarDados(
-                "ddsAtivos",
-                ddsAtivos
-            );
+await carregarDDSSupabase();
 
-            ddsFiltrados =
-            [...ddsAtivos];
+formDDS.reset();
 
-            atualizarDDS();
-
-            formDDS.reset();
-
-            alert(
-                "DDS criado com sucesso!"
-            );
-
+alert(
+    "DDS criado com sucesso!"
+);
         }
 
     );
@@ -2483,7 +2668,58 @@ if(formDDS){
 /* ===========================
    TABELA
 =========================== */
+async function carregarDDSSupabase(){
+    if(!window.empresaAtual){
+    return;
+}
 
+    const { data, error } =
+    await supabaseClient
+    .from("dds")
+    .select("*")
+.eq("empresa_id",window.empresaAtual)
+    .order(
+        "data_dds",
+        {
+            ascending:false
+        }
+    );
+
+    if(error){
+        console.error(error);
+        return;
+    }
+
+    const { data: participantesDDS } =
+    await supabaseClient
+    .from("dds_participantes")
+    .select("*")
+.eq("empresa_id",window.empresaAtual);
+
+    ddsAtivos =
+    (data || []).map(item => ({
+
+        id: item.id,
+
+        data: item.data_dds,
+
+        tema: item.tema,
+
+        responsavel: item.responsavel,
+
+        totalParticipantes:
+        (participantesDDS || [])
+        .filter(
+            p => p.dds_id === item.id
+        ).length
+
+    }));
+
+    ddsFiltrados =
+    [...ddsAtivos];
+
+    atualizarDDS();
+}
 function atualizarDDS(){
 
     if(!tabelaDDS) return;
@@ -2508,7 +2744,7 @@ function atualizarDDS(){
 
                 <td>${item.responsavel}</td>
 
-                <td>${item.participantes.length}</td>
+                <td>${item.totalParticipantes || 0}</td>
 
                 <td>
 
@@ -2536,29 +2772,10 @@ function atualizarDDS(){
     );
 
     atualizarIndicadoresDDS();
-const matriculasParticipantes =
-new Set();
 
-ddsFiltrados.forEach(
-    dds => {
-
-        dds.participantes.forEach(
-            participante => {
-
-                matriculasParticipantes.add(
-                    participante.matricula
-                );
-
-            }
-        );
-
-    }
-);
 
 const colaboradores =
-carregarDados(
-    "colaboradores"
-) || [];
+window.colaboradores || [];
 
 const totalColaboradores =
 
@@ -2574,38 +2791,23 @@ colaboradores.length
 
 0;
 
-const taxaParticipacao =
 
-totalColaboradores === 0
-
-? 0
-
-: Math.round(
-
-    (
-        matriculasParticipantes.size
-        /
-        totalColaboradores
-    ) * 100
-
-);
-
-const elementoTaxa =
-document.getElementById(
-    "taxaParticipacaoDDS"
-);
-
-if(elementoTaxa){
-
-    elementoTaxa.textContent =
-    `${taxaParticipacao}%`;
 
 }
-}
-function imprimirDDS(index){
+async function imprimirDDS(index){
 
     const dds =
     ddsFiltrados[index];
+
+    const { data: participantes } =
+await supabaseClient
+.from("dds_participantes")
+.select("*")
+.eq("empresa_id",window.empresaAtual)
+.eq(
+    "dds_id",
+    dds.id
+);
 
     const { jsPDF } =
     window.jspdf;
@@ -2657,10 +2859,10 @@ function imprimirDDS(index){
     );
 
     pdf.text(
-        `Participantes: ${dds.participantes.length}`,
-        20,
-        100
-    );
+    `Participantes: ${(participantes || []).length}`,
+    20,
+    100
+);
 
     let y = 120;
 
@@ -2674,12 +2876,12 @@ function imprimirDDS(index){
 
     y += 10;
 
-    dds.participantes.forEach(
+   (participantes || []).forEach(
         (participante,index) => {
 
             pdf.text(
 
-                `${index + 1}. ${participante.nome} (${participante.matricula})`,
+                `${index + 1}. ${participante.colaborador} (${participante.matricula})`,
 
                 20,
 
@@ -2716,12 +2918,77 @@ document.querySelector(
     "#tabelaFalaTalanga tbody"
 );
 
-let falaTalanga =
-carregarDados(
-    "falaTalanga"
-) || [];
-let falaTalangaFiltrado =
-[...falaTalanga];
+let falaTalanga = [];
+
+let falaTalangaFiltrado = [];
+
+async function carregarFalaTalangaSupabase(){
+    if(!window.empresaAtual){
+    return;
+}
+
+    const { data, error } =
+    await supabaseClient
+    .from("fala_talanga")
+    .select("*")
+.eq("empresa_id",window.empresaAtual)
+    .order(
+        "created_at",
+        {
+            ascending: false
+        }
+    );
+
+    if(error){
+
+        console.error(
+            "Erro Fala Talanga:",
+            error
+        );
+
+        return;
+    }
+
+    falaTalanga =
+    (data || []).map(item => ({
+
+        id: item.id,
+
+        data:
+        item.created_at,
+
+        colaborador:
+        item.colaborador,
+
+        matricula:
+        item.matricula,
+
+        empresa:
+        item.empresa,
+
+        funcao:
+        item.funcao,
+
+        tipo:
+        item.tipo,
+
+        mensagem:
+        item.mensagem,
+
+        status:
+        item.status,
+
+        resposta:
+        item.resposta
+
+    }));
+
+    falaTalangaFiltrado =
+    [...falaTalanga];
+
+    atualizarFalaTalanga();
+}
+
 function atualizarFalaTalanga(){
 
     if(!tabelaFalaTalanga)
@@ -2895,43 +3162,33 @@ falaTalanga.filter(
 
 
 }
-function colocarEmTratamento(index){
+async function colocarEmTratamento(index){
 
     const item =
     falaTalangaFiltrado[index];
 
-    const indiceReal =
-    falaTalanga.findIndex(
-        registro =>
+    const { error } =
+    await supabaseClient
+    .from("fala_talanga")
+    .update({
 
-        registro.data === item.data
+        status:
+        "Em Tratamento"
 
-        &&
-
-        registro.colaborador === item.colaborador
-
-        &&
-
-        registro.mensagem === item.mensagem
+    })
+    .eq(
+        "id",
+        item.id
     );
 
-    if(indiceReal === -1)
-    return;
+    if(error){
 
-    falaTalanga[indiceReal]
-    .status =
-    "Em Tratamento";
+        console.error(error);
 
-    salvarDados(
-        "falaTalanga",
-        falaTalanga
-    );
+        return;
+    }
 
-    falaTalangaFiltrado =
-    [...falaTalanga];
-
-    atualizarFalaTalanga();
-
+    await carregarFalaTalangaSupabase();
 }
 function filtrarFalaTalanga(){
 
@@ -3078,7 +3335,7 @@ function imprimirFalaTalanga(index){
     );
 
 }
-function responderFalaTalanga(index){
+async function responderFalaTalanga(index){
 
     const resposta = prompt(
         "Digite a resposta:"
@@ -3089,44 +3346,33 @@ function responderFalaTalanga(index){
     const item =
     falaTalangaFiltrado[index];
 
-    const indiceReal =
-    falaTalanga.findIndex(
-        registro =>
+    const { error } =
+    await supabaseClient
+    .from("fala_talanga")
+    .update({
 
-        registro.data === item.data
+        resposta:
+        resposta,
 
-        &&
+        status:
+        "Fechado"
 
-        registro.colaborador === item.colaborador
-
-        &&
-
-        registro.mensagem === item.mensagem
+    })
+    .eq(
+        "id",
+        item.id
     );
 
-    if(indiceReal === -1)
-    return;
+    if(error){
 
-    falaTalanga[indiceReal]
-    .resposta =
-    resposta;
+        console.error(error);
 
-    falaTalanga[indiceReal]
-    .status =
-    "Fechado";
+        return;
+    }
 
-    salvarDados(
-        "falaTalanga",
-        falaTalanga
-    );
-
-    falaTalangaFiltrado =
-    [...falaTalanga];
-
-    atualizarFalaTalanga();
-
+    await carregarFalaTalangaSupabase();
 }
-function eliminarFalaTalanga(index){
+async function eliminarFalaTalanga(index){
 
     if(
         !confirm(
@@ -3137,36 +3383,25 @@ function eliminarFalaTalanga(index){
     const item =
     falaTalangaFiltrado[index];
 
-    const indiceReal =
-    falaTalanga.findIndex(
-        registro =>
-        registro.data === item.data
-        &&
-        registro.colaborador === item.colaborador
-        &&
-        registro.mensagem === item.mensagem
+    const { error } =
+    await supabaseClient
+    .from("fala_talanga")
+    .delete()
+    .eq(
+        "id",
+        item.id
     );
 
-    if(
-        indiceReal === -1
-    ) return;
+    if(error){
 
-    falaTalanga.splice(
-        indiceReal,
-        1
-    );
+        console.error(error);
 
-    salvarDados(
-        "falaTalanga",
-        falaTalanga
-    );
+        return;
+    }
 
-    falaTalangaFiltrado =
-    [...falaTalanga];
-
-    atualizarFalaTalanga();
-
+    await carregarFalaTalangaSupabase();
 }
+
 atualizarFalaTalanga();
 /* ===========================
    FILTRO
@@ -3222,11 +3457,150 @@ function limparFiltroDDS(){
 /* ===========================
    INDICADORES
 =========================== */
+async function carregarIndicadoresDDS(){
+
+    const { data, error } =
+    await supabaseClient
+    .from("dds_participantes")
+    .select("*")
+.eq("empresa_id",window.empresaAtual);
+
+    if(error){
+
+        console.error(error);
+
+        return;
+    }
+
+    document.getElementById(
+        "participantesDDS"
+    ).textContent =
+    data.length;
+
+   const matriculasUnicas =
+new Set(
+    data.map(
+        item => item.matricula
+    )
+);
+
+const listaColaboradores =
+Array.isArray(window.colaboradores)
+? window.colaboradores
+: [];
+
+const totalColaboradores =
+listaColaboradores.length;
+    const taxa =
+    totalColaboradores === 0
+    ? 0
+    : Math.round(
+        (
+            matriculasUnicas.size
+            /
+            totalColaboradores
+        ) * 100
+    );
+
+    const taxaElemento =
+    document.getElementById(
+        "taxaParticipacaoDDS"
+    );
+
+    if(taxaElemento){
+
+        taxaElemento.textContent =
+        `${taxa}%`;
+    }
+
+    const contador = {};
+
+    data.forEach(item => {
+
+        contador[
+            item.colaborador
+        ] =
+
+        (
+            contador[
+                item.colaborador
+            ] || 0
+        ) + 1;
+
+    });
+
+    let nomeTop = "-";
+    let maior = 0;
+
+    Object.entries(
+        contador
+    ).forEach(
+        ([nome,total]) => {
+
+            if(total > maior){
+
+                maior = total;
+
+                nomeTop =
+                `${nome} (${total})`;
+            }
+
+        }
+    );
+
+    const maisParticipa =
+    document.getElementById(
+        "maisParticipaDDS"
+    );
+
+    if(maisParticipa){
+
+        maisParticipa.textContent =
+        nomeTop;
+    }
+
+
+
+const semDDS =
+listaColaboradores.filter(  colaborador =>
+
+        !matriculasUnicas.has(
+            colaborador.matricula
+        )
+    );
+
+    const elementoNunca =
+    document.getElementById(
+        "nuncaParticiparamDDS"
+    );
+
+    if(elementoNunca){
+
+        elementoNunca.textContent =
+        semDDS.length;
+    }
+
+    const lista =
+    document.getElementById(
+        "listaSemDDS"
+    );
+
+    if(lista){
+
+        lista.innerHTML =
+        semDDS.map(
+            item =>
+
+            `<p>
+                ${item.nome}
+                (${item.matricula})
+            </p>`
+        ).join("");
+    }
+}
 
 function atualizarIndicadoresDDS(){
 
-
-    
     const totalDDS =
     ddsFiltrados.length;
 
@@ -3239,80 +3613,34 @@ function atualizarIndicadoresDDS(){
 
         elementoTotalDDS.textContent =
         totalDDS;
-
     }
 
-    
-
-    const totalParticipantes =
-
-    ddsFiltrados.reduce(
-
-        (total,dds) =>
-
-        total +
-
-        (
-            dds.participantes
-            ?.length || 0
-        ),
-
-        0
-
-    );
-
-    const elementoParticipantes =
-    document.getElementById(
-        "participantesDDS"
-    );
-
-    if(elementoParticipantes){
-
-        elementoParticipantes.textContent =
-        totalParticipantes;
-
-    }
-
-    /* TEMA FREQUENTE */
+    carregarIndicadoresDDS();
 
     const temas = {};
 
-    ddsFiltrados.forEach(
-        dds => {
+    ddsFiltrados.forEach(dds => {
 
-            temas[dds.tema] =
+        temas[dds.tema] =
+        (temas[dds.tema] || 0) + 1;
 
-            (
-                temas[dds.tema]
-                || 0
-            ) + 1;
-
-        }
-    );
+    });
 
     let temaTop = "-";
     let maiorTema = 0;
 
-    Object.entries(
-        temas
-    ).forEach(
-
+    Object.entries(temas).forEach(
         ([tema,total]) => {
 
-            if(
-                total > maiorTema
-            ){
+            if(total > maiorTema){
 
-                maiorTema =
-                total;
+                maiorTema = total;
 
                 temaTop =
                 `${tema} (${total})`;
-
             }
 
         }
-
     );
 
     const temaDDS =
@@ -3324,172 +3652,14 @@ function atualizarIndicadoresDDS(){
 
         temaDDS.textContent =
         temaTop;
-
     }
-
-    /* MAIS PARTICIPA */
-
-    const participacoes = {};
-
-    ddsFiltrados.forEach(
-        dds => {
-
-            dds.participantes.forEach(
-                participante => {
-
-                    participacoes[
-                        participante.nome
-                    ] =
-
-                    (
-                        participacoes[
-                            participante.nome
-                        ] || 0
-                    ) + 1;
-
-                }
-            );
-
-        }
-    );
-
-    let nomeTop = "-";
-    let maior = 0;
-
-    Object.entries(
-        participacoes
-    ).forEach(
-
-        ([nome,total]) => {
-
-            if(total > maior){
-
-                maior = total;
-
-                nomeTop =
-                `${nome} (${total})`;
-
-            }
-
-        }
-
-    );
-
-    const elementoMaisParticipa =
-    document.getElementById(
-        "maisParticipaDDS"
-    );
-
-    if(
-        elementoMaisParticipa
-    ){
-
-        elementoMaisParticipa.textContent =
-        nomeTop;
-
-    }
-
-    /* NUNCA PARTICIPARAM */
-
-    const matriculasParticipantes =
-    new Set();
-
-    ddsFiltrados.forEach(
-        dds => {
-
-            dds.participantes.forEach(
-                participante => {
-
-                    matriculasParticipantes.add(
-                        participante.matricula
-                    );
-
-                }
-            );
-
-        }
-    );
-
-    const colaboradores =
-
-    carregarDados(
-        "colaboradores"
-    ) || [];
-
-    const colaboradoresSemDDS =
-
-    Array.isArray(
-        colaboradores
-    )
-
-    ?
-
-    colaboradores.filter(
-        colaborador =>
-
-        !matriculasParticipantes.has(
-            colaborador.matricula
-        )
-    )
-
-    :
-
-    [];
-
-    const elementoNuncaParticiparam =
-    document.getElementById(
-        "nuncaParticiparamDDS"
-    );
-
-    if(
-        elementoNuncaParticiparam
-    ){
-
-        elementoNuncaParticiparam.textContent =
-
-        colaboradoresSemDDS.length;
-
-    }
-
-    const listaSemDDS =
-    document.getElementById(
-        "listaSemDDS"
-    );
-
-    if(listaSemDDS){
-
-        if(
-            colaboradoresSemDDS.length === 0
-        ){
-
-            listaSemDDS.innerHTML =
-            "Todos participaram.";
-
-        }
-        else{
-
-            listaSemDDS.innerHTML =
-
-            colaboradoresSemDDS.map(
-                item =>
-
-                `<p>
-                    ${item.nome}
-                    (${item.matricula})
-                </p>`
-            ).join("");
-
-        }
-
-    }
-
 }
 
 /* ===========================
    ELIMINAR
 =========================== */
 
-function eliminarDDS(index){
+async function eliminarDDS(index){
 
     if(
         !confirm(
@@ -3500,42 +3670,50 @@ function eliminarDDS(index){
     const item =
     ddsFiltrados[index];
 
-    const indiceReal =
-
-    ddsAtivos.findIndex(
-        dds =>
-        dds.id === item.id
+    const { error } =
+    await supabaseClient
+    .from("dds")
+    .delete()
+    .eq(
+        "id",
+        item.id
     );
 
-    if(
-        indiceReal === -1
-    ) return;
+    if(error){
 
-    ddsAtivos.splice(
-        indiceReal,
-        1
-    );
+        console.error(error);
 
-    salvarDados(
-        "ddsAtivos",
-        ddsAtivos
-    );
+        return;
+    }
 
-    ddsFiltrados =
-    [...ddsAtivos];
-
-    atualizarDDS();
-
+    await carregarDDSSupabase();
 }
 
 /* ===========================
    PARTICIPANTES
 =========================== */
 
-function verParticipantesDDS(index){
+async function verParticipantesDDS(index){
 
     const dds =
     ddsFiltrados[index];
+
+    const { data, error } =
+    await supabaseClient
+    .from("dds_participantes")
+    .select("*")
+.eq("empresa_id",window.empresaAtual)
+    .eq(
+        "dds_id",
+        dds.id
+    );
+
+    if(error){
+
+        console.error(error);
+
+        return;
+    }
 
     const div =
     document.getElementById(
@@ -3543,51 +3721,38 @@ function verParticipantesDDS(index){
     );
 
     if(
-        !dds.participantes ||
-        dds.participantes.length === 0
+        !data ||
+        data.length === 0
     ){
 
         div.innerHTML =
         "Nenhum participante.";
 
         return;
-
     }
 
-    let html =
-    "<ul>";
+    let html = "<ul>";
 
-    dds.participantes.forEach(
-        participante => {
+    data.forEach(item => {
 
-            html += `
+        html += `
+            <li>
+                ${item.colaborador}
+                (${item.matricula})
+            </li>
+        `;
 
-                <li>
+    });
 
-                    ${participante.nome}
+    html += "</ul>";
 
-                    (${participante.matricula})
-
-                </li>
-
-            `;
-
-        }
-    );
-
-    html +=
-    "</ul>";
-
-    div.innerHTML =
-    html;
-
+    div.innerHTML = html;
 }
-
 /* ===========================
    INICIALIZAÇÃO
 =========================== */
 
-atualizarDDS();
+carregarDDSSupabase();
 /* ==========================================
    INSPEÇÕES
 ========================================== */
@@ -3602,10 +3767,7 @@ document.querySelector(
     "#tabelaInspecoes tbody"
 );
 
-let inspecoes =
-carregarDados(
-    "inspecoes"
-);
+let inspecoes = [];
 
 let indiceEdicaoInspecao =
 null;
@@ -3730,6 +3892,52 @@ if(formSolicitacaoEPI){
     );
 
 }
+async function carregarInspecoesSupabase(){
+    if(!window.empresaAtual){
+    return;
+}
+
+    const { data, error } =
+    await supabaseClient
+    .from("inspecoes")
+    .select("*")
+.eq("empresa_id",window.empresaAtual)
+    .order("data_inspecao", {
+        ascending: false
+    });
+
+    if(error){
+        console.error(
+            "Erro Inspecoes:",
+            error
+        );
+        return;
+    }
+
+    inspecoes = data || [];
+
+
+inspecoes = (data || []).map(item => ({
+    id: item.id,
+    data: item.data_inspecao,
+    atividade: item.atividade,
+    area: item.area,
+    responsavel: item.responsavel,
+    tipo: item.tipo,
+    descricao: item.descricao,
+    acaoCorretiva: item.acao_corretiva,
+    prazo: item.prazo,
+    status: item.status
+}));
+
+
+
+
+    atualizarInspecoes();
+}
+
+
+
 function atualizarInspecoes(
     lista = inspecoes
 ){
@@ -4050,7 +4258,7 @@ if(formInspecao){
 
         "submit",
 
-        e => {
+        async e => {
 
             e.preventDefault();
 
@@ -4103,34 +4311,98 @@ if(formInspecao){
 
             };
 
-            if(
-                indiceEdicaoInspecao !== null
-            ){
+           let error;
 
-                inspecoes[
-                    indiceEdicaoInspecao
-                ] = novaInspecao;
+if(
+    indiceEdicaoInspecao !== null
+){
 
-                indiceEdicaoInspecao =
-                null;
+    ({ error } =
+    await supabaseClient
+    .from("inspecoes")
+    .update({
 
-            }
-            else{
+        data_inspecao:
+        novaInspecao.data,
 
-                inspecoes.push(
-                    novaInspecao
-                );
+        atividade:
+        novaInspecao.atividade,
 
-            }
+        area:
+        novaInspecao.area,
 
-            salvarDados(
-                "inspecoes",
-                inspecoes
-            );
+        responsavel:
+        novaInspecao.responsavel,
 
-            atualizarInspecoes();
+        tipo:
+        novaInspecao.tipo,
 
-            formInspecao.reset();
+        descricao:
+        novaInspecao.descricao,
+
+        acao_corretiva:
+        novaInspecao.acaoCorretiva,
+
+        prazo:
+        novaInspecao.prazo,
+
+        status:
+        novaInspecao.status
+
+    })
+    .eq(
+        "id",
+        indiceEdicaoInspecao
+    ));
+indiceEdicaoInspecao = null;
+}
+else{
+
+    ({ error } =
+    await supabaseClient
+    .from("inspecoes")
+    .insert([{
+empresa_id:
+window.empresaAtual,
+        data_inspecao:
+        novaInspecao.data,
+
+        atividade:
+        novaInspecao.atividade,
+
+        area:
+        novaInspecao.area,
+
+        responsavel:
+        novaInspecao.responsavel,
+
+        tipo:
+        novaInspecao.tipo,
+
+        descricao:
+        novaInspecao.descricao,
+
+        acao_corretiva:
+        novaInspecao.acaoCorretiva,
+
+        prazo:
+        novaInspecao.prazo,
+
+        status:
+        novaInspecao.status
+
+    }]));
+}
+
+if(error){
+    console.error(error);
+    alert("Erro ao gravar inspeção.");
+    return;
+}
+
+await carregarInspecoesSupabase();
+
+formInspecao.reset();
 
         }
 
@@ -4215,7 +4487,7 @@ document.getElementById(
 responsavelFrequente;
 }
 
-function eliminarInspecao(index){
+async function eliminarInspecao(index){
 
     if(
         !confirm(
@@ -4223,18 +4495,30 @@ function eliminarInspecao(index){
         )
     ) return;
 
-    inspecoes.splice(
-        index,
-        1
+    const item =
+    inspecoes[index];
+
+    const { error } =
+    await supabaseClient
+    .from("inspecoes")
+    .delete()
+    .eq(
+        "id",
+        item.id
     );
 
-    salvarDados(
-        "inspecoes",
-        inspecoes
-    );
+    if(error){
 
-    atualizarInspecoes();
+        console.error(error);
 
+        alert(
+            "Erro ao eliminar."
+        );
+
+        return;
+    }
+
+    await carregarInspecoesSupabase();
 }
 function atualizarIndicadoresInspecoesPeriodo(lista){
 
@@ -4326,15 +4610,18 @@ function editarInspecao(index){
     item.status || "";
 
     indiceEdicaoInspecao =
-    index;
+    item.id;
 
+    console.log(
+        "EDITANDO ID:",
+        indiceEdicaoInspecao
+    );
 }
 
 function imprimirInspecao(index){
 
     const item =
-falaTalangaFiltrado[index];
-
+    inspecoes[index];
     const { jsPDF } =
     window.jspdf;
 
@@ -4444,118 +4731,175 @@ falaTalangaFiltrado[index];
 
 }
 
-let ocorrenciasHSE =
-carregarDados(
-    "ocorrenciasHSE"
-) || [];
 
-let ocorrenciasHSEFiltradas =
-[...ocorrenciasHSE];
+
+
 
 const formOcorrenciasHSE =
 document.getElementById(
     "formOcorrenciasHSE"
 );
-
 if(formOcorrenciasHSE){
 
     formOcorrenciasHSE.addEventListener(
         "submit",
-        e => {
 
-            e.preventDefault();
+        async e => {
 
-            console.log(
-                "SUBMIT OCORRENCIAS HSE"
-            );
-
-            
-
-            
             e.preventDefault();
 
             const registo = {
 
-                data:
-                document.getElementById(
-                    "dataOcorrenciaHSE"
-                ).value,
+    data:
+    document.getElementById(
+        "dataOcorrenciaHSE"
+    ).value,
 
-                tipo:
-                document.getElementById(
-                    "tipoOcorrenciaHSE"
-                ).value,
+    tipo:
+    document.getElementById(
+        "tipoOcorrenciaHSE"
+    ).value,
 
-                area:
-                document.getElementById(
-                    "areaOcorrenciaHSE"
-                ).value,
+    area:
+    document.getElementById(
+        "areaOcorrenciaHSE"
+    ).value,
 
-                local:
-                document.getElementById(
-                    "localOcorrenciaHSE"
-                ).value,
+    local:
+    document.getElementById(
+        "localOcorrenciaHSE"
+    ).value,
 
-                empresa:
-                document.getElementById(
-                    "empresaOcorrenciaHSE"
-                ).value,
+    empresa:
+    document.getElementById(
+        "empresaOcorrenciaHSE"
+    ).value,
 
-                colaborador:
-                document.getElementById(
-                    "colaboradorOcorrenciaHSE"
-                ).value,
+    colaborador:
+    document.getElementById(
+        "colaboradorOcorrenciaHSE"
+    ).value,
 
-                diasPerdidos:
-                Number(
-                    document.getElementById(
-                        "diasPerdidosHSE"
-                    ).value
-                ),
+    diasPerdidos:
+    Number(
+        document.getElementById(
+            "diasPerdidosHSE"
+        ).value
+    ),
 
-                descricao:
-                document.getElementById(
-                    "descricaoOcorrenciaHSE"
-                ).value,
+    descricao:
+    document.getElementById(
+        "descricaoOcorrenciaHSE"
+    ).value,
 
-                status:
-                document.getElementById(
-                    "statusOcorrenciaHSE"
-                ).value
+    status:
+    document.getElementById(
+        "statusOcorrenciaHSE"
+    ).value
 
-            };
+};
 
-           if(
-    indiceEdicaoOcorrenciaHSE !== null
-){
+            let error;
 
-    ocorrenciasHSE[
-        indiceEdicaoOcorrenciaHSE
-    ] = registo;
+            if(
+                indiceEdicaoOcorrenciaHSE !== null
+            ){
 
-    indiceEdicaoOcorrenciaHSE =
-    null;
+                ({ error } =
+                await supabaseClient
+                .from("ocorrencias_hse")
+                .update({
 
-}
-else{
+                    data_ocorrencia:
+                    registo.data,
 
-    ocorrenciasHSE.push(
-        registo
-    );
+                    tipo:
+                    registo.tipo,
 
-}
-            salvarDados(
-                "ocorrenciasHSE",
-                ocorrenciasHSE
-            );
-ocorrenciasHSEFiltradas =
-[...ocorrenciasHSE];
-            atualizarOcorrenciasHSE();
-            // atualizarDashboard();
+                    area:
+                    registo.area,
+
+                    local:
+                    registo.local,
+empresa:
+registo.empresa,
+                    colaborador:
+                    registo.colaborador,
+
+                    dias_perdidos:
+                    registo.diasPerdidos,
+
+                    descricao:
+                    registo.descricao,
+
+                    status:
+                    registo.status
+
+                })
+                .eq(
+                    "id",
+                    indiceEdicaoOcorrenciaHSE
+                ));
+
+                indiceEdicaoOcorrenciaHSE = null;
+
+            }else{
+
+                ({ error } =
+                await supabaseClient
+                .from("ocorrencias_hse")
+                .insert([{
+empresa_id:
+window.empresaAtual,
+                    data_ocorrencia:
+                    registo.data,
+
+                    tipo:
+                    registo.tipo,
+
+                    area:
+                    registo.area,
+
+                    local:
+                    registo.local,
+
+                    empresa:
+                    registo.empresa,
+
+                    colaborador:
+                    registo.colaborador,
+
+                    dias_perdidos:
+                    registo.diasPerdidos,
+
+                    descricao:
+                    registo.descricao,
+
+                    status:
+                    registo.status
+
+                }]));
+            }
+
+            if(error){
+
+                console.error(error);
+
+                alert(
+                    "Erro ao gravar ocorrência."
+                );
+
+                return;
+            }
+
+            await carregarOcorrenciasHSESupabase();
 
             formOcorrenciasHSE.reset();
 
+            atualizarDashboard();
+
         }
+
     );
 
 }
@@ -4819,29 +5163,86 @@ if(
 window.calcularDiasSemAcidente =
 calcularDiasSemAcidente;
 
-
-function salvarDataBaseAcidente(){
+async function salvarDataBaseAcidente(){
 
     const data =
     document.getElementById(
         "dataBaseAcidente"
     ).value;
 
-    salvarDados(
-        "dataBaseAcidente",
-        data
+    const { error } =
+    await supabaseClient
+    .from("configuracoes_hse")
+    const { data: existente } =
+await supabaseClient
+.from("configuracoes_hse")
+.select("id")
+.limit(1)
+
+.eq("empresa_id",window.empresaAtual);
+
+if(
+    existente &&
+    existente.length > 0
+){
+
+    await supabaseClient
+    .from("configuracoes_hse")
+    .update({
+        data_base_acidente:data
+    })
+    .eq(
+        "id",
+        existente[0].id
+    );
+
+}else{
+
+    await supabaseClient
+    .from("configuracoes_hse")
+    .insert([{
+        empresa_id:
+window.empresaAtual,
+        data_base_acidente:data
+    }]);
+}
+``
+    if(error){
+
+        console.error(error);
+
+        alert(
+            "Erro ao guardar a data."
+        );
+
+        return;
+    }
+
+    alert(
+        "Data base guardada com sucesso!"
     );
 
     atualizarDashboard();
-
+}
+``
+async function carregarDataBaseAcidente(){
+    if(!window.empresaAtual){
+    return;
 }
 
-function carregarDataBaseAcidente(){
+    const { data, error } =
+await supabaseClient
+.from("configuracoes_hse")
+.select("*")
+.limit(1)
+.eq("empresa_id",window.empresaAtual);
 
-    const dataBase =
-    carregarDados(
-        "dataBaseAcidente"
-    );
+    if(error){
+
+        console.error(error);
+
+        return;
+    }
 
     const campo =
     document.getElementById(
@@ -4850,20 +5251,82 @@ function carregarDataBaseAcidente(){
 
     if(
         campo &&
-        dataBase
+        data
     ){
-
         campo.value =
-        dataBase;
-
+        data.data_base_acidente || "";
     }
-
 }
+
 
 let indiceEdicaoOcorrenciaHSE = null;
 
 
 
+async function carregarOcorrenciasHSESupabase(){
+    if(!window.empresaAtual){
+    return;
+}
+
+    const { data, error } =
+    await supabaseClient
+    .from("ocorrencias_hse")
+    .select("*")
+.eq("empresa_id",window.empresaAtual)
+    .order(
+        "data_ocorrencia",
+        {
+            ascending:false
+        }
+    );
+
+    if(error){
+        console.error(
+            "Erro Ocorrencias HSE:",
+            error
+        );
+        return;
+    }
+
+    ocorrenciasHSE =
+(data || []).map(item => ({
+
+    id: item.id,
+
+    data:
+    item.data_ocorrencia,
+
+    tipo:
+    item.tipo,
+
+    area:
+    item.area,
+
+    local:
+    item.local,
+
+    empresa:
+    item.empresa,
+
+    colaborador:
+    item.colaborador,
+
+    diasPerdidos:
+    item.dias_perdidos,
+
+    descricao:
+    item.descricao,
+
+    status:
+    item.status
+
+}));
+    ocorrenciasHSEFiltradas =
+    [...ocorrenciasHSE];
+
+    atualizarOcorrenciasHSE();
+    atualizarHHT();
+}
 
 function atualizarOcorrenciasHSE(){
 
@@ -4988,7 +5451,7 @@ ocorrenciasHSE.reduce(
 );
 
 }
-function eliminarOcorrenciaHSE(index){
+async function eliminarOcorrenciaHSE(index){
 
     if(
         !confirm(
@@ -4996,23 +5459,32 @@ function eliminarOcorrenciaHSE(index){
         )
     ) return;
 
-    ocorrenciasHSE.splice(
-        index,
-        1
+    const item =
+    ocorrenciasHSE[index];
+
+    const { error } =
+    await supabaseClient
+    .from("ocorrencias_hse")
+    .delete()
+    .eq(
+        "id",
+        item.id
     );
 
-    salvarDados(
-        "ocorrenciasHSE",
-        ocorrenciasHSE
-    );
+    if(error){
 
-    ocorrenciasHSEFiltradas =
-    [...ocorrenciasHSE];
+        console.error(error);
 
-    atualizarOcorrenciasHSE();
+        alert(
+            "Erro ao eliminar."
+        );
+
+        return;
+    }
+
+    await carregarOcorrenciasHSESupabase();
 
     atualizarDashboard();
-
 }
 async function imprimirOcorrenciaHSE(index){
 
@@ -5151,8 +5623,8 @@ function editarOcorrenciaHSE(index){
         "statusOcorrenciaHSE"
     ).value = item.status;
 
-    indiceEdicaoOcorrenciaHSE =
-    index;
+   indiceEdicaoOcorrenciaHSE =
+item.id;
 
 }
 
@@ -5162,13 +5634,9 @@ function editarOcorrenciaHSE(index){
 
 
 
-let registosHHT =
-carregarDados(
-    "registosHHT"
-) || [];
+let registosHHT = [];
 
-let registosHHTFiltrados =
-[...registosHHT];
+let registosHHTFiltrados = [];
 
 let indiceEdicaoHHT = null;
 
@@ -5199,7 +5667,76 @@ if(formHHT){
     );
 
 }
-function registarHHT(e){
+async function carregarHHTSupabase(){
+    if(!window.empresaAtual){
+    return;
+}
+
+    const { data, error } =
+    await supabaseClient
+    .from("hht")
+    .select("*")
+.eq("empresa_id",window.empresaAtual)
+    .order(
+        "data_inicio",
+        {
+            ascending:false
+        }
+    );
+
+    if(error){
+
+        console.error(
+            "Erro HHT:",
+            error
+        );
+
+        return;
+    }
+
+    registosHHT =
+    (data || []).map(item => ({
+
+        id: item.id,
+
+        semana:
+        item.semana,
+
+        dataInicial:
+        item.data_inicio,
+
+        dataFinal:
+        item.data_fim,
+
+        empresaPrincipal:
+        item.empresa_principal,
+
+        empresaSub:
+        item.empresa_sub,
+
+        efetivoPrincipal:
+        item.efetivo_principal,
+
+        efetivoSub:
+        item.efetivo_sub,
+
+        efetivoSemana:
+        item.efetivo_semana,
+
+        hhtSemana:
+        item.hht_semana,
+
+        ...(item.dados || {})
+
+    }));
+registosHHTFiltrados =
+[...registosHHT];
+
+atualizarHHT();
+   
+}
+
+async function registarHHT(e){
 
    
    
@@ -5436,20 +5973,16 @@ function registarHHT(e){
         hhtSemana
 
     };
-    const existePeriodo =
+   const existePeriodo =
 
 registosHHT.some(
-    (item,index)=>
+    item =>
 
     item.dataInicial === registo.dataInicial
-
     &&
-
     item.dataFinal === registo.dataFinal
-
     &&
-
-    index !== indiceEdicaoHHT
+    item.id !== indiceEdicaoHHT
 );
 
 if(
@@ -5464,56 +5997,75 @@ if(
 
 }
 
-    if(indiceEdicaoHHT !== null){
+    let error;
+console.log(
+    "ID EM EDIÇÃO:",
+    indiceEdicaoHHT
 
-        const registoAntigo =
-        registosHHTFiltrados[
-            indiceEdicaoHHT
-        ];
+);
 
-        const indiceReal =
-        registosHHT.findIndex(
-            r =>
+if(indiceEdicaoHHT !== null){
 
-            r.semana === registoAntigo.semana
+    ({ error } =
+    await supabaseClient
+    .from("hht")
+    .update({
 
-            &&
+        semana: registo.semana,
+        data_inicio: registo.dataInicial,
+        data_fim: registo.dataFinal,
+        empresa_principal: registo.empresaPrincipal,
+        empresa_sub: registo.empresaSub,
+        efetivo_principal: registo.efetivoPrincipal,
+        efetivo_sub: registo.efetivoSub,
+        efetivo_semana: registo.efetivoSemana,
+        hht_semana: registo.hhtSemana,
+        dados: registo
 
-            r.dataInicial === registoAntigo.dataInicial
+    })
+    .eq(
+        "id",
+        indiceEdicaoHHT
+    ));
 
-            &&
+    indiceEdicaoHHT = null;
 
-            r.dataFinal === registoAntigo.dataFinal
-        );
+}else{
 
-        if(indiceReal > -1){
+    ({ error } =
+    await supabaseClient
+    .from("hht")
+    .insert([{
+empresa_id:
+window.empresaAtual,
+        semana: registo.semana,
+        data_inicio: registo.dataInicial,
+        data_fim: registo.dataFinal,
+        empresa_principal: registo.empresaPrincipal,
+        empresa_sub: registo.empresaSub,
+        efetivo_principal: registo.efetivoPrincipal,
+        efetivo_sub: registo.efetivoSub,
+        efetivo_semana: registo.efetivoSemana,
+        hht_semana: registo.hhtSemana,
+        dados: registo
 
-            registosHHT[indiceReal] =
-            registo;
+    }]));
+}
 
-        }
+if(error){
 
-        indiceEdicaoHHT = null;
+    console.error(error);
 
-    }else{
-
-        registosHHT.push(
-            registo
-        );
-
-    }
-
-    registosHHTFiltrados =
-    [...registosHHT];
-
-    salvarDados(
-        "registosHHT",
-        registosHHT
+    alert(
+        "Erro ao gravar HHT."
     );
 
-    atualizarHHT();
+    return;
+}
 
-    formHHT.reset();
+await carregarHHTSupabase();
+
+formHHT.reset();
 
 }
 function filtrarHHT(){
@@ -5780,79 +6332,38 @@ document.getElementById(
 
 calcularEfetivoMes();
 
-const ocorrenciasHSE =
-carregarDados(
-    "ocorrenciasHSE"
-) || [];
+const ocorrenciasHSEData =
+ocorrenciasHSEFiltradas;
 
 const totalACA =
-
-ocorrenciasHSE.filter(
-    item =>
-
-    item.tipo ===
-
-    "ACA"
+ocorrenciasHSEData.filter(
+    item => item.tipo === "ACA"
 ).length;
 
 const totalDiasPerdidos =
-
-ocorrenciasHSE.reduce(
-    (total,item)=>
-
+ocorrenciasHSEData.reduce(
+    (total,item) =>
     total +
-
-    Number(
-        item.diasPerdidos || 0
-    ),
-
+    Number(item.diasPerdidos || 0),
     0
 );
 
 const hhtAcumulado =
-
 registosHHTFiltrados.reduce(
-    (total,item)=>
-
+    (total,item) =>
     total +
-
-    item.hhtSemana,
-
+    Number(item.hhtSemana || 0),
     0
 );
 
 const tf =
-
 hhtAcumulado > 0
-
-?
-
-(
-    totalACA * 1000000
-)
-
-/
-
-hhtAcumulado
-
+? (totalACA * 1000000) / hhtAcumulado
 : 0;
 
 const tg =
-
 hhtAcumulado > 0
-
-?
-
-(
-    totalDiasPerdidos
-    *
-    1000000
-)
-
-/
-
-hhtAcumulado
-
+? (totalDiasPerdidos * 1000000) / hhtAcumulado
 : 0;
 document.getElementById(
     "taxaFrequencia"
@@ -6008,7 +6519,8 @@ function editarHHT(index){
     document.getElementById("domSMOD").value = item.domSMOD || "";
     document.getElementById("domSMOI").value = item.domSMOI || "";
 
-    indiceEdicaoHHT = index;
+    indiceEdicaoHHT = item.id;
+
 
     window.scrollTo({
         top: document.getElementById("formHHT").offsetTop,
@@ -6016,7 +6528,8 @@ function editarHHT(index){
     });
 
 }
-function eliminarHHT(index){
+async function eliminarHHT(index){
+
 
     if(!confirm("Eliminar registo?")){
         return;
@@ -6042,23 +6555,20 @@ function eliminarHHT(index){
 
     if(indiceReal > -1){
 
-        registosHHT.splice(
-            indiceReal,
-            1
-        );
+       const item =
+registosHHTFiltrados[index];
 
-    }
+await supabaseClient
+.from("hht")
+.delete()
+.eq(
+    "id",
+    item.id
+);
 
-    registosHHTFiltrados =
-    [...registosHHT];
+await carregarHHTSupabase();
 
-    salvarDados(
-        "registosHHT",
-        registosHHT
-    );
-
-    atualizarHHT();
-
+}
 }
 function calcularHHTMes(){
 
@@ -6137,6 +6647,12 @@ atualizarHHT();
 ========================================== */
 
 
-atualizarOcorrenciasHSE();
+carregarOcorrenciasHSESupabase();
 carregarDataBaseAcidente();
-atualizarInspecoes();
+carregarInspecoesSupabase();
+carregarFalaTalangaSupabase();
+carregarSolicitacoesEPISupabase();
+carregarDDSSupabase();
+carregarHHTSupabase();
+carregarOcorrenciasSupabase();
+carregarEstoqueEPISupabase();

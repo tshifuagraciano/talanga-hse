@@ -11,10 +11,38 @@ const tabelaUtilizadores =
     document.querySelector(
         "#tabelaUtilizadores tbody"
     );
-let utilizadores =
-carregarDados(
-    "utilizadores"
-);
+let utilizadores = [];
+
+async function carregarUtilizadoresSupabase(){
+if(!window.empresaAtual){
+    return;
+}
+    const {
+        data,
+        error
+    } =
+    await supabaseClient
+    .from("utilizadores")
+    .select("*")
+.eq("empresa_id",window.empresaAtual)
+
+    if(error){
+
+        console.error(error);
+
+        return;
+
+    }
+
+    utilizadores =
+    data || [];
+
+    atualizarUtilizadores();
+
+    atualizarIndicadoresUtilizadores();
+
+}
+
 function atualizarUtilizadores(){
 
     if(!tabelaUtilizadores) return;
@@ -42,15 +70,13 @@ function atualizarUtilizadores(){
 </td>
 
     <td>
-        ${item.dataCriacao
-?
-item.dataCriacao.split("T")[0]
-:
-"N/D"}
+       ${item.created_at
+    ? item.created_at.split("T")[0]
+    : "N/D"}
     </td>
 
     <td>
-        ${item.ultimoAcesso || "-"}
+        ${item.ultimo_acesso || "-"}
     </td>
 <td>
         ********
@@ -100,8 +126,8 @@ item.dataCriacao.split("T")[0]
 if(formUtilizador && tabelaUtilizadores){
 
     formUtilizador.addEventListener(
-        "submit",
-        e => {
+    "submit",
+    async e => {
 
             e.preventDefault();
 
@@ -177,28 +203,172 @@ if(formUtilizador && tabelaUtilizadores){
     "-"
 
 };
+const utilizadorLogado =
+JSON.parse(
+    localStorage.getItem(
+        "utilizadorLogado"
+    )
+);
+
+const novoPerfil =
+document.getElementById(
+    "perfilUser"
+).value;
+
+if(
+
+    novoPerfil ===
+    "Super Admin"
+
+    &&
+
+    utilizadorLogado.perfil
+    .toLowerCase()
+    !==
+    "super admin"
+
+){
+
+    alert(
+        "Apenas o Super Admin pode criar outro Super Admin."
+    );
+
+    return;
+
+}
 
 if(
     indiceEdicaoUtilizador !== null
 ){
 
+    const utilizadorEditado =
     utilizadores[
         indiceEdicaoUtilizador
-    ] = novoUtilizador;
+    ];
+
+    const { error } =
+    await supabaseClient
+    .from("utilizadores")
+    .update({
+
+        nome:
+        novoUtilizador.nome,
+
+        email:
+        novoUtilizador.email,
+
+        perfil:
+        novoUtilizador.perfil,
+
+        status:
+        novoUtilizador.status
+
+    })
+    .eq(
+        "id",
+        utilizadorEditado.id
+    );
+
+    if(error){
+
+        console.error(error);
+
+        return;
+
+    }
 
     indiceEdicaoUtilizador =
     null;
 
 }
-else{
 
-    utilizadores.push(
-        novoUtilizador
+else{
+const {
+    data: { session }
+} =
+await supabaseClient.auth.getSession();
+
+console.log("SESSION:", session);
+
+if(!session){
+
+    alert(
+        "Sessão não encontrada."
     );
+
+    return;
 
 }
 
-            salvarDados(
+    const resposta =
+await fetch(
+
+    "https://phtxaeswfsphuopyjteu.supabase.co/functions/v1/criar-utilizador",
+
+    {
+
+        method: "POST",
+
+        headers: {
+
+            "Content-Type":
+            "application/json",
+
+            "Authorization":
+            `Bearer ${session.access_token}`
+
+        },
+
+        body: JSON.stringify({
+
+            nome:
+            novoUtilizador.nome,
+
+            email:
+            novoUtilizador.email,
+
+            perfil:
+            novoUtilizador.perfil,
+
+            status:
+            novoUtilizador.status,
+
+            empresa_id:
+            window.empresaAtual
+
+        })
+
+    }
+
+);
+
+    const resultado =
+    await resposta.json();
+
+    if(!resposta.ok){
+
+        console.error(resultado);
+
+        alert(
+            "Erro ao criar utilizador."
+        );
+
+        return;
+
+    }
+
+    alert(
+
+        "Utilizador criado com sucesso!\n\n" +
+
+        "Senha temporária: " +
+
+        resultado.password
+
+    );
+
+}
+      salvarDados(
                 "utilizadores",
                 utilizadores
             );
@@ -206,6 +376,7 @@ else{
            
 
             formUtilizador.reset();
+            await carregarUtilizadoresSupabase();
 atualizarUtilizadores();
         }
     );
@@ -222,50 +393,144 @@ function verSenha(index){
 
 let indiceEdicaoUtilizador =
 null;
-function eliminarUtilizador(index){
+async function eliminarUtilizador(index){
 
-    if(
-        !confirm(
-            "Eliminar utilizador?"
-        )
-    ) return;
 
-    utilizadores.splice(
-        index,
-        1
-    );
 
-    salvarDados(
-        "utilizadores",
-        utilizadores
-    );
+if(
 
-    atualizarUtilizadores();
+!confirm(
+
+"Eliminar utilizador?"
+)
+
+) return;
+
+const utilizador =
+
+utilizadores[index];
+
+const { error } =
+
+await supabaseClient
+
+.from("utilizadores")
+
+.delete()
+
+.eq(
+
+"id",
+
+utilizador.id
+
+);
+
+if(error){
+
+console.error(error);
+
+return;
 
 }
-function resetSenha(index){
+
+await carregarUtilizadoresSupabase();
+
+}
+
+async function resetSenha(index){
+
+    const utilizador =
+    utilizadores[index];
 
     if(
         !confirm(
-            "Resetar senha para 123456?"
+            `Resetar a senha de ${utilizador.nome} para Talanga@123 ?`
         )
-    ) return;
+    ){
+        return;
+    }
 
-    utilizadores[index]
-    .senha =
-    "123456";
+    const {
+        data: { session }
+    } =
+    await supabaseClient.auth.getSession();
 
-    salvarDados(
-        "utilizadores",
-        utilizadores
+    const resposta =
+    await fetch(
+
+        "https://phtxaeswfsphuopyjteu.supabase.co/functions/v1/reset-password",
+
+        {
+
+            method: "POST",
+
+            headers: {
+
+                "Content-Type":
+                "application/json",
+
+                "Authorization":
+                `Bearer ${session.access_token}`
+
+            },
+
+            body: JSON.stringify({
+
+                email:
+                utilizador.email
+
+            })
+
+        }
+
     );
 
+    const resultado =
+    await resposta.json();
+
+    if(!resposta.ok){
+
+        console.error(resultado);
+
+        alert(
+            "Erro ao redefinir senha."
+        );
+
+        return;
+
+    }
+
     alert(
-        "Senha redefinida para 123456"
+        "Senha redefinida para Talanga@123"
     );
 
 }
 function atualizarIndicadoresUtilizadores(){
+
+    console.log(
+    "UTILIZADORES:",
+    utilizadores
+);
+
+utilizadores.forEach(item => {
+
+    console.log(
+        "PERFIL:",
+        item.perfil
+    );
+
+});
+document.getElementById(
+    "superAdminsUtilizadores"
+).textContent =
+
+utilizadores.filter(
+    item =>
+    item.perfil &&
+    item.perfil.trim().toLowerCase()
+    === "super admin"
+).length;
 
     document.getElementById(
         "totalUtilizadores"
@@ -293,16 +558,19 @@ utilizadores.filter(
     item.status ===
     "Inativo"
 ).length;
+
+
+
     document.getElementById(
         "adminsUtilizadores"
     ).textContent =
 
     utilizadores.filter(
-        item =>
-
-        item.perfil ===
-        "Administrador"
-    ).length;
+    item =>
+        item.perfil &&
+        item.perfil.trim().toLowerCase()
+        === "administrador"
+).length;
 
     document.getElementById(
         "hseUtilizadores"
@@ -314,6 +582,45 @@ utilizadores.filter(
         item.perfil ===
         "Técnico HSE"
     ).length;
+
+}
+function controlarPerfisUtilizador(){
+
+    const utilizador = JSON.parse(
+        localStorage.getItem(
+            "utilizadorLogado"
+        )
+    );
+
+    if(!utilizador){
+        return;
+    }
+
+    const perfilUser =
+    document.getElementById(
+        "perfilUser"
+    );
+
+    if(!perfilUser){
+        return;
+    }
+
+    if(
+        utilizador.perfil
+        .toLowerCase() !==
+        "super admin"
+    ){
+
+        perfilUser.innerHTML = `
+            <option>
+                Administrador
+            </option>
+
+            <option>
+                Técnico HSE
+            </option>
+        `;
+    }
 
 }
 function editarUtilizador(index){
@@ -492,4 +799,5 @@ if(btnExcel){
     );
 
 }
-atualizarUtilizadores();
+carregarUtilizadoresSupabase();
+controlarPerfisUtilizador();

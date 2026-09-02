@@ -12,10 +12,8 @@ document.querySelector(
     "#tabelaAmbiental tbody"
 );
 
-let ambiental =
-carregarDados(
-    "ambiental"
-);
+let ambiental = [];
+
 let indiceEdicaoAmbiental =
 null;
 
@@ -84,6 +82,41 @@ function calcularStatusAmbiental(
 
 }
 
+async function carregarAmbientalSupabase(){
+    if(!window.empresaAtual){
+    return;
+}
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+    .from("ambiental")
+    .select("*")
+.eq("empresa_id",window.empresaAtual)
+
+    if(error){
+
+        console.error(
+            "Erro Ambiental:",
+            error
+        );
+
+        return;
+
+    }
+
+    console.log(
+        "DADOS AMBIENTAL:",
+        data
+    );
+
+    ambiental =
+    data || [];
+
+    atualizarAmbiental();
+
+}
 
 
 function atualizarAmbiental(){
@@ -104,7 +137,7 @@ function atualizarAmbiental(){
             );
 
             linha.innerHTML = `
-                <td>${item.requisitoLegal}</td>
+                <td>${item.requisito}</td>
 
                 <td>${item.categoria}</td>
 
@@ -182,17 +215,18 @@ function atualizarAlertasAmbientais(){
 
     ambiental.forEach(item => {
 
-        if(
-            item.possuiValidade ===
-            "Nao"
-        ){
+       if(
+    item.possui_validade !== "Sim"
+)
+
+{
             return;
         }
 
-        const validade =
-        new Date(
-            item.dataValidade
-        );
+       const validade =
+new Date(
+    item.data_validade
+);
 
         const dias =
         Math.ceil(
@@ -221,16 +255,11 @@ function atualizarAlertasAmbientais(){
             true;
 
             container.innerHTML += `
-                <div class="
-                    alerta-ambiental
-                    alerta-vencido">
-
-                    🔴
-                    ${item.requisitoLegal}
-                    está vencido
-
-                </div>
-            `;
+<div>
+🔴 ${item.requisito}
+está vencido
+</div>
+`;
 
         }
         else if(
@@ -240,19 +269,12 @@ function atualizarAlertasAmbientais(){
             existeAlerta =
             true;
 
-            container.innerHTML += `
-                <div class="
-                    alerta-ambiental
-                    alerta-vencer">
-
-                    ⚠️
-                    ${item.requisitoLegal}
-                    vence em
-                    ${dias} dias
-
-                </div>
-            `;
-
+           container.innerHTML += `
+<div>
+⚠️ ${item.requisito}
+vence em ${dias} dias
+</div>
+`;
         }
 
     });
@@ -274,7 +296,44 @@ function atualizarAlertasAmbientais(){
     }
 
 }
+carregarAmbientalSupabase();
 
+
+async function carregarConsumosSupabase(){
+    if(!window.empresaAtual){
+    return;
+}
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+    .from("consumos")
+    .select("*")
+.eq("empresa_id",window.empresaAtual)
+
+    if(error){
+
+        console.error(
+            "Erro Consumos:",
+            error
+        );
+
+        return;
+
+    }
+
+    console.log(
+        "DADOS CONSUMOS:",
+        data
+    );
+
+    consumos =
+    data || [];
+
+    atualizarConsumos();
+
+}
 
 const formConsumos =
 document.getElementById(
@@ -286,10 +345,7 @@ document.querySelector(
     "#tabelaConsumos tbody"
 );
 
-let consumos =
-carregarDados(
-    "consumos"
-);
+let consumos = [];
 
 let indiceEdicaoConsumo =
 null;
@@ -304,10 +360,7 @@ document.querySelector(
     "#tabelaResiduos tbody"
 );
 
-let residuos =
-carregarDados(
-    "residuos"
-);
+let residuos = [];
 
 let indiceEdicaoResiduo =
 null;
@@ -318,76 +371,154 @@ if(
 ){
 
     formResiduos.addEventListener(
-        "submit",
-        e => {
+    "submit",
+    async e => {
 
-            e.preventDefault();
+        e.preventDefault();
 
-            const novoResiduo = {
+        console.log(
+            "SUBMIT RESIDUO"
+        );
 
-                data:
-                document.getElementById(
-                    "dataResiduo"
-                ).value,
+        const data =
+        document.getElementById(
+            "dataResiduo"
+        ).value;
 
-                tipo:
-                document.getElementById(
-                    "tipoResiduo"
-                ).value,
+        const tipo =
+        document.getElementById(
+            "tipoResiduo"
+        ).value;
 
-                quantidade:
-                document.getElementById(
-                    "quantidadeResiduo"
-                ).value,
+        const quantidade =
+        document.getElementById(
+            "quantidadeResiduo"
+        ).value;
 
-                unidade:
-                document.getElementById(
-                    "unidadeResiduo"
-                ).value,
+        const unidade =
+        document.getElementById(
+            "unidadeResiduo"
+        ).value;
 
-                destino:
-                document.getElementById(
-                    "destinoResiduo"
-                ).value,
+        const destino =
+        document.getElementById(
+            "destinoResiduo"
+        ).value;
 
-                responsavel:
-                document.getElementById(
-                    "responsavelResiduo"
-                ).value
+        const responsavel =
+        document.getElementById(
+            "responsavelResiduo"
+        ).value;
+if(
+    indiceEdicaoResiduo
+){
 
-            };
+    const { error } =
+    await supabaseClient
+    .from("residuos")
+    .update({
 
-            if(
-                indiceEdicaoResiduo !== null
-            ){
+        data_residuo: data,
+        tipo,
+        quantidade,
+        unidade,
+        destino,
+        responsavel
 
-                residuos[
-                    indiceEdicaoResiduo
-                ] = novoResiduo;
+    })
+    .eq(
+        "id",
+        indiceEdicaoResiduo
+    );
 
-                indiceEdicaoResiduo =
-                null;
+    if(error){
 
-            }
-            else{
+        console.error(error);
 
-                residuos.push(
-                    novoResiduo
-                );
+        return;
 
-            }
+    }
 
-            salvarDados(
-                "residuos",
-                residuos
+    indiceEdicaoResiduo =
+    null;
+
+    await carregarResiduosSupabase();
+
+    formResiduos.reset();
+
+    return;
+
+}
+        const { error } =
+        await supabaseClient
+        .from("residuos")
+        .insert([{
+empresa_id:
+window.empresaAtual,
+    data_residuo:
+    data,
+
+    tipo,
+    quantidade,
+    unidade,
+    destino,
+    responsavel
+
+}]);
+        if(error){
+
+            console.error(
+                "ERRO INSERT:",
+                error
             );
 
-            atualizarResiduos();
-
-            formResiduos.reset();
+            return;
 
         }
+
+        await carregarResiduosSupabase();
+
+        formResiduos.reset();
+
+    }
+);
+
+
+}
+
+async function carregarResiduosSupabase(){
+    if(!window.empresaAtual){
+    return;
+}
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+    .from("residuos")
+    .select("*")
+.eq("empresa_id",window.empresaAtual)
+
+    if(error){
+
+        console.error(
+            "Erro Resíduos:",
+            error
+        );
+
+        return;
+
+    }
+
+    console.log(
+        "DADOS RESIDUOS:",
+        data
     );
+
+    residuos =
+    data || [];
+
+    atualizarResiduos();
 
 }
 
@@ -410,7 +541,7 @@ function atualizarResiduos(lista = residuos){
 
             linha.innerHTML = `
 
-                <td>${item.data}</td>
+                <td>${item.data_residuo || "-"}</td>
 
                 <td>${item.tipo}</td>
 
@@ -596,25 +727,30 @@ document.getElementById(
 
 
 }
-function eliminarResiduo(index){
+async function eliminarResiduo(index){
 
     if(
-        !confirm(
-            "Eliminar resíduo?"
-        )
+        !confirm("Eliminar resíduo?")
     ) return;
 
-    residuos.splice(
-        index,
-        1
-    );
+    const item =
+    residuos[index];
 
-    salvarDados(
-        "residuos",
-        residuos
-    );
+    const { error } =
+    await supabaseClient
+    .from("residuos")
+    .delete()
+    .eq("id", item.id);
 
-    atualizarResiduos();
+    if(error){
+
+        console.error(error);
+
+        return;
+
+    }
+
+    await carregarResiduosSupabase();
 
 }
 function editarResiduo(index){
@@ -625,38 +761,37 @@ function editarResiduo(index){
     document.getElementById(
         "dataResiduo"
     ).value =
-    item.data;
+    item.data_residuo || "";
 
     document.getElementById(
         "tipoResiduo"
     ).value =
-    item.tipo;
+    item.tipo || "";
 
     document.getElementById(
         "quantidadeResiduo"
     ).value =
-    item.quantidade;
+    item.quantidade || "";
 
     document.getElementById(
         "unidadeResiduo"
     ).value =
-    item.unidade;
+    item.unidade || "";
 
     document.getElementById(
         "destinoResiduo"
     ).value =
-    item.destino;
+    item.destino || "";
 
     document.getElementById(
         "responsavelResiduo"
     ).value =
-    item.responsavel;
+    item.responsavel || "";
 
     indiceEdicaoResiduo =
-    index;
+    item.id;
 
 }
-
 function imprimirResiduo(index){
 
     const item =
@@ -694,7 +829,7 @@ function imprimirResiduo(index){
     pdf.setFontSize(11);
 
     pdf.text(
-        `Data: ${item.data}`,
+        `Data: ${item.data_residuo}`,
         20,
         55
     );
@@ -825,7 +960,7 @@ function filtrarFauna(){
         resultados =
         resultados.filter(
             item =>
-            item.data >= inicio
+            item.data_fauna >= inicio
         );
 
     }
@@ -835,7 +970,7 @@ function filtrarFauna(){
         resultados =
         resultados.filter(
             item =>
-            item.data <= fim
+            item.data_fauna <= fim
         );
 
     }
@@ -888,7 +1023,7 @@ function filtrarResiduos(){
         resultados =
         resultados.filter(
             item =>
-            item.data >= inicio
+            item.data_residuo >= inicio
         );
 
     }
@@ -898,7 +1033,7 @@ function filtrarResiduos(){
         resultados =
         resultados.filter(
             item =>
-            item.data <= fim
+            item.data_residuo <= fim
         );
 
     }
@@ -933,73 +1068,123 @@ if(
 ){
 
     formConsumos.addEventListener(
-        "submit",
-        e => {
+    "submit",
+    async e => {
 
-            e.preventDefault();
-console.log("SUBMIT CONSUMO");
-            const novoConsumo = {
+e.preventDefault();
+if(
+    indiceEdicaoConsumo
+){
 
-                data:
-                document.getElementById(
-                    "dataConsumo"
-                ).value,
+    const { error } =
+    await supabaseClient
+    .from("consumos")
+    .update({
 
-                tipo:
-                document.getElementById(
-                    "tipoConsumo"
-                ).value,
+        data_consumo:
+        document.getElementById(
+            "dataConsumo"
+        ).value,
 
-                quantidade:
-                document.getElementById(
-                    "quantidadeConsumo"
-                ).value,
+        tipo:
+        document.getElementById(
+            "tipoConsumo"
+        ).value,
 
-                unidade:
-                document.getElementById(
-                    "unidadeConsumo"
-                ).value,
+        quantidade:
+        document.getElementById(
+            "quantidadeConsumo"
+        ).value,
 
-                local:
-                document.getElementById(
-                    "localConsumo"
-                ).value,
+        unidade:
+        document.getElementById(
+            "unidadeConsumo"
+        ).value,
 
-                observacao:
-                document.getElementById(
-                    "observacaoConsumo"
-                ).value
+        local:
+        document.getElementById(
+            "localConsumo"
+        ).value,
 
-            };
+        observacao:
+        document.getElementById(
+            "observacaoConsumo"
+        ).value
 
-            if(
-                indiceEdicaoConsumo !== null
-            ){
+    })
+    .eq(
+        "id",
+        indiceEdicaoConsumo
+    );
 
-                consumos[
-                    indiceEdicaoConsumo
-                ] = novoConsumo;
+    if(error){
 
-                indiceEdicaoConsumo =
-                null;
+        console.error(error);
 
-            }
-            else{
+        return;
 
-                consumos.push(
-                    novoConsumo
-                );
+    }
 
-            }
+    indiceEdicaoConsumo = null;
 
-            salvarDados(
-                "consumos",
-                consumos
-            );
+    await carregarConsumosSupabase();
 
-            atualizarConsumos();
+    formConsumos.reset();
 
-            formConsumos.reset();
+    return;
+
+}
+const { error } =
+await supabaseClient
+.from("consumos")
+.insert([{
+empresa_id:
+window.empresaAtual,
+    data_consumo:
+    document.getElementById(
+        "dataConsumo"
+    ).value,
+
+    tipo:
+    document.getElementById(
+        "tipoConsumo"
+    ).value,
+
+    quantidade:
+    document.getElementById(
+        "quantidadeConsumo"
+    ).value,
+
+    unidade:
+    document.getElementById(
+        "unidadeConsumo"
+    ).value,
+
+    local:
+    document.getElementById(
+        "localConsumo"
+    ).value,
+
+    observacao:
+    document.getElementById(
+        "observacaoConsumo"
+    ).value
+
+}]);
+if(error){
+
+    console.error(
+        "ERRO INSERT:",
+        error
+    );
+
+    return;
+
+}
+
+await carregarConsumosSupabase();
+
+formConsumos.reset();
 
         }
     );
@@ -1027,7 +1212,7 @@ function atualizarConsumos(lista = consumos){
 
             linha.innerHTML = `
 
-                <td>${item.data}</td>
+                <td>${item.data_consumo}</td>
 
                 <td>${item.tipo}</td>
 
@@ -1086,66 +1271,131 @@ atualizarIndicadoresConsumos();
 }
 function atualizarIndicadoresConsumos(){
 
-    const aguaPotavel = consumos
-        .filter(item => item.tipo === "Água Potável")
-        .reduce((t,item) => t + Number(item.quantidade || 0), 0);
+    document.getElementById(
+        "totalConsumos"
+    ).textContent =
+    consumos.length;
 
-    const aguaBruta = consumos
-        .filter(item => item.tipo === "Água Bruta")
-        .reduce((t,item) => t + Number(item.quantidade || 0), 0);
+   document.getElementById(
+    "aguaPotavel"
+).textContent =
 
-    const energiaRede = consumos
-        .filter(item => item.tipo === "Energia - Rede Pública")
-        .reduce((t,item) => t + Number(item.quantidade || 0), 0);
+consumos.filter(
+    item =>
+    item.tipo ===
+    "Água Potável"
+).length;
 
-    const energiaGerador = consumos
-        .filter(item => item.tipo === "Energia - Gerador")
-        .reduce((t,item) => t + Number(item.quantidade || 0), 0);
 
-    const gasoleo = consumos
-        .filter(item => item.tipo === "Gasóleo")
-        .reduce((t,item) => t + Number(item.quantidade || 0), 0);
+document.getElementById(
+    "aguaBruta"
+).textContent =
 
-    const gasolina = consumos
-        .filter(item => item.tipo === "Gasolina")
-        .reduce((t,item) => t + Number(item.quantidade || 0), 0);
+consumos.filter(
+    item =>
+    item.tipo ===
+    "Água Bruta"
+).length;
 
-    const co2 = consumos
-        .filter(item => item.tipo === "CO₂")
-        .reduce((t,item) => t + Number(item.quantidade || 0), 0);
 
-    document.getElementById("totalConsumos").textContent =
-        consumos.length;
+document.getElementById(
+    "aguaConsumos"
+).textContent =
 
-    document.getElementById("aguaPotavel").textContent =
-        aguaPotavel;
+consumos.filter(
+    item =>
 
-    document.getElementById("aguaBruta").textContent =
-        aguaBruta;
+    item.tipo ===
+    "Água Potável"
 
-    document.getElementById("aguaConsumos").textContent =
-        aguaPotavel + aguaBruta;
+    ||
 
-    document.getElementById("energiaRede").textContent =
-        energiaRede;
+    item.tipo ===
+    "Água Bruta"
 
-    document.getElementById("energiaGerador").textContent =
-        energiaGerador;
+).length;
 
-    document.getElementById("energiaConsumos").textContent =
-        energiaRede + energiaGerador;
+    document.getElementById(
+    "energiaRede"
+).textContent =
 
-    document.getElementById("gasoleoConsumos").textContent =
-        gasoleo;
+consumos.filter(
+    item =>
+    item.tipo ===
+    "Energia - Rede Pública"
+).length;
 
-    document.getElementById("gasolinaConsumos").textContent =
-        gasolina;
 
-    document.getElementById("combustivelConsumos").textContent =
-        gasoleo + gasolina;
+document.getElementById(
+    "energiaGerador"
+).textContent =
 
-    document.getElementById("co2Consumos").textContent =
-        co2;
+consumos.filter(
+    item =>
+    item.tipo ===
+    "Energia - Gerador"
+).length;
+
+
+document.getElementById(
+    "energiaConsumos"
+).textContent =
+
+consumos.filter(
+    item =>
+
+    item.tipo ===
+    "Energia - Rede Pública"
+
+    ||
+
+    item.tipo ===
+    "Energia - Gerador"
+
+).length;
+
+    document.getElementById(
+    "gasoleoConsumos"
+).textContent =
+
+consumos.filter(
+    item =>
+    item.tipo === "Gasóleo"
+).length;
+
+document.getElementById(
+    "gasolinaConsumos"
+).textContent =
+
+consumos.filter(
+    item =>
+    item.tipo === "Gasolina"
+).length;
+
+document.getElementById(
+    "combustivelConsumos"
+).textContent =
+
+consumos.filter(
+    item =>
+
+    item.tipo === "Gasóleo"
+
+    ||
+
+    item.tipo === "Gasolina"
+
+).length;
+
+    document.getElementById(
+        "co2Consumos"
+    ).textContent =
+
+    consumos.filter(
+        item =>
+        item.tipo === "CO₂"
+    ).length;
+
 }
 function atualizarIndicadoresConsumosPeriodo(lista){
 
@@ -1276,7 +1526,7 @@ function atualizarIndicadoresConsumosPeriodo(lista){
     ).length;
 
 }
-function eliminarConsumo(index){
+async function eliminarConsumo(index){
 
     if(
         !confirm(
@@ -1284,17 +1534,27 @@ function eliminarConsumo(index){
         )
     ) return;
 
-    consumos.splice(
-        index,
-        1
+    const item =
+    consumos[index];
+
+    const { error } =
+    await supabaseClient
+    .from("consumos")
+    .delete()
+    .eq(
+        "id",
+        item.id
     );
 
-    salvarDados(
-        "consumos",
-        consumos
-    );
+    if(error){
 
-    atualizarConsumos();
+        console.error(error);
+
+        return;
+
+    }
+
+    await carregarConsumosSupabase();
 
 }
 function editarConsumo(index){
@@ -1305,35 +1565,35 @@ function editarConsumo(index){
     document.getElementById(
         "dataConsumo"
     ).value =
-    item.data;
+    item.data_consumo || "";
 
     document.getElementById(
         "tipoConsumo"
     ).value =
-    item.tipo;
+    item.tipo || "";
 
     document.getElementById(
         "quantidadeConsumo"
     ).value =
-    item.quantidade;
+    item.quantidade || "";
 
     document.getElementById(
         "unidadeConsumo"
     ).value =
-    item.unidade;
+    item.unidade || "";
 
     document.getElementById(
         "localConsumo"
     ).value =
-    item.local;
+    item.local || "";
 
     document.getElementById(
         "observacaoConsumo"
     ).value =
-    item.observacao;
+    item.observacao || "";
 
     indiceEdicaoConsumo =
-    index;
+    item.id;
 
 }
 
@@ -1374,7 +1634,7 @@ function imprimirConsumo(index){
     pdf.setFontSize(11);
 
     pdf.text(
-        `Data: ${item.data}`,
+        `Data: ${item.data_consumo}`,
         20,
         55
     );
@@ -1440,20 +1700,23 @@ function filtrarConsumos(){
     if(texto){
 
         resultados =
-        resultados.filter(item =>
-
-            item.tipo.toLowerCase().includes(texto)
+        resultados.filter(
+            item =>
+            item.tipo
+            .toLowerCase()
+            .includes(texto)
 
             ||
 
-            item.local.toLowerCase().includes(texto)
+            item.local
+            .toLowerCase()
+            .includes(texto)
 
             ||
 
             (item.observacao || "")
             .toLowerCase()
             .includes(texto)
-
         );
 
     }
@@ -1462,7 +1725,8 @@ function filtrarConsumos(){
 
         resultados =
         resultados.filter(
-            item => item.data >= inicio
+            item =>
+            item.data_consumo >= inicio
         );
 
     }
@@ -1471,7 +1735,8 @@ function filtrarConsumos(){
 
         resultados =
         resultados.filter(
-            item => item.data <= fim
+            item =>
+            item.data_consumo <= fim
         );
 
     }
@@ -1479,11 +1744,12 @@ function filtrarConsumos(){
     atualizarConsumos(
         resultados
     );
-atualizarIndicadoresConsumosPeriodo(
-    resultados
-);
-}
 
+    atualizarIndicadoresConsumosPeriodo(
+        resultados
+    );
+
+}
 function controlarValidadeAmbiental(){
 
     const possuiValidade =
@@ -1491,7 +1757,24 @@ function controlarValidadeAmbiental(){
     document.getElementById(
         "possuiValidade"
     ).value;
+let dataEmissao =
+document.getElementById(
+    "dataEmissao"
+).value;
 
+let dataValidade =
+document.getElementById(
+    "dataValidade"
+).value;
+
+if(
+    possuiValidade === "Nao"
+){
+
+    dataEmissao = null;
+    dataValidade = null;
+
+}
     const grupoDataEmissao =
 
     document.getElementById(
@@ -1533,7 +1816,7 @@ function controlarValidadeAmbiental(){
 }
 
 
-function eliminarAmbiental(index){
+async function eliminarAmbiental(index){
 
     if(
         !confirm(
@@ -1541,67 +1824,75 @@ function eliminarAmbiental(index){
         )
     ) return;
 
-    ambiental.splice(
-        index,
-        1
+    const item =
+    ambiental[index];
+
+    const { error } =
+    await supabaseClient
+    .from("ambiental")
+    .delete()
+    .eq(
+        "id",
+        item.id
     );
 
-    salvarDados(
-        "ambiental",
-        ambiental
-    );
+    if(error){
 
-    atualizarAmbiental();
+        console.error(error);
+
+        return;
+
+    }
+
+    await carregarAmbientalSupabase();
 
 }
-
 function editarAmbiental(index){
 
     const item =
     ambiental[index];
 
     document.getElementById(
-        "requisitoLegal"
-    ).value =
-    item.requisitoLegal;
-
+    "requisitoLegal"
+).value =
+item.requisito || "";
     document.getElementById(
         "categoriaAmbiental"
     ).value =
-    item.categoria;
+    item.categoria || "";
 
     document.getElementById(
         "possuiValidade"
     ).value =
-    item.possuiValidade;
+    item.possui_validade || "";
 
     document.getElementById(
         "dataEmissao"
     ).value =
-    item.dataEmissao;
+    item.data_emissao || "";
 
     document.getElementById(
         "dataValidade"
     ).value =
-    item.dataValidade;
+    item.data_validade || "";
 
     document.getElementById(
         "responsavelAmbiental"
     ).value =
-    item.responsavel;
+    item.responsavel || "";
 
     document.getElementById(
         "cumprimentoAmbiental"
     ).value =
-    item.cumprimento;
+    item.cumprimento || "";
 
     document.getElementById(
         "observacoesAmbientais"
     ).value =
-    item.observacoes;
+    item.observacoes || "";
 
     indiceEdicaoAmbiental =
-    index;
+    item.id;
 
 }
 
@@ -1610,10 +1901,9 @@ if(
     tabelaAmbiental
 ){
 
-    formAmbiente.addEventListener(
-        "submit",
-        e => {
-
+   formAmbiente.addEventListener(
+    "submit",
+    async e => {
             e.preventDefault();
 
             const requisitoLegal =
@@ -1631,15 +1921,23 @@ if(
                 "possuiValidade"
             ).value;
 
-            const dataEmissao =
-            document.getElementById(
-                "dataEmissao"
-            ).value;
+            let dataEmissao =
+document.getElementById(
+    "dataEmissao"
+).value;
 
-            const dataValidade =
-            document.getElementById(
-                "dataValidade"
-            ).value;
+let dataValidade =
+document.getElementById(
+    "dataValidade"
+).value;
+if(
+    possuiValidade !== "Sim"
+){
+
+    dataEmissao = null;
+    dataValidade = null;
+
+}
 
             const responsavel =
             document.getElementById(
@@ -1665,60 +1963,135 @@ if(
                 dataValidade
 
             );
+if(
+    indiceEdicaoAmbiental
+){
+if(
+    possuiValidade !== "Sim")
+{
 
-            const novoRegisto = {
+    dataEmissao = null;
+    dataValidade = null;
 
-                requisitoLegal,
+}
+    const { error } =
+    await supabaseClient
+    .from("ambiental")
+    .update({
 
-                categoria,
+    requisito:
+    requisitoLegal,
 
-                possuiValidade,
+    categoria:
+    categoria,
 
-                dataEmissao,
+    possui_validade:
+    possuiValidade,
 
-                dataValidade,
+    data_emissao:
+    dataEmissao,
 
-                responsavel,
+    data_validade:
+    dataValidade,
 
-                cumprimento,
+    responsavel:
+    responsavel,
 
-                observacoes,
+    cumprimento:
+    cumprimento,
 
-                status,
+    observacoes:
+    observacoes,
 
-                dataRegisto:
-                new Date().toISOString()
+    status:
+    status
 
-            };
+})
+    .eq(
+        "id",
+        indiceEdicaoAmbiental
+    );
 
-            if(
-                indiceEdicaoAmbiental !== null
-            ){
+    if(error){
 
-                ambiental[
-                    indiceEdicaoAmbiental
-                ] = novoRegisto;
+        console.error(error);
 
-                indiceEdicaoAmbiental =
-                null;
+        return;
 
-            }
-            else{
+    }
 
-                ambiental.push(
-                    novoRegisto
-                );
+    indiceEdicaoAmbiental =
+    null;
 
-            }
+    await carregarAmbientalSupabase();
 
-            salvarDados(
-                "ambiental",
-                ambiental
-            );
+    formAmbiente.reset();
 
-            atualizarAmbiental();
+    return;
 
-            formAmbiente.reset();
+}
+console.log(
+    "VALIDADE:",
+    possuiValidade
+);
+
+console.log(
+    "EMISSAO:",
+    dataEmissao
+);
+
+console.log(
+    "VALIDADE DATA:",
+    dataValidade
+);
+const { error } =
+await supabaseClient
+.from("ambiental")
+.insert([{
+empresa_id:
+window.empresaAtual,
+    requisito:
+    requisitoLegal,
+
+    categoria:
+    categoria,
+
+    possui_validade:
+    possuiValidade,
+
+    data_emissao:
+    dataEmissao,
+
+    data_validade:
+    dataValidade,
+
+    responsavel:
+    responsavel,
+
+    cumprimento:
+    cumprimento,
+
+    observacoes:
+    observacoes,
+
+    status:
+    status
+
+}]);
+if(error){
+
+    console.error(
+        "ERRO INSERT:",
+        error
+    );
+
+    return;
+
+}
+
+await carregarAmbientalSupabase();
+
+formAmbiente.reset();
 
         }
     );
@@ -1726,8 +2099,8 @@ if(
 }
 function imprimirAmbiental(index){
 
-    const item =
-    ambiental[index];
+   const item =
+ambiental[index];
 
     const { jsPDF } =
     window.jspdf;
@@ -1761,7 +2134,7 @@ function imprimirAmbiental(index){
     pdf.setFontSize(11);
 
     pdf.text(
-        `Requisito: ${item.requisitoLegal}`,
+        `Requisito: ${item.requisito}`,
         20,
         55
     );
@@ -1818,7 +2191,7 @@ function imprimirAmbiental(index){
     );
 
     pdf.save(
-        `Requisito_${item.requisitoLegal}.pdf`
+        `Requisito_${item.requisito}.pdf`
     );
 
 }
@@ -1922,108 +2295,9 @@ function atualizarIndicadoresAmbientaisPesquisa(lista){
 }
 
 
-function imprimirAmbiental(index){
-
-    const item =
-    ambiental[index];
-
-    const { jsPDF } =
-    window.jspdf;
-
-    const pdf =
-    new jsPDF();
-
-    pdf.setFontSize(18);
-
-    pdf.text(
-        "TALANGA HSE",
-        20,
-        20
-    );
-
-    pdf.setFontSize(14);
-
-    pdf.text(
-        "REQUISITO LEGAL AMBIENTAL",
-        20,
-        35
-    );
-
-    pdf.line(
-        20,
-        40,
-        190,
-        40
-    );
-
-    pdf.setFontSize(11);
-
-    pdf.text(
-        `Requisito: ${item.requisitoLegal}`,
-        20,
-        55
-    );
-
-    pdf.text(
-        `Categoria: ${item.categoria}`,
-        20,
-        70
-    );
-
-    pdf.text(
-        `Responsavel: ${item.responsavel}`,
-        20,
-        85
-    );
-
-    pdf.text(
-        `Cumpre: ${item.cumprimento}`,
-        20,
-        100
-    );
-
-    pdf.text(
-        `Status: ${item.status}`,
-        20,
-        115
-    );
-
-    pdf.text(
-        `Data Emissao: ${
-            item.dataEmissao || "-"
-        }`,
-        20,
-        130
-    );
-
-    pdf.text(
-        `Data Validade: ${
-            item.dataValidade || "-"
-        }`,
-        20,
-        145
-    );
-
-    pdf.text(
-        `Observacoes: ${
-            item.observacoes || "-"
-        }`,
-        20,
-        160,
-        {
-            maxWidth: 160
-        }
-    );
-
-    pdf.save(
-        `Requisito_${item.requisitoLegal}.pdf`
-    );
-
-}
-
 controlarValidadeAmbiental();
 atualizarAmbiental();
-atualizarConsumos();
+carregarConsumosSupabase();
 
 
 
@@ -2041,53 +2315,151 @@ const tabelaFauna =
     document.querySelector(
         "#tabelaFauna tbody"
     );
+let fauna = [];
 
-let fauna =
-carregarDados(
-    "fauna"
-);
-
-if (formFauna && tabelaFauna) {        formFauna.addEventListener(
+formFauna.addEventListener(
     "submit",
-    e => {
+    async e => {
 
         e.preventDefault();
 
-        fauna.push({
-
-    data:
-    document.getElementById(
-        "dataFauna"
-    ).value,
-
-    animal:
-    document.getElementById(
-        "animal"
-    ).value,
-
-    local:
-    document.getElementById(
-        "localAnimal"
-    ).value,
-
-    descricao:
-    document.getElementById(
-        "descricaoFauna"
-    ).value
-
-});
-
-        salvarDados(
-            "fauna",
-            fauna
+        console.log(
+            "SUBMIT FAUNA"
         );
+if(
+    indiceEdicaoFauna
+){
 
-        atualizarFauna();
+    const { error } =
+    await supabaseClient
+    .from("fauna")
+    .update({
+
+        data_fauna:
+        document.getElementById(
+            "dataFauna"
+        ).value,
+
+        animal:
+        document.getElementById(
+            "animal"
+        ).value,
+
+        local:
+        document.getElementById(
+            "localAnimal"
+        ).value,
+
+        descricao:
+        document.getElementById(
+            "descricaoFauna"
+        ).value
+
+    })
+    .eq(
+        "id",
+        indiceEdicaoFauna
+    );
+
+    if(error){
+
+        console.error(error);
+
+        return;
+
+    }
+
+    indiceEdicaoFauna =
+    null;
+
+    await carregarFaunaSupabase();
+
+    formFauna.reset();
+
+    return;
+
+}
+        const { error } =
+        await supabaseClient
+        .from("fauna")
+        .insert([{
+empresa_id:
+window.empresaAtual,
+           data_fauna:
+document.getElementById(
+    "dataFauna"
+).value,
+
+            animal:
+            document.getElementById(
+                "animal"
+            ).value,
+
+            local:
+            document.getElementById(
+                "localAnimal"
+            ).value,
+
+            descricao:
+            document.getElementById(
+                "descricaoFauna"
+            ).value
+
+        }]);
+
+        if(error){
+
+            console.error(
+                "ERRO INSERT:",
+                error
+            );
+
+            return;
+
+        }
+
+        await carregarFaunaSupabase();
 
         formFauna.reset();
 
     }
 );
+async function carregarFaunaSupabase(){
+    if(!window.empresaAtual){
+    return;
+}
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+    .from("fauna")
+    .select("*")
+.eq("empresa_id",window.empresaAtual)
+
+    if(error){
+
+        console.error(
+            "Erro Fauna:",
+            error
+        );
+
+        return;
+
+    }
+
+    console.log(
+        "DADOS FAUNA:",
+        data
+    );
+
+    fauna =
+    data || [];
+
+    atualizarFauna();
+
+}
+
 function atualizarFauna(lista = fauna){
 
     tabelaFauna.innerHTML = "";
@@ -2099,7 +2471,7 @@ function atualizarFauna(lista = fauna){
             tabelaFauna,
 
             `
-            <td>${item.data || "-"}</td>
+            <td>${item.data_fauna || "-"}</td>
 
 <td>${item.animal}</td>
 
@@ -2220,7 +2592,7 @@ function atualizarIndicadoresFaunaPeriodo(lista){
 
 }
 
-function eliminarFauna(index){
+async function eliminarFauna(index){
 
     if(
         !confirm(
@@ -2228,19 +2600,31 @@ function eliminarFauna(index){
         )
     ) return;
 
-    fauna.splice(
-        index,
-        1
+    const item =
+    fauna[index];
+
+    const { error } =
+    await supabaseClient
+    .from("fauna")
+    .delete()
+    .eq(
+        "id",
+        item.id
     );
 
-    salvarDados(
-        "fauna",
-        fauna
-    );
+    if(error){
 
-    atualizarFauna();
+        console.error(error);
+
+        return;
+
+    }
+
+    await carregarFaunaSupabase();
 
 }
+let indiceEdicaoFauna =
+null;
 function editarFauna(index){
 
     const item =
@@ -2249,24 +2633,28 @@ function editarFauna(index){
     document.getElementById(
         "dataFauna"
     ).value =
-    item.data || "";
+    item.data_fauna || "";
 
     document.getElementById(
         "animal"
     ).value =
-    item.animal;
+    item.animal || "";
 
     document.getElementById(
         "localAnimal"
     ).value =
-    item.local;
+    item.local || "";
 
     document.getElementById(
         "descricaoFauna"
     ).value =
     item.descricao || "";
 
+    indiceEdicaoFauna =
+    item.id;
+
 }
+
 function imprimirFauna(index){
 
     const item =
@@ -2291,7 +2679,7 @@ function imprimirFauna(index){
     );
 
     pdf.text(
-        `Data: ${item.data || "-"}`,
+        `Data: ${item.data_fauna || "-"}`,
         20,
         55
     );
@@ -2415,8 +2803,10 @@ function atualizarIndicadoresFauna(){
 
 }
 
-atualizarFauna();
-}
+carregarFaunaSupabase();
+
+
+
 function alternarSecao(id){
 
     const secao =
@@ -2519,4 +2909,4 @@ document
     "input",
     pesquisarFauna
 );
-atualizarResiduos();
+carregarResiduosSupabase();

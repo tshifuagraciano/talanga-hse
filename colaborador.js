@@ -12,10 +12,44 @@ const tabelaColaboradores =
         "#tabelaColaboradores tbody"
     );
 
-let colaboradores =
-carregarDados(
-    "colaboradores"
-);
+let colaboradores = [];
+
+async function carregarColaboradoresSupabase(){
+if(!window.empresaAtual){
+    return;
+}
+    const {
+        data,
+        error
+    } = await supabaseClient
+        .from("colaboradores")
+        .select("*")
+.eq("empresa_id",window.empresaAtual)
+
+    if(error){
+        console.error(error);
+        return;
+    }
+
+    colaboradores = data || [];
+
+window.colaboradores = colaboradores;
+
+atualizarColaboradores();
+if(
+    typeof carregarColaboradoresAmbulatorio
+    === "function"
+){
+    carregarColaboradoresAmbulatorio();
+}
+
+if(
+    typeof carregarColaboradoresAtivosASO
+    === "function"
+){
+    carregarColaboradoresAtivosASO();
+}   atualizarColaboradores();
+}
 
 function atualizarColaboradores(
     lista = colaboradores
@@ -47,9 +81,9 @@ function atualizarColaboradores(
 <td>${item.lider}</td>
 
 <td>${item.empresa}</td>
-<td>${item.dataAdmissao || "-"}</td>
+<td>${item.data_admissao || "-"}</td>
 
-<td>${item.dataDemissao || "-"}</td>
+<td>${item.data_demissao || "-"}</td>
 <td>${item.status}</td>
 <td>
 
@@ -341,8 +375,7 @@ function gerarQRCodeColaborador(index){
     colaboradores[index];
 
    const codigoQR =
-
-`portal.html?matricula=${colaborador.matricula}`;
+`https://www.talangahse.ao/portal.html?matricula=${colaborador.matricula}`;
     const container =
     document.createElement("div");
 
@@ -534,7 +567,7 @@ function filtrarColaboradores(){
         resultados =
         resultados.filter(
             item =>
-            item.dataAdmissao >= inicio
+            item.data_admissao >= inicio
         );
 
     }
@@ -544,7 +577,7 @@ function filtrarColaboradores(){
         resultados =
         resultados.filter(
             item =>
-            item.dataAdmissao <= fim
+            item.data_admissao <= fim
         );
 
     }
@@ -574,7 +607,7 @@ function limparFiltroColaboradores(){
 
 }
 
-function eliminarColaborador(index){
+async function eliminarColaborador(index){
 
     if(
         !confirm(
@@ -582,20 +615,30 @@ function eliminarColaborador(index){
         )
     ) return;
 
-    colaboradores.splice(
-        index,
-        1
+    const colaborador =
+    colaboradores[index];
+
+    const { error } =
+    await supabaseClient
+    .from("colaboradores")
+    .delete()
+    .eq(
+        "id",
+        colaborador.id
     );
 
-    salvarDados(
-        "colaboradores",
-        colaboradores
-    );
+    if(error){
 
-    atualizarColaboradores();
+        console.error(error);
+
+        return;
+
+    }
+
+    await carregarColaboradoresSupabase();
+    atualizarKpiColaboradores();
 
 }
-
 
 
 function editarColaborador(index){
@@ -655,12 +698,12 @@ console.log(
     document.getElementById(
     "dataAdmissao"
 ).value =
-item.dataAdmissao || "";
+item.data_admissao || "";
 
 document.getElementById(
     "dataDemissao"
 ).value =
-item.dataDemissao || "";
+item.data_demissao || "";
     
 
     indiceEdicaoColaborador =
@@ -670,9 +713,11 @@ item.dataDemissao || "";
 if (formColaborador && tabelaColaboradores) {
 
     formColaborador.addEventListener(
-        "submit",
-        e => {
+    "submit",
+    async e => {
 
+
+        
             e.preventDefault();
 
            const novoColaborador = {
@@ -742,9 +787,59 @@ if(
     indiceEdicaoColaborador !== null
 ){
 
+    const colaboradorEditado =
     colaboradores[
         indiceEdicaoColaborador
-    ] = novoColaborador;
+    ];
+
+    const { error } =
+    await supabaseClient
+    .from("colaboradores")
+    .update({
+
+        matricula:
+        novoColaborador.matricula,
+
+        nome:
+        novoColaborador.nome,
+
+        genero:
+        novoColaborador.genero,
+
+        funcao:
+        novoColaborador.funcao,
+
+        setor:
+        novoColaborador.setor,
+
+        lider:
+        novoColaborador.lider,
+
+        empresa:
+        novoColaborador.empresa,
+
+        data_admissao:
+novoColaborador.dataAdmissao || null,
+
+data_demissao:
+novoColaborador.dataDemissao || null,
+
+        status:
+        novoColaborador.status
+
+    })
+    .eq(
+        "id",
+        colaboradorEditado.id
+    );
+
+    if(error){
+
+        console.error(error);
+
+        return;
+
+    }
 
     indiceEdicaoColaborador =
     null;
@@ -752,16 +847,66 @@ if(
 }
 else{
 
-    colaboradores.push(
-        novoColaborador
-    );
+    const { error } =
+    await supabaseClient
+    .from("colaboradores")
+    .insert([{
+empresa_id:
+window.empresaAtual,
+        matricula:
+        novoColaborador.matricula,
+
+        nome:
+        novoColaborador.nome,
+
+        genero:
+        novoColaborador.genero,
+
+        funcao:
+        novoColaborador.funcao,
+
+        setor:
+        novoColaborador.setor,
+
+        lider:
+        novoColaborador.lider,
+
+        empresa:
+        novoColaborador.empresa,
+
+       data_admissao:
+novoColaborador.dataAdmissao || null,
+
+data_demissao:
+novoColaborador.dataDemissao || null,
+
+        status:
+        novoColaborador.status
+
+    }]);
+
+    if(error){
+
+        console.error(error);
+
+        return;
+
+    }
 
 }
 
-            salvarDados(
-                "colaboradores",
-                colaboradores
-            );
+await carregarColaboradoresSupabase();
+
+formColaborador.reset();
+
+console.log(
+    novoColaborador
+);
+await carregarColaboradoresSupabase();
+
+formColaborador.reset();
+
+           
 
             atualizarColaboradores();
 
@@ -816,10 +961,10 @@ y += 15;
 pdf.text(`Empresa: ${item.empresa}`,20,y);
 y += 15;
 
-pdf.text(`Data de Admissao: ${item.dataAdmissao || "-"}`,20,y);
+pdf.text(`Data de Admissao: ${item.data_admissao || "-"}`,20,y);
 y += 15;
 
-pdf.text(`Data de Demissao: ${item.dataDemissao || "-"}`,20,y);
+pdf.text(`Data de Demissao: ${item.data_demissao || "-"}`,20,y);
 y += 15;
 
 pdf.text(`Status: ${item.status}`,20,y);
@@ -829,5 +974,4 @@ pdf.text(`Status: ${item.status}`,20,y);
 
 }
 
-
-atualizarColaboradores();
+carregarColaboradoresSupabase();

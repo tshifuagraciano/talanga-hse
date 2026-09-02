@@ -12,12 +12,41 @@ supabase.createClient(
     SUPABASE_KEY
 );
 
+window.utilizadorAtual =
+JSON.parse(
+    localStorage.getItem(
+        "utilizadorLogado"
+    )
+);
+
+if(window.utilizadorAtual){
+
+    window.empresaAtual =
+    window.utilizadorAtual.empresa_id;
+
+}
+
+if(utilizadorGuardado){
+
+    window.utilizadorAtual =
+    utilizadorGuardado;
+
+    window.empresaAtual =
+    utilizadorGuardado.empresa_id;
+
+}
+
 async function testarSupabase(){
+    
 
     const { data, error } =
     await supabaseClient
     .from("colaboradores")
-    .select("*");
+.select("*")
+.eq(
+    "empresa_id",
+    window.empresaAtual
+);
 
     console.log("DADOS:");
     console.log(data);

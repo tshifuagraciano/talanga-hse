@@ -1,6 +1,22 @@
 /* ==========================================
    LOGIN
 ========================================== */
+const utilizadorGuardado =
+JSON.parse(
+    localStorage.getItem(
+        "utilizadorLogado"
+    )
+);
+
+if(utilizadorGuardado){
+
+    window.utilizadorAtual =
+    utilizadorGuardado;
+
+    window.empresaAtual =
+    utilizadorGuardado.empresa_id;
+
+}
 
 const formLogin =
 document.getElementById(
@@ -13,110 +29,173 @@ if(formLogin){
 
         "submit",
 
-        e => {
+        async e => {
 
             e.preventDefault();
 
             const email =
-
             document.getElementById(
                 "loginEmail"
             ).value;
 
             const senha =
-
             document.getElementById(
                 "loginSenha"
             ).value;
 
-            const utilizadores =
+         const { data, error } =
+await supabaseClient.auth
+.signInWithPassword({
 
-            carregarDados(
-                "utilizadores"
-            ) || [];
+    email,
 
-            const utilizador =
+    password: senha
 
-            utilizadores.find(
-                item =>
+});
+if(error){
 
-                item.email === email
+    alert(
+        "Email ou palavra-passe inválidos."
+    );
 
-                &&
-
-                item.senha === senha
-            );
-
-            if(!utilizador){
-
-                if(typeof gtag === "function"){
-    gtag('event', 'login_falhado');
+    return;
 }
 
+const authUser =
+data.user;
 
-                alert(
-                    "Email ou palavra-passe inválidos."
-                );
 
-                return;
 
-            }
+console.log(
+    "UTILIZADORES:"
+);
 
-            if(
-                utilizador.status ===
-                "Inativo"
-            ){
+console.log(
+    utilizadores
+);
 
-                alert(
-                    "Utilizador inativo."
-                );
+const {
+    data: utilizadorBD,
+    error: erroPerfil
+}
+=
+await supabaseClient
+.from("utilizadores")
+.select("*")
+.eq(
+    "email",
+    email
+)
+.single();
+if(erroPerfil){
 
-                return;
+    console.error(
+        erroPerfil
+    );
 
-            }
+    return;
+}
+if(utilizadorBD.primeiro_acesso){
 
-            utilizador.ultimoAcesso =
+    window.utilizadorAtual =
+    utilizadorBD;
 
-            new Date()
-            .toLocaleString();
+    document.getElementById(
+        "areaAlterarSenha"
+    ).style.display =
+    "block";
 
-            salvarDados(
-                "utilizadores",
-                utilizadores
-            );
-atualizarIndicadoresLogin();
+    document.getElementById(
+        "formLogin"
+    ).style.display =
+    "none";
+
+    alert(
+        "Primeiro acesso. É obrigatório alterar a senha."
+    );
+
+    return;
+}
+window.utilizadorAtual =
+utilizadorBD;
+
+window.empresaAtual =
+utilizadorBD.empresa_id;
+
+
+if(!utilizadorBD){
+
+    alert(
+        "Utilizador não encontrado."
+    );
+
+    return;
+}
+console.log(
+    "UTILIZADOR BD:"
+);
+
+console.log(
+    utilizadorBD
+);
+
+console.log(
+    "ERRO UTILIZADOR:"
+);
+
+
+console.log(utilizadorBD);
+
+
+
+          
+
             localStorage.setItem(
 
-                "utilizadorLogado",
+    "utilizadorLogado",
 
-                JSON.stringify(
-                    utilizador
-                )
+    JSON.stringify(
+        utilizadorBD
+    )
 
-            );
-            mostrarUtilizadorLogado();
-            if(typeof gtag === "function"){
-    gtag('event', 'login_sucesso', {
-        email: utilizador.email
-    });
-}
+);
+window.empresaAtual =
+utilizadorBD.empresa_id;
+localStorage.setItem(
+    "empresaAtual",
+    utilizadorBD.empresa_id
+);
 
             alert(
-    `Bem-vindo ${utilizador.nome}`
+                "Login efetuado com sucesso!"
+            );
+await supabaseClient
+.from("utilizadores")
+.update({
+
+    ultimo_acesso:
+    new Date().toISOString()
+
+})
+.eq(
+    "id",
+    utilizadorBD.id
 );
+            mostrarUtilizadorLogado();
 
-mostrarUtilizadorLogado();
+            aplicarPermissoes();
 
-aplicarPermissoes();
+            mostrarModulo(
+                "dashboard"
+            );
 
-mostrarModulo(
-    "dashboard"
-);
         }
 
     );
 
 }
+
+
 const formAlterarSenha =
 document.getElementById(
     "formAlterarSenha"
@@ -128,32 +207,9 @@ if(formAlterarSenha){
 
         "submit",
 
-        e => {
+        async e => {
 
             e.preventDefault();
-
-            const utilizador =
-
-            JSON.parse(
-                localStorage.getItem(
-                    "utilizadorLogado"
-                )
-            );
-
-            if(!utilizador){
-
-                alert(
-                    "Faça login primeiro."
-                );
-
-                return;
-
-            }
-
-            const senhaAtual =
-            document.getElementById(
-                "senhaAtual"
-            ).value;
 
             const novaSenha =
             document.getElementById(
@@ -164,19 +220,31 @@ if(formAlterarSenha){
             document.getElementById(
                 "confirmarSenha"
             ).value;
+            const senhaAtual =
+document.getElementById(
+    "senhaAtual"
+).value;
+const email =
+window.utilizadorAtual.email;
+const {
+    error: erroSenhaAtual
+} =
+await supabaseClient.auth.signInWithPassword({
 
-            if(
-                senhaAtual !==
-                utilizador.senha
-            ){
+    email,
 
-                alert(
-                    "Senha atual incorreta."
-                );
+    password: senhaAtual
 
-                return;
+});
+if(erroSenhaAtual){
 
-            }
+    alert(
+        "Senha atual incorreta."
+    );
+
+    return;
+
+}
 
             if(
                 novaSenha !==
@@ -191,50 +259,63 @@ if(formAlterarSenha){
 
             }
 
-            const utilizadores =
+            const {
+                error
+            } =
+            await supabaseClient
+            .auth
+            .updateUser({
 
-            carregarDados(
-                "utilizadores"
-            ) || [];
+                password:
+                novaSenha
 
-            const indice =
+            });
+            document.getElementById(
+    "areaAlterarSenha"
+).style.display =
+"none";
+mostrarModulo(
+    "dashboard"
+);
+            await supabaseClient
+.from("utilizadores")
+.update({
+    primeiro_acesso: false
+})
 
-            utilizadores.findIndex(
-                item =>
 
-                item.email ===
-                utilizador.email
-            );
+.eq(
+    "id",
+    window.utilizadorAtual.id
+);
 
-            if(
-                indice === -1
-            ) return;
+document.getElementById(
+    "areaAlterarSenha"
+).style.display =
+"none";
 
-            utilizadores[
-                indice
-            ].senha =
-            novaSenha;
+document.getElementById(
+    "formLogin"
+).style.display =
+"block";
 
-            salvarDados(
-                "utilizadores",
-                utilizadores
-            );
+mostrarModulo(
+    "dashboard"
+);
 
-            utilizador.senha =
-            novaSenha;
 
-            localStorage.setItem(
+            if(error){
 
-                "utilizadorLogado",
+                console.error(error);
 
-                JSON.stringify(
-                    utilizador
-                )
+                alert(
+                    "Erro ao alterar palavra-passe."
+                );
 
-            );
-if(typeof gtag === "function"){
-    gtag('event', 'alterar_senha');
-}
+                return;
+
+            }
+
             alert(
                 "Palavra-passe alterada com sucesso!"
             );
@@ -246,34 +327,43 @@ if(typeof gtag === "function"){
     );
 
 }
-function atualizarIndicadoresLogin(){
+async function atualizarIndicadoresLogin(){
+    if(!window.empresaAtual){
+return;}
 
-    const utilizadores =
+    const {
+        data,
+        error
+    } =
+    await supabaseClient
+    .from("utilizadores")
+    .select("*")
+.eq("empresa_id",window.empresaAtual)
 
-    carregarDados(
-        "utilizadores"
-    ) || [];
+    if(error){
 
-    const totalLogins =
-    utilizadores.filter(
-        item =>
-        item.ultimoAcesso &&
-        item.ultimoAcesso !== "-"
-    ).length;
+        console.error(error);
+
+        return;
+
+    }
 
     document.getElementById(
         "totalLogins"
     ).textContent =
-    totalLogins;
+
+    data.filter(
+        item =>
+        item.ultimo_acesso
+    ).length;
 
     document.getElementById(
         "utilizadoresAtivos"
     ).textContent =
 
-    utilizadores.filter(
+    data.filter(
         item =>
-        item.status ===
-        "Ativo"
+        item.status === "Ativo"
     ).length;
 
 }

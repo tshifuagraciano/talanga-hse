@@ -4,20 +4,6 @@
 <html lang="pt">
 
 <head>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-RYD5JLM0VK"></script>
-
-<script>
-window.dataLayer = window.dataLayer || [];
-
-function gtag() {
-    dataLayer.push(arguments);
-}
-
-gtag('js', new Date());
-
-gtag('config', 'G-RYD5JLM0VK');
-</script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -139,6 +125,11 @@ class="logo"
  Relatórios
 
 </li>
+<li onclick="mostrarModulo('leads')">
+
+    Leads Comerciais
+
+</li>
 
 <li onclick="mostrarModulo('utilizadores')">
 
@@ -147,10 +138,7 @@ class="logo"
 </li>
 
 
-<li onclick="
-gtag('event','abrir_login');
-mostrarModulo('login');
-">
+<li onclick="mostrarModulo('login')">
 
  Login
 
@@ -201,32 +189,79 @@ mostrarModulo('login');
 </div>
             <div class="hero-botoes">
 
-                <button onclick="
-gtag('event','abrir_login');
-mostrarModulo('login');
-">
-     Iniciar Sessão
-</button>
+                <button onclick="mostrarModulo('login')">
+                     Iniciar Sessão
+                </button>
 
                 <button
     class="btn-demo"
-    onclick="
-    gtag('event','solicitar_demonstracao');
-    solicitarDemonstracao();
-    "
+    onclick="abrirModalLead()"
 >
      Solicitar Demonstração
 </button>
+
 
             </div>
 
         </div>
 
     </div>
+    <section class="como-aceder-talanga">
+
+    <h2>Como Aceder ao Talanga HSE</h2>
+
+    <div class="timeline-talanga">
+
+        <div class="timeline-item">
+
+            <div class="timeline-numero">1</div>
+
+            <h4>Solicite uma Demonstração</h4>
+
+            <p>Conheça a plataforma e as funcionalidades disponíveis.</p>
+
+        </div>
+
+        <div class="timeline-item">
+
+            <div class="timeline-numero">2</div>
+
+            <h4>Receba as Credenciais</h4>
+
+            <p>A GT configura o ambiente da sua organização.</p>
+
+        </div>
+
+        <div class="timeline-item">
+
+            <div class="timeline-numero">3</div>
+
+            <h4>Aceda à Plataforma</h4>
+
+            <p>Entre com as suas credenciais em qualquer dispositivo.</p>
+
+        </div>
+
+        <div class="timeline-item">
+
+            <div class="timeline-numero">4</div>
+
+            <h4>Gerencie o seu HSE</h4>
+
+            <p>Controle tudo numa única plataforma integrada.</p>
+
+        </div>
+
+    </div>
+
+</section>
 
     <!-- BENEFICIOS -->
 
-    <section class="landing-section">
+    <section 
+    id="porqueTalanga"
+    class="landing-section">
+        
 
         <h2>Porque escolher o Talanga?</h2>
 
@@ -263,67 +298,135 @@ mostrarModulo('login');
         </div>
 
     </section>
+    
+<section class="landing-section lancamento-talanga">
+
+    <div class="lancamento-grid">
+
+        <div class="foto-lancamento">
+
+            <img src="evento1.jpg" alt="Lançamento Talanga HSE">
+
+        </div>
+
+        <div class="texto-lancamento">
+
+            <h2>
+                Lançamento Oficial do Talanga HSE
+            </h2>
+
+            <p>
+                No dia 15 de agosto de 2026, em Cabinda, a GT Engenharia e Serviços realizou o lançamento oficial do Talanga HSE, uma plataforma digital 
+                desenvolvida para tornar a gestão de Saúde, Segurança e Ambiente mais integrada, eficiente e acessível.
+
+A apresentação oficial esteve a cargo de Graciano de Jesus Tshifua, CEO da GT Engenharia e Serviços, idealizador e criador do Talanga HSE, que apresentou a 
+visão, o propósito e as principais funcionalidades da plataforma.
+
+Este lançamento representa um marco importante na aposta da GT Engenharia e Serviços em tecnologia e inovação aplicada à gestão HSE.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
 
     <!-- MODULOS -->
 
     <section class="landing-section">
 
-        <h2>Módulos Integrados</h2>
+    <h2>Módulos Integrados</h2>
 
-        <div class="cards-publicos">
+    <div class="ciclo-talanga">
 
-            <div class="card-publico"><h3> Segurança</h3></div>
-            <div class="card-publico"><h3> Saúde Ocupacional</h3></div>
-            <div class="card-publico"><h3> Meio Ambiente</h3></div>
-            <div class="card-publico"><h3> Emergências</h3></div>
-            <div class="card-publico"><h3> Inspeções</h3></div>
-            <div class="card-publico"><h3> Treinamentos</h3></div>
-            <div class="card-publico"><h3> Gestão de EPI</h3></div>
-            <div class="card-publico"><h3> DDS Eletrónico</h3></div>
-            <div class="card-publico"><h3> Colaboradores</h3></div>
-            <div class="card-publico"><h3> Portal do Colaborador</h3></div>
-            <div class="card-publico"><h3> Matriz de Risco</h3></div>
-            <div class="card-publico"><h3> Relatórios</h3></div>
+        <div class="centro-talanga"onclick="mostrarModulo('login')">
+
+            <img
+                src="talanga.png"
+                alt="Talanga"
+            >
+
+            <h3>Talanga HSE</h3>
 
         </div>
 
-    </section>
+        <div class="modulo-ciclo m1"onclick="abrirModalLead()">
+            
+            
+             Segurança
+        </div>
+
+        <div class="modulo-ciclo m2"onclick="abrirModalLead()">
+            Saúde Ocupacional
+        </div>
+
+        <div class="modulo-ciclo m3"onclick="abrirModalLead()">
+             Meio Ambiente
+        </div>
+
+        <div class="modulo-ciclo m4"onclick="abrirModalLead()">
+             Emergências
+        </div>
+
+        <div class="modulo-ciclo m5"onclick="abrirModalLead()">
+             Inspeções
+        </div>
+
+        <div class="modulo-ciclo m6"onclick="abrirModalLead()">
+             Treinamentos
+        </div>
+
+        <div class="modulo-ciclo m7"onclick="abrirModalLead()">
+             Gestão de EPI
+        </div>
+
+        <div class="modulo-ciclo m8"onclick="abrirModalLead()">
+             Relatórios
+        </div>
+
+    </div>
+
+</section>
 
     <!-- SETORES -->
 
     <section class="landing-section">
 
-        <h2>Ideal para os Sectores</h2>
+    <h2>Sectores de Aplicação</h2>
 
-        <div class="cards-publicos">
+    <div class="setores-talanga">
 
-            <div class="card-publico">
-                <h3> Construção Civil</h3>
-            </div>
-
-            <div class="card-publico">
-                <h3> Petróleo e Gás</h3>
-            </div>
-
-            <div class="card-publico">
-                <h3> Energia</h3>
-            </div>
-
-            <div class="card-publico">
-                <h3> Indústria</h3>
-            </div>
-
-            <div class="card-publico">
-                <h3> Logística</h3>
-            </div>
-
-            <div class="card-publico">
-                <h3> Mineração</h3>
-            </div>
-
+        <div class="setor-card"onclick="abrirModalLead()">
+           <img src="civil.png">
+            <h3>Construção Civil</h3>
         </div>
 
-    </section>
+        <div class="setor-card"onclick="abrirModalLead()">
+            <img src="petro.png">   <h3>Petróleo e Gás</h3>
+        </div>
+
+        <div class="setor-card"onclick="abrirModalLead()">
+            <img src="energia.png">
+            <h3>Energia</h3>
+        </div>
+
+        <div class="setor-card"onclick="abrirModalLead()">
+            <img src="industria.png">
+            <h3>Indústria</h3>
+        </div>
+
+        <div class="setor-card"onclick="abrirModalLead()">
+            <img src="logistica.png">     <h3>Logística</h3>
+        </div>
+
+        <div class="setor-card"onclick="abrirModalLead()">
+            <img src="mineracao.png">  <h3>Mineração</h3>
+        </div>
+
+    </div>
+
+</section>
 
     <!-- CTA -->
 
@@ -338,23 +441,21 @@ mostrarModulo('login');
             numa única plataforma moderna.
         </p>
 
-        <button onclick="
-gtag('event','abrir_login');
-mostrarModulo('login');
-">
-     Iniciar Sessão
-</button>
+
+        <button onclick="mostrarModulo('login')">
+             Iniciar Sessão
+        </button>
 
         <button
     class="btn-demo"
-    onclick="
-    gtag('event','solicitar_demonstracao');
-    solicitarDemonstracao();
-    "
+    onclick="abrirModalLead()"
 >
      Solicitar Demonstração
 </button>
-
+<p>
+            Contecte pelo Whatsap: +244 921 630 180 <br>
+            E-mail: gtengenhariaservicos@gmail.com
+        </p>
     </section>
 
 </div>
@@ -604,7 +705,7 @@ mostrarModulo('login');
     ></canvas>
 
 </div>
-<div class="card-grafico">
+<div class="card-resumo">
 
     <h3>
          Ocorrências
@@ -1323,17 +1424,18 @@ onclick="alternarSecao('ocorrenciasHSE')">
 <input
     type="file"
     id="fotoProblema"
-    accept="image/*"
 >
+
+<div id="previewFotoProblema"></div>
 
 <label>Foto da Solução</label>
 
 <input
     type="file"
     id="fotoSolucao"
-    accept="image/*"
 >
 
+<div id="previewFotoSolucao"></div>
                 <label>Severidade</label>
 
                 <select id="severidade">
@@ -1803,11 +1905,12 @@ onclick="alternarSecao('ocorrenciasHSE')">
 
 <div id="listaSemDDS"></div>
 </div>
+<label>Data Inicial</label>
 <input
     type="date"
     id="dataInicioDDS"
 >
-
+<label>Data Final</label>
 <input
     type="date"
     id="dataFimDDS"
@@ -1829,20 +1932,20 @@ onclick="alternarSecao('ocorrenciasHSE')">
 <h3> Registrar DDS</h3>
 
 <form id="formDDS">
-
+<label>Data do DDS</label>
     <input
         type="date"
         id="dataDDS"
         required
     >
-
+<label>Tema do DDS</label>
     <input
         type="text"
         id="temaDDS"
         placeholder="Tema do DDS"
         required
     >
-
+<label>Responsável do DDS</label>
     <input
         type="text"
         id="responsavelDDS"
@@ -4015,7 +4118,7 @@ Produtos Químicos
     <th>Admissão</th>
 <th>Demissão</th>
 <th>Status</th>
-<th>QR Code</th>
+<th>QR Code e Solicitar EPI</th>
     <th>Ações</th>
 
 </tr>
@@ -4218,7 +4321,19 @@ Produtos Químicos
         <h4> Técnicos HSE</h4>
         <span id="hseUtilizadores">0</span>
     </div>
+<div
+    id="cardSuperAdmin"
+    class="card-indicador"
+    style="display:none;"
+>
 
+    <h4>Super Admin</h4>
+
+    <span id="superAdminsUtilizadores">
+        0
+    </span>
+
+</div>
 </div>
             
 
@@ -4247,16 +4362,14 @@ Produtos Químicos
 
 <label>Perfil</label>
 <select id="perfilUser">
-                
-                   <option>Administrador</option>
 
+    <option>Super Admin</option>
 
+    <option>Administrador</option>
 
-<option>Técnico HSE</option>
+    <option>Técnico HSE</option>
 
-
-                </select>
-<label>Status</label>
+</select><label>Status</label>
 
 <select id="statusUser">
 
@@ -4444,20 +4557,22 @@ Produtos Químicos
     </div>
 
 </section>
-        <!-- LOGIN -->
 
-        <section id="login" class="modulo">
+<section
+    id="leads"
+    class="modulo"
+>
 
-            <h2> Login</h2>
+    <h2>
+        Leads Comerciais
+    </h2>
 <div class="indicadores-ambientais">
 
     <div class="card-indicador">
 
-        <h4>
-             Total Logins
-        </h4>
+        <h4>Total Leads</h4>
 
-        <span id="totalLogins">
+        <span id="totalLeads">
             0
         </span>
 
@@ -4465,100 +4580,231 @@ Produtos Químicos
 
     <div class="card-indicador">
 
-        <h4>
-             Utilizadores Ativos
-        </h4>
+        <h4>Leads Hoje</h4>
 
-        <span id="utilizadoresAtivos">
+        <span id="leadsHoje">
             0
         </span>
 
     </div>
 
+    <div class="card-indicador">
+
+        <h4>Empresas Interessadas</h4>
+
+        <span id="empresasLeads">
+            0
+        </span>
+
+    </div>
+
+    <div class="card-indicador">
+
+        <h4>Sectores</h4>
+
+        <span id="sectoresLeads">
+            0
+        </span>
+
+    </div>
+
+    <div
+        id="cardClientesConvertidos"
+        class="card-indicador"
+    >
+
+        <h4>Clientes</h4>
+
+        <span id="clientesConvertidos">
+            0
+        </span>
+
+    </div>
+    <div class="card-indicador">
+
+    <h4>Novos</h4>
+
+    <span id="novosLeads">0</span>
+
 </div>
-            <form id="formLogin">
+<div class="card-indicador">
 
-                <label>Email</label>
-<input
-    type="email"
-    id="loginEmail"
-    placeholder="Digite o email"
->
+    <h4>Contactados</h4>
 
-<label>Palavra-passe</label>
-<input
-    type="password"
-    id="loginSenha"
-    placeholder="Digite a palavra-passe"
->
+    <span id="contactadosLeads">0</span>
 
-                <button type="submit">
-                    Entrar
-                </button>
-
-            </form>
-<hr>
-
-<h3>
-     Alterar Palavra-passe
-</h3>
-
-<form id="formAlterarSenha">
-
+</div>
+<div class="filtros-leads">
+<label>Data inicial</label>
     <input
-        type="password"
-        id="senhaAtual"
-        placeholder="Senha Atual"
+        type="date"
+        id="dataInicioLead"
+    >
+<label>Data final</label>
+    <input
+        type="date"
+        id="dataFimLead"
     >
 
-    <input
-        type="password"
-        id="novaSenha"
-        placeholder="Nova Senha"
+    <button
+        type="button"
+        onclick="filtrarLeads()"
     >
+        Filtrar
+    </button>
+
+    <button
+        type="button"
+        onclick="limparFiltroLeads()"
+    >
+        Limpar
+    </button>
+
+
+<label>Pesquisar</label>
+<input
+
+    id="pesquisaLead"
+    placeholder="Pesquisar nome, empresa ou email"
+    oninput="filtrarLeads()"
+>
+</div>
+
+   <table id="tabelaLeads">
+
+    <thead>
+
+        <tr>
+
+            <th>Nome</th>
+            <th>Empresa</th>
+            <th>Email</th>
+            <th>Telefone</th>
+            <th>Sector</th>
+            <th>Colaboradores</th>
+            <th>Status</th>
+            <th>Data</th>
+            
+
+<th>Ações</th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+    </tbody>
+
+</table>
+
+</section>
+
+
+        <!-- LOGIN -->
+    
+     
+
+
+        <section id="login" class="modulo">
+
+            <h2>Login</h2>
+
+            
+
+
+
+    
+
+<form id="formLogin">
+
+    <div
+    id="indicadoresLoginAdmin"
+    class="indicadores-ambientais"
+    style="display:none;"
+>
+
+    <div class="card-indicador">
+
+        <h4>Total Logins</h4>
+
+        <span id="totalLogins">0</span>
+
+    </div>
+
+    <div class="card-indicador">
+
+        <h4>Utilizadores Ativos</h4>
+
+        <span id="utilizadoresAtivos">0</span>
+
+    </div></div>
+
+    <label>Email</label>
+
+    <input
+        type="email"
+        id="loginEmail"
+        placeholder="Digite o email"
+    >
+
+    <label>Palavra-passe</label>
 
     <input
         type="password"
-        id="confirmarSenha"
-        placeholder="Confirmar Nova Senha"
+        id="loginSenha"
+        placeholder="Digite a palavra-passe"
     >
 
     <button type="submit">
-        Alterar Palavra-passe
+        Entrar
     </button>
-<div class="credenciais-demo">
 
-    <div class="credenciais-demo">
-
-    <h3> Credenciais do Periodo Gratis</h3>
-
-    <div class="demo-user">
-
-        <strong>Administrador</strong><br>
-
-         admin@talanga.co.ao<br>
-
-         123456
-
-    </div>
-
-    <div class="demo-user">
-
-        <strong>Técnico HSE</strong><br>
-
-         hse@talanga.co.ao<br>
-
-         123456
-
-    </div>
-
-</div>
-<p style="color:#f59e0b;font-weight:bold;">
- Ambiente do Periodo Gratis por 15 dias.
-</p>
 </form>
-        </section>
+
+<div id="areaAlterarSenha"
+     style="display:none;">
+
+    <hr>
+
+    <h3>
+        Alterar Palavra-passe
+    </h3>
+
+    <form id="formAlterarSenha">
+
+        <label>Senha Atual</label>
+
+        <input
+            type="password"
+            id="senhaAtual"
+        >
+
+        <label>Nova Senha</label>
+
+        <input
+            type="password"
+            id="novaSenha"
+        >
+
+        <label>Confirmar Nova Senha</label>
+
+        <input
+            type="password"
+            id="confirmarSenha"
+        >
+
+        <button type="submit">
+            Alterar Palavra-passe
+        </button>
+
+    </form>
+
+</div></section>
+
 <footer class="rodape">
+    Contecte pelo Whatsap: +244 921 630 180 <br>
+            E-mail: gtengenhariaservicos@gmail.com
 
     <p>
         Talanga HSE® | Desenvolvido por GT Engenharia e Serviços
@@ -4574,7 +4820,9 @@ Produtos Químicos
 
 <div id="talanguinhaBot">
 
-    👷‍♀️
+    <img
+        src="talanguinha.jpg"
+        class="talanguinha-avatar">
 
 </div>
 
@@ -4582,9 +4830,10 @@ Produtos Químicos
 
     <div id="talanguinhaHeader">
 
-        👷‍♀️ Talanguinha
-
-    </div>
+    <img
+        src="talanguinha.jpg"
+        class="talanguinha-mini">
+   </div>
 
     <div id="talanguinhaMensagens">
 
@@ -4596,6 +4845,36 @@ Produtos Químicos
         </div>
 
     </div>
+    <div class="atalhos-talanguinha">
+
+    <button onclick="perguntaRapidaTalanguinha('Como está a conformidade?')">
+        📊 Conformidade
+    </button>
+
+    <button onclick="perguntaRapidaTalanguinha('O que devo priorizar hoje?')">
+        🎯 Prioridades
+    </button>
+
+    <button onclick="perguntaRapidaTalanguinha('Análise dos desvios')">
+        🦺 Desvios
+    </button>
+
+    <button onclick="perguntaRapidaTalanguinha('Análise dos ASO')">
+        🩺 ASO
+    </button>
+<button onclick="perguntaRapidaTalanguinha('Como está a empresa?')">
+📈 Empresa
+</button>
+
+<button onclick="perguntaRapidaTalanguinha('O que devo fazer hoje?')">
+🎯 Hoje
+</button>
+
+<button onclick="perguntaRapidaTalanguinha('Que módulos existem?')">
+📚 Módulos
+</button>
+</div>
+   
 
     <div class="talanguinhaRodape">
 
@@ -4615,12 +4894,155 @@ Produtos Químicos
 
 </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+ <div
+    id="modalLead"
+    class="modal-login"
+>
+
+    <div class="modal-login-conteudo">
+
+        <span
+    class="fechar-modal"
+    onclick="fecharModalLead()"
+>
+    ×
+</span>
+
+
+        <h2>
+            Solicitar Demonstração
+        </h2>
+
+        <form id="formLead">
+<label>Nome</label>
+            <input
+                type="text"
+                id="leadNome"
+                placeholder="Nome"
+            >
+<label>Empresa</label>
+            <input
+                type="text"
+                id="leadEmpresa"
+                placeholder="Empresa"
+            >
+<label>E-mail da empresa</label>
+            <input
+                type="email"
+                id="leadEmail"
+                placeholder="Email"
+            >
+<label>Número de telefone</label>
+            <input
+                type="text"
+                id="leadTelefone"
+                placeholder="Telefone"
+            >
+<label>Setor de atuação</label>
+            <input
+                type="text"
+                id="leadSector"
+                placeholder="Sector"
+            >
+<label>Número de colaboradores</label>
+            <input
+                type="number"
+                id="leadColaboradores"
+                placeholder="Nº Colaboradores"
+            >
+<label>Mensagem</label>
+            <textarea
+                id="leadMensagem"
+                placeholder="Mensagem"
+            ></textarea>
+
+            <button type="submit">
+
+                Solicitar
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+<div
+    id="modalEditarLead"
+    class="modal"
+    style="display:none;"
+>
+
+    <div class="modal-content">
+
+        <span
+            class="close"
+            onclick="fecharModalEditarLead()"
+        >
+            &times;
+        </span>
+
+        <h2>Editar Lead</h2>
+
+        <input
+            type="hidden"
+            id="editarLeadId"
+        >
+
+        <input
+            id="editarLeadNome"
+            placeholder="Nome"
+        >
+
+        <input
+            id="editarLeadEmpresa"
+            placeholder="Empresa"
+        >
+
+        <input
+            id="editarLeadEmail"
+            placeholder="Email"
+        >
+
+        <input
+            id="editarLeadTelefone"
+            placeholder="Telefone"
+        >
+
+        <input
+            id="editarLeadSector"
+            placeholder="Sector"
+        >
+
+        <input
+            id="editarLeadColaboradores"
+            type="number"
+            placeholder="Colaboradores"
+        >
+
+        <textarea
+            id="editarLeadMensagem"
+            placeholder="Mensagem"
+        ></textarea>
+
+        <button
+            onclick="guardarEdicaoLead()"
+        >
+            Guardar Alterações
+        </button>
+
+    </div>
+
+</div>
+
+
 
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
 <script src="storage.js"></script>
 <script src="db.js"></script>
 <script src="app.js"></script>
@@ -4636,7 +5058,12 @@ Produtos Químicos
 <script src="matriz.js"></script>
 <script src="relatorios.js"></script>
 <script src="pesquisa.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+
 <script src="dashboard.js"></script>
+<script src="leads.js"></script>
+<script src="lead.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>

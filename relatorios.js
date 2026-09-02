@@ -432,11 +432,19 @@ ocorrenciasHSE.filter(
         ambientalVencido;
 
     const conformidade =
-parseInt(
-    document
-    .getElementById("cardConformidade")
-    .textContent
-) || 0;
+totalItens > 0
+?
+Math.max(
+    0,
+    Math.round(
+        (
+            (totalItens - totalNaoConformes) /
+            totalItens
+        ) * 100
+    )
+)
+:
+100;
 
     /* =================================
        PAGINA 1

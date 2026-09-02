@@ -24,3 +24,44 @@ function alternarTema(){
     }
 
 }
+function alternarTema(){
+
+    document.body.classList.toggle(
+        "dark"
+    );
+
+    localStorage.setItem(
+
+        "tema",
+
+        document.body.classList.contains(
+            "dark"
+        )
+
+        ?
+
+        "dark"
+
+        :
+
+        "light"
+
+    );
+
+}
+const temaGuardado =
+
+localStorage.getItem(
+    "tema"
+);
+
+if(
+    temaGuardado ===
+    "dark"
+){
+
+    document.body.classList.add(
+        "dark"
+    );
+
+}
