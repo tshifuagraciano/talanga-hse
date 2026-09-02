@@ -472,7 +472,8 @@ async function enviarSolicitacaoPortal(){
     await supabaseClient
     .from("epi_solicitacoes")
     .insert([{
-
+empresa_id:
+colaboradorPortal.empresa_id,
         colaborador:
         solicitacao.colaborador,
 
@@ -750,22 +751,24 @@ async function registrarParticipacaoDDS(idDDS){
 
     const { error: erroInsert } =
     await supabaseClient
-    .from("dds_participantes")
-    .insert([{
+.from("dds_participantes")
+.insert([{
 
-        dds_id:
-        idDDS,
+    empresa_id:
+    colaboradorPortal.empresa_id,
 
-        matricula:
-        colaboradorPortal.matricula,
+    dds_id: idDDS,
 
-        colaborador:
-        colaboradorPortal.nome,
+    matricula:
+    colaboradorPortal.matricula,
 
-        empresa:
-        colaboradorPortal.empresa
+    colaborador:
+    colaboradorPortal.nome,
 
-    }]);
+    empresa:
+    colaboradorPortal.empresa
+
+}]);
 
     if(erroInsert){
 
@@ -899,6 +902,8 @@ async function enviarFalaTalanga(){
     .from("fala_talanga")
     .insert([{
 
+        empresa_id:
+colaboradorPortal.empresa_id,
         colaborador:
         novoRegistro.colaborador,
 
