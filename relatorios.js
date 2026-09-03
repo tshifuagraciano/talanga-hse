@@ -1,47 +1,189 @@
 function exportarSegurancaExcel(){
+const workbook = XLSX.utils.book_new();
 
-    const workbook =
-    XLSX.utils.book_new();
+    const wsDesvios =
 
-    XLSX.utils.book_append_sheet(
-        workbook,
-        XLSX.utils.json_to_sheet(
-            ocorrencias || []
-        ),
-        "Ocorrencias"
-    );
+XLSX.utils.json_to_sheet(
 
-    XLSX.utils.book_append_sheet(
-        workbook,
-        XLSX.utils.json_to_sheet(
-            solicitacoesEPI || []
-        ),
-        "EPI"
-    );
+    ocorrencias.map(item => ({
 
-    XLSX.utils.book_append_sheet(
-        workbook,
-        XLSX.utils.json_to_sheet(
-            ddsAtivos || []
-        ),
-        "DDS"
-    );
+        Titulo:
+        item.titulo,
 
-    XLSX.utils.book_append_sheet(
-        workbook,
-        XLSX.utils.json_to_sheet(
-            falaTalanga || []
-        ),
-        "FalaTalanga"
-    );
+        Descricao:
+        item.descricao,
 
-    XLSX.utils.book_append_sheet(
-        workbook,
-        XLSX.utils.json_to_sheet(
-            inspecoes || []
-        ),
-        "Inspecoes"
-    );
+        Severidade:
+        item.severidade,
+
+        Area:
+        item.area,
+
+        Responsavel:
+        item.responsavel,
+
+        Status:
+        item.status
+
+    }))
+
+);
+
+XLSX.utils.book_append_sheet(
+    workbook,
+    wsDesvios,
+    "Desvios"
+);
+   const wsEPI =
+
+XLSX.utils.json_to_sheet(
+
+    solicitacoesEPI.map(item => ({
+
+        Data:
+        item.data,
+
+        Colaborador:
+        item.colaborador,
+
+        Matricula:
+        item.matricula,
+
+        Empresa:
+        item.empresa,
+
+        Funcao:
+        item.funcao,
+
+        EPI:
+        item.epi,
+
+        Quantidade:
+        item.quantidade,
+
+        Motivo:
+        item.motivo,
+
+        Status:
+        item.status
+
+    }))
+
+);
+
+XLSX.utils.book_append_sheet(
+    workbook,
+    wsEPI,
+    "EPI"
+);
+
+    const wsDDS =
+
+XLSX.utils.json_to_sheet(
+
+    ddsAtivos.map(item => ({
+
+        Data:
+        item.data,
+
+        Tema:
+        item.tema,
+
+        Responsavel:
+        item.responsavel,
+
+        Participantes:
+        item.totalParticipantes
+
+    }))
+
+);
+
+XLSX.utils.book_append_sheet(
+    workbook,
+    wsDDS,
+    "DDS"
+);
+
+    const wsFalaTalanga =
+
+XLSX.utils.json_to_sheet(
+
+    falaTalanga.map(item => ({
+
+        Data:
+        item.data,
+
+        Colaborador:
+        item.colaborador,
+
+        Empresa:
+        item.empresa,
+
+        Tipo:
+        item.tipo,
+
+        Mensagem:
+        item.mensagem,
+
+        Status:
+        item.status,
+
+        Resposta:
+        item.resposta
+
+    }))
+
+);
+
+XLSX.utils.book_append_sheet(
+    workbook,
+    wsFalaTalanga,
+    "FalaTalanga"
+);
+
+    const wsInspecoes =
+
+XLSX.utils.json_to_sheet(
+
+    inspecoes.map(item => ({
+
+        Data:
+        item.data,
+
+        Atividade:
+        item.atividade,
+
+        Area:
+        item.area,
+
+        Responsavel:
+        item.responsavel,
+
+        Tipo:
+        item.tipo,
+
+        Descricao:
+        item.descricao,
+
+        AcaoCorretiva:
+        item.acaoCorretiva,
+
+        Prazo:
+        item.prazo,
+
+        Status:
+        item.status
+
+    }))
+
+);
+
+XLSX.utils.book_append_sheet(
+    workbook,
+    wsInspecoes,
+    "Inspecoes"
+);
 
     XLSX.writeFile(
         workbook,
@@ -62,38 +204,137 @@ function exportarASOExcel(){
     const workbook =
     XLSX.utils.book_new();
 
-    XLSX.utils.book_append_sheet(
-        workbook,
-        XLSX.utils.json_to_sheet(
-            asos || []
-        ),
-        "ASO"
-    );
+    const wsASO =
+XLSX.utils.json_to_sheet(
+    asos.map(item => ({
 
-    XLSX.utils.book_append_sheet(
-        workbook,
-        XLSX.utils.json_to_sheet(
-            atendimentosAmbulatorio || []
-        ),
-        "Ambulatorio"
-    );
+        Colaborador:
+        item.colaboradores?.nome || "",
 
-    XLSX.utils.book_append_sheet(
-        workbook,
-        XLSX.utils.json_to_sheet(
-            medicamentos || []
-        ),
-        "Medicamentos"
-    );
+        Matricula:
+        item.colaboradores?.matricula || "",
 
-    XLSX.utils.book_append_sheet(
-        workbook,
-        XLSX.utils.json_to_sheet(
-            emergencias || []
-        ),
-        "Emergencias"
-    );
+        Funcao:
+        item.colaboradores?.funcao || "",
 
+        Tipo:
+        item.tipo || "",
+
+        DataExame:
+        item.data_exame || "",
+
+        Validade:
+        item.validade || "",
+
+        Resultado:
+        item.resultado || "",
+
+        Status:
+        item.status || ""
+
+    }))
+);
+XLSX.utils.book_append_sheet(
+    workbook,
+    wsASO,
+    "ASO"
+);
+
+
+    const dadosAmbulatorio =
+
+atendimentosAmbulatorio.map(item => ({
+
+    Data:
+    item.data_atendimento,
+
+    Colaborador:
+    item.colaborador,
+
+    Funcao:
+    item.funcao,
+
+    Empresa:
+    item.empresa,
+
+    Doenca:
+    item.doenca
+
+}));
+const wsAmbulatorio =
+
+XLSX.utils.json_to_sheet(
+    dadosAmbulatorio
+);
+XLSX.utils.book_append_sheet(
+    workbook,
+    wsAmbulatorio,
+    "Ambulatorio"
+);
+
+
+   const dadosMedicamentos =
+
+medicamentos.map(item => ({
+
+    Medicamento:
+    item.nome,
+
+    Fabricante:
+    item.fabricante,
+
+    Lote:
+    item.lote,
+
+    Quantidade:
+    item.quantidade,
+
+    Validade:
+    item.validade,
+
+    Local:
+    item.local
+
+}));
+const wsMedicamentos =
+
+XLSX.utils.json_to_sheet(
+    dadosMedicamentos
+);
+
+XLSX.utils.book_append_sheet(
+    workbook,
+    wsMedicamentos,
+    "Medicamentos"
+);
+    const dadosEmergencias =
+
+emergencias.map(item => ({
+
+    Data:
+    item.data_emergencia,
+
+    Tipo:
+    item.tipo,
+
+    Local:
+    item.local,
+
+    Descricao:
+    item.descricao
+
+}));
+const wsEmergencias =
+
+XLSX.utils.json_to_sheet(
+    dadosEmergencias
+);
+
+XLSX.utils.book_append_sheet(
+    workbook,
+    wsEmergencias,
+    "Emergencias"
+);
     XLSX.writeFile(
         workbook,
         "Saude_Ocupacional.xlsx"
@@ -112,7 +353,18 @@ function exportarColaboradoresExcel(){
 
     const worksheet =
     XLSX.utils.json_to_sheet(
-        colaboradores
+        colaboradores.map(item => ({
+            Nome: item.nome || "",
+            Matricula: item.matricula || "",
+            Genero: item.genero || "",
+            Funcao: item.funcao || "",
+            Setor: item.setor || "",
+            Lider: item.lider || "",
+            Empresa: item.empresa || "",
+            Admissao: item.data_admissao || "",
+            Demissao: item.data_demissao || "",
+            Status: item.status || ""
+        }))
     );
 
     const workbook =
@@ -141,7 +393,14 @@ function exportarTreinamentosExcel(){
 
     const worksheet =
     XLSX.utils.json_to_sheet(
-        treinamentos
+        treinamentos.map(item => ({
+            Data: item.data || "",
+            Colaborador: item.colaborador || "",
+            Treinamento: item.tipo || "",
+            Instrutor: item.instrutor || "",
+            Validade: item.validade || "",
+            Status: item.status || ""
+        }))
     );
 
     const workbook =
@@ -166,11 +425,19 @@ document
     "click",
     exportarTreinamentosExcel
 );
+
 function exportarUtilizadoresExcel(){
 
     const worksheet =
     XLSX.utils.json_to_sheet(
-        utilizadores
+        utilizadores.map(item => ({
+            Nome: item.nome || "",
+            Email: item.email || "",
+            Perfil: item.perfil || "",
+            Status: item.status || "",
+            UltimoAcesso: item.ultimo_acesso || "",
+            PrimeiroAcesso: item.primeiro_acesso ? "Sim" : "Não"
+        }))
     );
 
     const workbook =
@@ -202,25 +469,53 @@ function exportarAmbienteExcel(){
     XLSX.utils.book_new();
 
     const wsAmbiental =
-    XLSX.utils.json_to_sheet(
-        ambiental
-    );
+XLSX.utils.json_to_sheet(
+    ambiental.map(item => ({
+        Requisito: item.requisito || "",
+        Categoria: item.categoria || "",
+        PossuiValidade: item.possui_validade || "",
+        DataEmissao: item.data_emissao || "",
+        DataValidade: item.data_validade || "",
+        Responsavel: item.responsavel || "",
+        Cumprimento: item.cumprimento || "",
+        Observacoes: item.observacoes || "",
+        Status: item.status || ""
+    }))
+);
 
-    const wsResiduos =
-    XLSX.utils.json_to_sheet(
-        residuos
-    );
+   const wsResiduos =
+XLSX.utils.json_to_sheet(
+    residuos.map(item => ({
+        Data: item.data_residuo || "",
+        Tipo: item.tipo || "",
+        Quantidade: item.quantidade || "",
+        Unidade: item.unidade || "",
+        Destino: item.destino || "",
+        Responsavel: item.responsavel || ""
+    }))
+);
 
     const wsConsumos =
-    XLSX.utils.json_to_sheet(
-        consumos
-    );
+XLSX.utils.json_to_sheet(
+    consumos.map(item => ({
+        Data: item.data_consumo || "",
+        Tipo: item.tipo || "",
+        Quantidade: item.quantidade || "",
+        Unidade: item.unidade || "",
+        Local: item.local || "",
+        Observacao: item.observacao || ""
+    }))
+);
 
-    const wsFauna =
-    XLSX.utils.json_to_sheet(
-        fauna
-    );
-
+   const wsFauna =
+XLSX.utils.json_to_sheet(
+    fauna.map(item => ({
+        Data: item.data_fauna || "",
+        Animal: item.animal || "",
+        Local: item.local || "",
+        Descricao: item.descricao || ""
+    }))
+);
     XLSX.utils.book_append_sheet(
         workbook,
         wsAmbiental,
@@ -265,186 +560,122 @@ function gerarRelatorioExecutivo(){
 
     const pdf = new jsPDF();
 
+    
+
     const dataAtual =
     new Date().toLocaleDateString("pt-PT");
 
     const horaAtual =
     new Date().toLocaleTimeString("pt-PT");
 
-    const registosHHT =
-    carregarDados("registosHHT") || [];
-
     const hhtAcumulado =
-    registosHHT.reduce(
-        (t,item)=>
-        t + Number(item.hhtSemana || 0),
-        0
-    );
 
-    const efetivoAtual =
-    registosHHT.length
-    ?
-    registosHHT[
-        registosHHT.length - 1
-    ].efetivoSemana
-    :
-    0;
+document.getElementById(
+    "cardHHTAcumulado"
+)?.textContent || "0";
 
-   const ocorrenciasHSE =
+const efetivoAtual =
 
-carregarDados(
-    "ocorrenciasHSE"
-) || [];
+document.getElementById(
+    "cardEfetivoAtual"
+)?.textContent || "0";
 
+const tf =
+
+Number(
+
+    document.getElementById(
+        "cardTF"
+    )?.textContent || 0
+
+);
+
+const tg =
+
+Number(
+
+    document.getElementById(
+        "cardTG"
+    )?.textContent || 0
+
+);
+
+const diasSemAcidente =
+
+document.getElementById(
+    "diasSemAcidente"
+)?.textContent || "0";
 const totalACA =
 
-ocorrenciasHSE.filter(
-    item =>
-
-    item.tipo === "ACA"
-).length;
+Number(
+    document.getElementById(
+        "acaHSE"
+    )?.textContent || 0
+);
 
 const totalFatalidades =
 
-ocorrenciasHSE.filter(
-    item =>
+Number(
+    document.getElementById(
+        "fatalidadeHSE"
+    )?.textContent || 0
+);
 
-    item.tipo === "Fatalidade"
-).length;
+const totalNearMiss =
+
+Number(
+    document.getElementById(
+        "nearMissHSE"
+    )?.textContent || 0
+);
 
 const totalDiasPerdidos =
 
-ocorrenciasHSE.reduce(
-    (total,item)=>
-
-    total +
-
-    Number(
-        item.diasPerdidos || 0
-    ),
-
-    0
+Number(
+    document.getElementById(
+        "diasPerdidosTotal"
+    )?.textContent || 0
 );
-const totalNearMiss =
 
-ocorrenciasHSE.filter(
-    item =>
+const conformidade =
 
-    item.tipo === "Near Miss"
+Number(
+
+    String(
+        document.getElementById(
+            "cardConformidade"
+        )?.textContent || "0"
+    ).replace("%","")
+
+);
+const asoVencido =
+
+Number(
+    document.getElementById(
+        "alertaASOVencido"
+    )?.textContent.match(/\d+/)?.[0] || 0
+);
+
+const asoProximo =
+
+Number(
+    document.getElementById(
+        "alertaASOProximo"
+    )?.textContent.match(/\d+/)?.[0] || 0
+);
+
+const treinamentoVencido =
+
+Number(
+    document.getElementById(
+        "alertaTreinamentoVencido"
+    )?.textContent.match(/\d+/)?.[0] || 0
+);
+
+const ambientalVencido =
+ambiental.filter(
+    item => item.status === "Vencido"
 ).length;
-    const tf =
-    hhtAcumulado > 0
-    ?
-    (
-        totalACA * 1000000
-    ) /
-    hhtAcumulado
-    :
-    0;
-
-    const tg =
-    hhtAcumulado > 0
-    ?
-    (
-        totalDiasPerdidos * 1000000
-    ) /
-    hhtAcumulado
-    :
-    0;
-
-    const diasSemAcidente =
-    typeof calcularDiasSemAcidente ===
-    "function"
-    ?
-    calcularDiasSemAcidente()
-    :
-    0;
-
-    const hoje =
-    new Date();
-
-    let asoVencido = 0;
-    let asoProximo = 0;
-
-    asos.forEach(item=>{
-
-        const validade =
-        new Date(item.validade);
-
-        const dias =
-        (validade-hoje) /
-        (1000*60*60*24);
-
-        if(dias < 0){
-
-            asoVencido++;
-
-        }
-        else if(dias <= 30){
-
-            asoProximo++;
-
-        }
-
-    });
-
-    let treinamentoVencido = 0;
-    let treinamentoProximo = 0;
-
-    treinamentos.forEach(item=>{
-
-        const validade =
-        new Date(item.validade);
-
-        const dias =
-        (validade-hoje) /
-        (1000*60*60*24);
-
-        if(dias < 0){
-
-            treinamentoVencido++;
-
-        }
-        else if(dias <= 30){
-
-            treinamentoProximo++;
-
-        }
-
-    });
-
-    const ambientalVencido =
-    ambiental.filter(
-        item =>
-        item.status === "Vencido"
-    ).length;
-
-    const totalItens =
-        asos.length +
-        treinamentos.length +
-        ambiental.length +
-        ocorrencias.length +
-        inspecoes.length;
-
-    const totalNaoConformes =
-        asoVencido +
-        treinamentoVencido +
-        ambientalVencido;
-
-    const conformidade =
-totalItens > 0
-?
-Math.max(
-    0,
-    Math.round(
-        (
-            (totalItens - totalNaoConformes) /
-            totalItens
-        ) * 100
-    )
-)
-:
-100;
 
     /* =================================
        PAGINA 1
@@ -463,13 +694,7 @@ Math.max(
         20
     );
 
-    pdf.setFontSize(16);
-
-    pdf.text(
-        "RELATORIO EXECUTIVO",
-        20,
-        32
-    );
+    
 
     pdf.setFontSize(10);
 

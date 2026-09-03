@@ -21,13 +21,14 @@ async function carregarASOSupabase(){
     error
 } = await supabaseClient
     .from("asos")
-    .select(`
-        *,
-        colaboradores (
-            nome,
-            funcao
-        )
-    `)
+.select(`
+    *,
+    colaboradores(
+        nome,
+        matricula,
+        funcao
+    )
+`)
     .eq(
         "empresa_id",
         window.empresaAtual

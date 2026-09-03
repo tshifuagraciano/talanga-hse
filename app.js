@@ -690,6 +690,25 @@ async function responderTalanguinha(){
 
 }
 async function resumoConformidadeTalanguinha(){
+    const utilizador =
+
+JSON.parse(
+    localStorage.getItem(
+        "utilizadorLogado"
+    )
+);
+
+if(!utilizador){
+
+    return `
+
+🔒 Informação disponível apenas para utilizadores autenticados.
+
+Inicie sessão para consultar os indicadores da sua empresa.
+
+`;
+
+}
 
     const conformidade =
 
@@ -718,6 +737,25 @@ ${parseFloat(conformidade) >= 90
 }
 
 async function resumoExecutivoTalanguinha(){
+    const utilizador =
+
+JSON.parse(
+    localStorage.getItem(
+        "utilizadorLogado"
+    )
+);
+
+if(!utilizador){
+
+    return `
+
+🔒 Informação disponível apenas para utilizadores autenticados.
+
+Inicie sessão para consultar os indicadores da sua empresa.
+
+`;
+
+}
 
     return `
 
@@ -754,7 +792,26 @@ ${document.getElementById("diasSemAcidente")?.textContent || "0"}
 
 }
 async function analisarDesviosTalanguinha(){
+const utilizador =
 
+JSON.parse(
+    localStorage.getItem(
+        "utilizadorLogado"
+    )
+);
+
+if(!utilizador){
+
+    return `
+
+🔒 Informação disponível apenas para utilizadores autenticados.
+
+Inicie sessão para consultar os indicadores da sua empresa.
+
+`;
+
+}
+    
     const { data, error } =
 
     await supabaseClient
@@ -1227,9 +1284,62 @@ function procurarConhecimentoTalanga(
 
 }
 async function processarPerguntaTalanguinha(pergunta){
+const utilizador =
 
+JSON.parse(
+    localStorage.getItem(
+        "utilizadorLogado"
+    )
+);
+
+const autenticado =
+!!utilizador;
+const perguntasPrivadas = [
+
+    "análise dos aso",
+
+    "analise dos aso",
+
+    "análise dos desvios",
+
+    "analise dos desvios",
+
+    "conformidade",
+
+    "resumo da empresa",
+
+    "como está a empresa",
+
+    "o que devo fazer hoje",
+
+    "prioridades"
+
+];
+if(
+
+    !autenticado
+
+    &&
+
+    perguntasPrivadas.some(
+        termo =>
+        pergunta.includes(termo)
+    )
+
+){
+
+    return `
+
+🔒 Informação disponível apenas para utilizadores autenticados.
+
+Inicie sessão para consultar os indicadores da sua empresa.
+
+`;
+
+}
     pergunta =
     pergunta.toLowerCase();
+    
 if(
     pergunta.includes("sugere um dds")
     ||
@@ -1239,6 +1349,7 @@ if(
 ){
     return await sugerirDDSTalanguinha();
 }
+
     // PRIMEIRO procura na base de conhecimento
 
     const respostaBase =
@@ -1305,6 +1416,7 @@ if(
 ){
     return modulosTalanguinha();
 }
+
     return `
 🤖 Ainda estou a aprender.
 
@@ -1317,7 +1429,10 @@ Experimente:
 • Como adquirir o Talanga?
 • Resumo da empresa
 `;
+
+
 }
+
 
 function modulosTalanguinha(){
 
@@ -1434,6 +1549,25 @@ Existem desvios registados que justificam reforço da cultura preventiva.
 
 }
 async function prioridadesTalanguinha(){
+    const utilizador =
+
+JSON.parse(
+    localStorage.getItem(
+        "utilizadorLogado"
+    )
+);
+
+if(!utilizador){
+
+    return `
+
+🔒 Informação disponível apenas para utilizadores autenticados.
+
+Inicie sessão para consultar os indicadores da sua empresa.
+
+`;
+
+}
 
     const prioridades = [];
 
@@ -1526,6 +1660,26 @@ ${parseFloat(conformidade) >= 90
 
 }
 async function analisarASOTalanguinha(){
+
+    const utilizador =
+
+JSON.parse(
+    localStorage.getItem(
+        "utilizadorLogado"
+    )
+);
+
+if(!utilizador){
+
+    return `
+
+🔒 Informação disponível apenas para utilizadores autenticados.
+
+Inicie sessão para consultar os indicadores da sua empresa.
+
+`;
+
+}
 
     const total =
 
