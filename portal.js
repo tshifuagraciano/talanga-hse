@@ -63,7 +63,10 @@ const {
 await supabaseClient
 .from("asos")
 .select("*")
-
+.eq(
+    "empresa_id",
+    colaboradorPortal.empresa_id
+)
 
 .eq(
     "colaborador_id",
@@ -96,6 +99,10 @@ const {
 await supabaseClient
 .from("treinamentos")
 .select("*")
+.eq(
+    "empresa_id",
+    colaboradorPortal.empresa_id
+)
 .eq(
     "colaborador_id",
     colaboradorPortal.id
@@ -531,6 +538,10 @@ await supabaseClient
 .from("epi_solicitacoes")
 .select("*")
 .eq(
+    "empresa_id",
+    colaboradorPortal.empresa_id
+)
+.eq(
     "matricula",
     colaboradorPortal.matricula
 );
@@ -648,6 +659,11 @@ if(btnDDS){
 await supabaseClient
 .from("dds")
 .select("*")
+
+.eq(
+    "empresa_id",
+    colaboradorPortal.empresa_id
+)
 .order(
     "data_dds",
     {
@@ -722,6 +738,10 @@ async function registrarParticipacaoDDS(idDDS){
     await supabaseClient
     .from("dds_participantes")
     .select("*")
+    .eq(
+    "empresa_id",
+    colaboradorPortal.empresa_id
+)
     .eq(
         "dds_id",
         idDDS
@@ -962,7 +982,11 @@ if(btnMinhasMensagens){
            const { data, error } =
 await supabaseClient
 .from("fala_talanga")
-.select("*");
+.select("*")
+.eq(
+    "empresa_id",
+    colaboradorPortal.empresa_id
+);
 
 if(error){
 
