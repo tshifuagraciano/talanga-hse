@@ -6,20 +6,19 @@ new URLSearchParams(
     window.location.search
 );
 
-const matricula =
-parametros.get(
-    "matricula"
-);
+const id =
+parametros.get("id");
 
 const { data, error } =
 await supabaseClient
 .from("colaboradores")
 .select("*")
 .eq(
-    "matricula",
-    matricula
+    "id",
+    id
 )
 .single();
+
 
 if(error){
 

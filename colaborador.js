@@ -375,7 +375,7 @@ function gerarQRCodeColaborador(index){
     colaboradores[index];
 
    const codigoQR =
-`https://www.talangahse.ao/portal.html?matricula=${colaborador.matricula}`;
+`https://www.talangahse.ao/portal.html?id=${colaborador.id}`;
     const container =
     document.createElement("div");
 
