@@ -746,7 +746,11 @@ async function atualizarCardColaboradoresSupabase(){
     const { data, error } =
     await supabaseClient
     .from("colaboradores")
-    .select("id");
+    .select("id")
+    .eq(
+    "empresa_id",
+    window.empresaAtual
+);
 
     if(error){
 
@@ -767,7 +771,11 @@ async function atualizarCardTreinamentosSupabase(){
     const { data, error } =
     await supabaseClient
     .from("treinamentos")
-    .select("id");
+    .select("id")
+    .eq(
+    "empresa_id",
+    window.empresaAtual
+);
 
     if(error){
 
@@ -788,7 +796,11 @@ async function atualizarCardASOSupabase(){
     const { data, error } =
     await supabaseClient
     .from("asos")
-    .select("id");
+    .select("id")
+    .eq(
+    "empresa_id",
+    window.empresaAtual
+);
 
     if(error){
 
@@ -809,7 +821,11 @@ async function atualizarCardDesviosSupabase(){
     const { data, error } =
     await supabaseClient
     .from("desvios")
-    .select("id");
+    .select("id")
+    .eq(
+    "empresa_id",
+    window.empresaAtual
+);
 
     if(error){
 
@@ -837,7 +853,11 @@ async function atualizarCardInspecoesSupabase(){
     const { data, error } =
     await supabaseClient
     .from("inspecoes")
-    .select("id");
+    .select("id")
+    .eq(
+    "empresa_id",
+    window.empresaAtual
+);
 
     if(error){
 
@@ -865,7 +885,11 @@ async function atualizarCardAmbulatorioSupabase(){
     const { data, error } =
     await supabaseClient
     .from("ambulatorio")
-    .select("id");
+    .select("id")
+    .eq(
+    "empresa_id",
+    window.empresaAtual
+);
 
     if(error){
 
@@ -886,7 +910,11 @@ async function atualizarCardMedicamentosSupabase(){
     const { data, error } =
     await supabaseClient
     .from("medicamentos")
-    .select("id");
+    .select("id")
+    .eq(
+    "empresa_id",
+    window.empresaAtual
+);
 
     if(error){
 
@@ -907,7 +935,11 @@ async function atualizarCardEmergenciasSupabase(){
     const { data, error } =
     await supabaseClient
     .from("emergencias")
-    .select("id");
+    .select("id")
+    .eq(
+    "empresa_id",
+    window.empresaAtual
+);
 
     if(error){
 
@@ -928,7 +960,11 @@ async function atualizarCardAmbientalSupabase(){
     const { data, error } =
     await supabaseClient
     .from("ambiental")
-    .select("id");
+    .select("id")
+    .eq(
+    "empresa_id",
+    window.empresaAtual
+);
 
     if(error){
 
@@ -949,7 +985,11 @@ async function atualizarCardResiduosSupabase(){
     const { data, error } =
     await supabaseClient
     .from("residuos")
-    .select("id");
+    .select("id")
+    .eq(
+    "empresa_id",
+    window.empresaAtual
+);
 
     if(error){
 
@@ -970,7 +1010,11 @@ async function atualizarCardConsumosSupabase(){
     const { data, error } =
     await supabaseClient
     .from("consumos")
-    .select("id");
+    .select("id")
+    .eq(
+    "empresa_id",
+    window.empresaAtual
+);
 
     if(error){
 
@@ -991,7 +1035,11 @@ async function atualizarCardFaunaSupabase(){
     const { data, error } =
     await supabaseClient
     .from("fauna")
-    .select("id");
+    .select("id")
+    .eq(
+    "empresa_id",
+    window.empresaAtual
+);
 
     if(error){
 
@@ -1559,11 +1607,19 @@ async function atualizarAlertasSupabase(){
 
         supabaseClient
         .from("asos")
-        .select("*"),
+        .select("*")
+        .eq(
+    "empresa_id",
+    window.empresaAtual
+),
 
         supabaseClient
         .from("treinamentos")
         .select("*")
+        .eq(
+    "empresa_id",
+    window.empresaAtual
+)
 
     ]);
 
@@ -1674,7 +1730,11 @@ async function atualizarCardEPISupabase(){
     const { data, error } =
     await supabaseClient
     .from("epi_solicitacoes")
-    .select("id");
+    .select("id")
+    .eq(
+    "empresa_id",
+    window.empresaAtual
+);
 
     if(error){
 
@@ -1695,7 +1755,11 @@ async function atualizarCardDDSSupabase(){
     const { data, error } =
     await supabaseClient
     .from("dds")
-    .select("id");
+    .select("id")
+    .eq(
+    "empresa_id",
+    window.empresaAtual
+);
 
     if(error){
 
@@ -1716,7 +1780,11 @@ async function atualizarCardFalaTalangaSupabase(){
     const { data, error } =
     await supabaseClient
     .from("fala_talanga")
-    .select("id");
+    .select("id")
+    .eq(
+    "empresa_id",
+    window.empresaAtual
+);
 
     if(error){
 
@@ -2034,11 +2102,19 @@ async function atualizarGraficoVencimentos(){
 
         supabaseClient
         .from("asos")
-        .select("*"),
+        .select("*")
+        .eq(
+    "empresa_id",
+    window.empresaAtual
+),
 
         supabaseClient
         .from("treinamentos")
         .select("*")
+        .eq(
+    "empresa_id",
+    window.empresaAtual
+)
 
     ]);
 
@@ -2193,20 +2269,35 @@ async function atualizarGraficoResumo(){
 
         supabaseClient
         .from("desvios")
-        .select("id"),
+        .select("id")
+        .eq(
+    "empresa_id",
+    window.empresaAtual
+),
 
         supabaseClient
         .from("epi_solicitacoes")
-        .select("id"),
+        .select("id")
+        .eq(
+    "empresa_id",
+    window.empresaAtual
+),
 
         supabaseClient
         .from("dds")
-        .select("id"),
+        .select("id")
+        .eq(
+    "empresa_id",
+    window.empresaAtual
+),
 
         supabaseClient
         .from("fala_talanga")
         .select("id")
-
+.eq(
+    "empresa_id",
+    window.empresaAtual
+)
     ]);
 
     const totalDesvios =
