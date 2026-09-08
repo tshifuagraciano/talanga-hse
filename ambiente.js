@@ -17,6 +17,627 @@ let ambiental = [];
 let indiceEdicaoAmbiental =
 null;
 
+/* ==========================================
+   IMPACTO AMBIENTAL
+========================================== */
+
+const formAspectoAmbiental = document.getElementById("formAspectoAmbiental");
+const tabelaAspectosAmbientais = document.querySelector("#tabelaAspectosAmbientais tbody");
+
+let aspectosAmbientais = [];
+let indiceEdicaoAspecto = null;
+
+async function carregarAspectosAmbientaisSupabase() {
+
+    if (!window.empresaAtual) return;
+
+    const { data, error } = await supabaseClient
+        .from("aspectos_impactos_ambientais")
+        .select("*")
+        .eq("empresa_id", window.empresaAtual);
+
+    if (error) {
+        console.error(error);
+        return;
+    }
+
+    aspectosAmbientais = data || [];
+
+    atualizarAspectosAmbientais();
+}
+function atualizarAspectosAmbientais(lista = aspectosAmbientais) {
+
+    if (!tabelaAspectosAmbientais) return;
+
+    tabelaAspectosAmbientais.innerHTML = "";
+
+    lista.forEach((item,index) => {
+
+        const linha = document.createElement("tr");
+
+        linha.innerHTML = `
+    <td>${item.atividade}</td>
+    <td>${item.aspecto}</td>
+    <td>${item.impacto}</td>
+    <td>${item.area || "-"}</td>
+    <td>${item.responsavel || "-"}</td>
+    <td>${item.status || "-"}</td>
+    <td>${item.risco}</td>
+    <td>${item.classificacao}</td>
+    <td>
+    <button
+        type="button"
+        onclick="editarAspecto(${index})"
+    >
+        ✏️
+    </button>
+
+    <button
+        type="button"
+        onclick="imprimirAspecto(${index})"
+    >
+        🖨️
+    </button>
+
+    <button
+        type="button"
+        onclick="eliminarAspecto(${index})"
+    >
+        🗑️
+    </button>
+</td>
+
+        `;
+
+        tabelaAspectosAmbientais.appendChild(linha);
+    });
+
+    atualizarIndicadoresAspectos();
+}
+
+document
+.getElementById("pesquisaAspecto")
+?.addEventListener(
+    "input",
+    pesquisarAspectos
+);
+function pesquisarAspectos(){
+
+    const texto =
+    document.getElementById(
+        "pesquisaAspecto"
+    ).value.toLowerCase();
+
+    const resultados =
+    aspectosAmbientais.filter(item =>
+
+        item.atividade
+        ?.toLowerCase()
+        .includes(texto)
+
+        ||
+
+        item.aspecto
+        ?.toLowerCase()
+        .includes(texto)
+
+        ||
+
+        item.impacto
+        ?.toLowerCase()
+        .includes(texto)
+
+        ||
+
+        item.responsavel
+        ?.toLowerCase()
+        .includes(texto)
+
+    );
+
+    atualizarAspectosAmbientais(
+        resultados
+    );
+
+}
+function filtrarAspectos(){
+
+    const inicio =
+    document.getElementById(
+        "dataInicioAspecto"
+    ).value;
+
+    const fim =
+    document.getElementById(
+        "dataFimAspecto"
+    ).value;
+
+    let resultados =
+    [...aspectosAmbientais];
+
+    if(inicio){
+
+        resultados =
+        resultados.filter(
+            item =>
+            item.created_at.substring(0,10)
+            >= inicio
+        );
+
+    }
+
+    if(fim){
+
+        resultados =
+        resultados.filter(
+            item =>
+            item.created_at.substring(0,10)
+            <= fim
+        );
+
+    }
+
+    atualizarAspectosAmbientais(
+        resultados
+    );
+
+}
+function limparFiltrosAspectos(){
+
+    document.getElementById(
+        "pesquisaAspecto"
+    ).value = "";
+
+    document.getElementById(
+        "dataInicioAspecto"
+    ).value = "";
+
+    document.getElementById(
+        "dataFimAspecto"
+    ).value = "";
+
+    atualizarAspectosAmbientais();
+
+}
+async function eliminarAspecto(index){
+
+    if(
+        !confirm(
+            "Eliminar registo?"
+        )
+    ) return;
+
+    const item =
+    aspectosAmbientais[index];
+
+    const { error } =
+    await supabaseClient
+    .from(
+        "aspectos_impactos_ambientais"
+    )
+    .delete()
+    .eq(
+        "id",
+        item.id
+    );
+
+    if(error){
+
+        console.error(error);
+
+        return;
+
+    }
+
+    await carregarAspectosAmbientaisSupabase();
+
+}
+function editarAspecto(index){
+
+    const item =
+    aspectosAmbientais[index];
+
+    document.getElementById(
+        "atividadeAmbiental"
+    ).value =
+    item.atividade || "";
+
+    document.getElementById(
+        "aspectoAmbiental"
+    ).value =
+    item.aspecto || "";
+
+    document.getElementById(
+        "impactoAmbiental"
+    ).value =
+    item.impacto || "";
+
+    document.getElementById(
+        "areaAmbiental"
+    ).value =
+    item.area || "";
+
+    document.getElementById(
+        "responsavelAspecto"
+    ).value =
+    item.responsavel || "";
+
+    document.getElementById(
+        "statusAspecto"
+    ).value =
+    item.status || "Ativo";
+
+    indiceEdicaoAspecto =
+    item.id;
+    document.getElementById(
+    "controleAmbiental"
+).value =
+item.controle_existente || "";
+
+document.getElementById(
+    "mitigacaoAmbiental"
+).value =
+item.acao_mitigacao || "";
+
+document.getElementById(
+    "probabilidadeAmbiental"
+).value =
+item.probabilidade || 1;
+
+document.getElementById(
+    "severidadeAmbiental"
+).value =
+item.severidade || 1;
+
+}
+
+function imprimirAspecto(index){
+
+    const item =
+    aspectosAmbientais[index];
+
+    const { jsPDF } =
+    window.jspdf;
+
+    const pdf =
+    new jsPDF();
+   
+
+    const logo =
+    document.getElementById(
+        "logoTalanga"
+    );
+
+    if(logo){
+
+        pdf.addImage(
+            logo,
+            "PNG",
+            15,
+            10,
+            30,
+            30
+        );
+
+    }
+ 
+    pdf.setFontSize(18);
+
+    pdf.text(
+        "TALANGA HSE",
+        55,
+        20
+    );
+
+    pdf.setFontSize(14);
+
+    pdf.text(
+        "ASPECTOS E IMPACTOS AMBIENTAIS",
+        55,
+        30
+    );
+
+    pdf.line(
+        15,
+        45,
+        195,
+        45
+    );
+
+    pdf.setFontSize(11);
+
+    pdf.text(
+        `Atividade: ${item.atividade}`,
+        15,
+        60
+    );
+
+    pdf.text(
+        `Aspecto: ${item.aspecto}`,
+        15,
+        75
+    );
+
+    pdf.text(
+        `Impacto: ${item.impacto}`,
+        15,
+        90
+    );
+
+    pdf.text(
+        `Área: ${item.area || "-"}`,
+        15,
+        105
+    );
+
+    pdf.text(
+        `Responsável: ${item.responsavel || "-"}`,
+        15,
+        120
+    );
+
+    pdf.text(
+        `Status: ${item.status || "-"}`,
+        15,
+        135
+    );
+
+    pdf.text(
+        `Probabilidade: ${item.probabilidade}`,
+        15,
+        150
+    );
+
+    pdf.text(
+        `Severidade: ${item.severidade}`,
+        15,
+        165
+    );
+
+    pdf.text(
+        `Risco: ${item.risco}`,
+        15,
+        180
+    );
+
+    pdf.text(
+        `Classificação: ${item.classificacao}`,
+        15,
+        195
+    );
+
+    pdf.text(
+        `Significativo: ${item.significativo || "Não"}`,
+        15,
+        210
+    );
+
+    pdf.text(
+        `Controle Existente: ${item.controle_existente || "-"}`,
+        15,
+        225,
+        { maxWidth: 170 }
+    );
+
+    pdf.text(
+        `Ação de Mitigação: ${item.acao_mitigacao || "-"}`,
+        15,
+        245,
+        { maxWidth: 170 }
+    );
+
+    pdf.save(
+        `Aspecto_Ambiental_${item.atividade}.pdf`
+    );
+
+}
+
+function atualizarIndicadoresAspectos() {
+
+    document.getElementById("totalAspectos").textContent =
+        aspectosAmbientais.length;
+
+    document.getElementById("riscosCriticos").textContent =
+        aspectosAmbientais.filter(
+            item => item.classificacao === "Crítico"
+        ).length;
+
+    document.getElementById("riscosAltos").textContent =
+        aspectosAmbientais.filter(
+            item => item.classificacao === "Alto"
+        ).length;
+        document.getElementById("aspectosAtivos").textContent =
+aspectosAmbientais.filter(
+    item => item.status === "Ativo"
+).length;
+
+document.getElementById("aspectosEncerrados").textContent =
+aspectosAmbientais.filter(
+    item => item.status === "Encerrado"
+).length;
+document.getElementById(
+    "aspectosSignificativos"
+).textContent =
+aspectosAmbientais.filter(
+    item => item.significativo === "Sim"
+).length;
+}
+if (
+    formAspectoAmbiental &&
+    tabelaAspectosAmbientais
+) {
+
+    formAspectoAmbiental.addEventListener(
+        "submit",
+        async e => {
+
+            e.preventDefault();
+
+            const atividade =
+                document.getElementById(
+                    "atividadeAmbiental"
+                ).value;
+
+            const aspecto =
+                document.getElementById(
+                    "aspectoAmbiental"
+                ).value;
+
+            const impacto =
+                document.getElementById(
+                    "impactoAmbiental"
+                ).value;
+
+            const area =
+                document.getElementById(
+                    "areaAmbiental"
+                ).value;
+
+            const probabilidade =
+                Number(
+                    document.getElementById(
+                        "probabilidadeAmbiental"
+                    ).value
+                );
+
+            const severidade =
+                Number(
+                    document.getElementById(
+                        "severidadeAmbiental"
+                    ).value
+                );
+
+            const controle_existente =
+                document.getElementById(
+                    "controleAmbiental"
+                ).value;
+
+            const acao_mitigacao =
+                document.getElementById(
+                    "mitigacaoAmbiental"
+                ).value;
+
+            const risco =
+                probabilidade * severidade;
+
+            let classificacao = "";
+
+           if (risco <= 4) {
+
+    classificacao = "Baixo";
+
+}
+else if (risco <= 9) {
+
+    classificacao = "Moderado";
+
+}
+else if (risco <= 16) {
+
+    classificacao = "Alto";
+
+}
+else {
+
+    classificacao = "Crítico";
+
+}
+let significativo = "Não";
+
+if(risco >= 10){
+    significativo = "Sim";
+}
+            const responsavel =
+    document.getElementById(
+        "responsavelAspecto"
+    ).value;
+
+const status =
+    document.getElementById(
+        "statusAspecto"
+    ).value;
+
+    if(indiceEdicaoAspecto){
+
+    const { error } =
+    await supabaseClient
+    .from("aspectos_impactos_ambientais")
+    .update({
+
+        atividade,
+        aspecto,
+        impacto,
+        area,
+        probabilidade,
+        severidade,
+        risco,
+        classificacao,
+        controle_existente,
+        acao_mitigacao,
+        responsavel,
+        status
+
+    })
+    .eq(
+        "id",
+        indiceEdicaoAspecto
+    );
+
+    if(error){
+        console.error(error);
+        return;
+    }
+
+    indiceEdicaoAspecto = null;
+
+    await carregarAspectosAmbientaisSupabase();
+
+    formAspectoAmbiental.reset();
+
+    return;
+}
+            const { error } =
+                await supabaseClient
+                    .from(
+                        "aspectos_impactos_ambientais"
+                    )
+                    .insert([{
+    empresa_id: window.empresaAtual,
+    atividade,
+    aspecto,
+    impacto,
+    area,
+    probabilidade,
+    severidade,
+    risco,
+    classificacao,
+    significativo,
+    controle_existente,
+    acao_mitigacao,
+    responsavel,
+    status
+}]);
+
+            if (error) {
+
+                console.error(
+                    "Erro Aspecto:",
+                    error
+                );
+
+                return;
+
+            }
+
+            await carregarAspectosAmbientaisSupabase();
+
+            formAspectoAmbiental.reset();
+
+        }
+    );
+
+}
+
 function calcularStatusAmbiental(
 
     possuiValidade,
@@ -2910,3 +3531,5 @@ document
     pesquisarFauna
 );
 carregarResiduosSupabase();
+
+carregarAspectosAmbientaisSupabase();

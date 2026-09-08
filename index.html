@@ -2781,6 +2781,173 @@ Produtos Químicos
         <section id="ambiente" class="modulo">
 
             <h2> Gestão Ambiental</h2>
+           <button
+    class="secao-toggle"
+    onclick="alternarSecao('secaoAspectosAmbientais')"
+>
+     Aspectos e Impactos Ambientais
+</button>
+
+<div
+    id="secaoAspectosAmbientais"
+    style="display:none;"
+>
+<div id="secaoAspectosAmbientais" style="display:none;">
+
+    <h2>Aspectos e Impactos Ambientais</h2>
+
+    
+</div>
+<div class="cards-dashboard">
+
+    <div class="card-indicador">
+        <h3>Total Aspectos</h3>
+        <span id="totalAspectos">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h3>Riscos Críticos</h3>
+        <span id="riscosCriticos">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h3>Riscos Altos</h3>
+        <span id="riscosAltos">0</span>
+    </div>
+    <div class="card-indicador">
+    <h3>Ativos</h3>
+    <span id="aspectosAtivos">0</span>
+</div>
+
+<div class="card-indicador">
+    <h3>Encerrados</h3>
+    <span id="aspectosEncerrados">0</span>
+</div>
+<div class="card-indicador">
+    <h3>Significativos</h3>
+    <span id="aspectosSignificativos">0</span>
+</div>
+
+</div> 
+<div class="filtros-ambiente">
+
+    <input
+        type="text"
+        id="pesquisaAspecto"
+        placeholder="Pesquisar..."
+    >
+
+    <input
+        type="date"
+        id="dataInicioAspecto"
+    >
+
+    <input
+        type="date"
+        id="dataFimAspecto"
+    >
+
+    <button
+        type="button"
+        onclick="filtrarAspectos()"
+    >
+        Filtrar
+    </button>
+
+    <button
+        type="button"
+        onclick="limparFiltrosAspectos()"
+    >
+        Limpar
+    </button>
+
+</div>
+
+    <form id="formAspectoAmbiental">
+
+        <label>Atividade</label>
+        <input type="text" id="atividadeAmbiental">
+
+        <label>Aspecto Ambiental</label>
+        <input type="text" id="aspectoAmbiental">
+
+        <label>Impacto Ambiental</label>
+        <input type="text" id="impactoAmbiental">
+
+        <label>Área</label>
+        <input type="text" id="areaAmbiental">
+
+        <label>Probabilidade</label>
+        <select id="probabilidadeAmbiental">
+    <option value="1">Muito Baixa</option>
+    <option value="2">Baixa</option>
+    <option value="3">Média</option>
+    <option value="4">Alta</option>
+    <option value="5">Muito Alta</option>
+</select>
+
+        <label>Severidade</label>
+    <select id="severidadeAmbiental">
+    <option value="1">Insignificante</option>
+    <option value="2">Menor</option>
+    <option value="3">Moderada</option>
+    <option value="4">Significativa</option>
+    <option value="5">Grave</option>
+</select>
+
+        <label>Controle Existente</label>
+        <textarea id="controleAmbiental"></textarea>
+
+        <label>Ação de Mitigação</label>
+        <textarea id="mitigacaoAmbiental"></textarea>
+        <label>Responsável</label>
+<input
+    type="text"
+    id="responsavelAspecto"
+>
+
+<label>Status</label>
+<select id="statusAspecto">
+    <option value="Ativo">
+        Ativo
+    </option>
+
+    <option value="Encerrado">
+        Encerrado
+    </option>
+</select>
+
+
+        <button type="submit">
+            Guardar
+        </button>
+
+    </form>
+
+    <table id="tabelaAspectosAmbientais">
+        <thead>
+            <tr>
+                <th>Atividade</th>
+<th>Aspecto</th>
+<th>Impacto</th>
+<th>Área</th>
+<th>Responsável</th>
+<th>Status</th>
+<th>Risco</th>
+<th>Classificação</th>
+<th>Ações</th>
+
+            </tr>
+        </thead>
+
+        <tbody></tbody>
+
+    </table>
+
+</div>
+
+
+
 <button
     class="secao-toggle"
     onclick="

@@ -5225,39 +5225,29 @@ window.empresaAtual,
     atualizarDashboard();
 }
 ``
-async function carregarDataBaseAcidente(){
-    if(!window.empresaAtual){
-    return;
-}
+async function carregarDataBaseAcidente() {
 
-    const { data, error } =
-await supabaseClient
-.from("configuracoes_hse")
-.select("*")
-.limit(1)
-.eq("empresa_id",window.empresaAtual);
-
-    if(error){
-
-        console.error(error);
-
+    if (!window.empresaAtual) {
         return;
     }
 
-    const campo =
-    document.getElementById(
-        "dataBaseAcidente"
-    );
+    const { data, error } = await supabaseClient
+        .from("configuracoes_hse")
+        .select("*")
+        .eq("empresa_id", window.empresaAtual)
+        .limit(1);
 
-    if(
-        campo &&
-        data
-    ){
-        campo.value =
-        data.data_base_acidente || "";
+    if (error) {
+        console.error(error);
+        return;
+    }
+
+    const campo = document.getElementById("dataBaseAcidente");
+
+    if (campo && data && data.length > 0) {
+        campo.value = data[0].data_base_acidente || "";
     }
 }
-
 
 let indiceEdicaoOcorrenciaHSE = null;
 
