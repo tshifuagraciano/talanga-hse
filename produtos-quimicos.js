@@ -16,6 +16,7 @@ document.querySelector(
 
 let produtosQuimicos = [];
 
+let produtoEmEdicao = null;
 
 
 
@@ -169,13 +170,16 @@ async function gerarPdfFispq() {
     const { data, error } =
 await supabaseClient
     .from("produtos_quimicos")
-    .select(`
-        produto,
-        numero_cas,
-        numero_onu,
-        classificacao_ghs,
-        fispq_digital
-    `)
+   .select(`
+    produto,
+    numero_cas,
+    numero_onu,
+    classificacao_ghs,
+    fispq_digital,
+    versao_fispq,
+    status_fispq,
+    ultima_revisao
+`)
     .eq(
         "id",
         produtoEmEdicao
@@ -506,6 +510,9 @@ for (
     );
 
 }
+const urlFispq =
+
+`${window.location.origin}/fispq.html?id=${produtoEmEdicao}`;
 const qrDiv =
 document.createElement(
     "div"
