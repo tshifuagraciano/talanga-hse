@@ -3852,6 +3852,7 @@ body.dark .talanguinhaRodape input::placeholder{
         0 0 60px rgba(37,99,235,.35);
 
 }
+
 .card-resumo:hover{
 
     box-shadow:
@@ -3916,5 +3917,198 @@ body.dark .talanguinhaRodape input::placeholder{
         height:70vh;
 
     }
+
+}
+
+.matriz-risco{
+    width:100%;
+    border-collapse:collapse;
+    text-align:center;
+}
+
+.matriz-risco td,
+.matriz-risco th{
+    border:1px solid #ccc;
+    padding:12px;
+}
+
+.baixo{
+    background:#4CAF50;
+    color:#fff;
+}
+
+.moderado{
+    background:#FFC107;
+}
+
+.alto{
+    background:#FF9800;
+    color:#fff;
+}
+
+.critico{
+    background:#F44336;
+    color:#fff;
+}
+.painel-risco-ambiental{
+
+    display:flex;
+
+    gap:40px;
+
+    align-items:flex-start;
+
+    margin-top:20px;
+
+}
+
+.bloco-matriz{
+
+    width:320px;
+
+}
+
+.bloco-grafico{
+
+    flex:1;
+
+    min-height:350px;
+
+}
+.alerta-vermelha {
+    border-left: 5px solid #dc2626;
+    box-shadow: 0 0 12px rgba(220, 38, 38, 0.30);
+}
+
+.alerta-laranja {
+    border-left: 5px solid #f97316;
+    box-shadow: 0 0 12px rgba(249, 115, 22, 0.30);
+}
+
+.alerta-amarela {
+    border-left: 5px solid #eab308;
+    box-shadow: 0 0 12px rgba(234, 179, 8, 0.30);
+}
+
+.linha-vencida td {
+    background: rgba(220, 38, 38, 0.12) !important;
+    box-shadow: inset 0 0 12px rgba(220, 38, 38, 0.25);
+}
+
+.linha-alerta td {
+    background: rgba(249, 115, 22, 0.10) !important;
+    box-shadow: inset 0 0 12px rgba(249, 115, 22, 0.20);
+}
+.alertas-compatibilidade {
+    margin-top: 20px;
+}
+
+.alerta-compatibilidade {
+
+    padding: 15px;
+
+    margin-bottom: 12px;
+
+    border-radius: 12px;
+
+    border-left: 4px solid #dc2626;
+
+}
+
+.light-theme .alerta-compatibilidade {
+
+    background: #fef2f2;
+
+    color: #991b1b;
+
+}
+
+.dark-theme .alerta-compatibilidade {
+
+    background: rgba(220,38,38,0.12);
+
+    color: #f8fafc;
+
+}
+#riscosQuimicos {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.card-risco-quimico {
+    min-height: 120px;
+}
+.risco-critico {
+    border-left: 5px solid #dc2626;
+}
+
+.risco-alto {
+    border-left: 5px solid #f97316;
+}
+
+.risco-medio {
+    border-left: 5px solid #eab308;
+}
+.fispq-container {
+
+    margin-top: 20px;
+
+    padding: 20px;
+
+    border-radius: 12px;
+
+    background: var(--card-bg);
+
+}
+
+.fispq-container details {
+
+    margin-bottom: 12px;
+
+    border: 1px solid rgba(120,120,120,.2);
+
+    border-radius: 10px;
+
+    overflow: hidden;
+
+}
+
+.fispq-container summary {
+
+    cursor: pointer;
+
+    padding: 15px;
+
+    font-weight: 600;
+
+    font-size: 16px;
+
+}
+
+.fispq-container details[open] summary {
+
+    border-bottom: 1px solid rgba(120,120,120,.2);
+
+}
+
+.fispq-container textarea {
+
+    width: 100%;
+
+    min-height: 120px;
+
+    border: none;
+
+    padding: 15px;
+
+    resize: vertical;
+
+}
+
+.fispq-container input {
+
+    width: 100%;
+
+    margin: 10px 0;
 
 }

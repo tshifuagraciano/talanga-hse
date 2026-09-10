@@ -546,6 +546,21 @@ const nomeColaborador =
 
     const pdf =
     new jsPDF();
+    const logo =
+document.getElementById("logoTalanga");
+
+if(logo){
+
+    pdf.addImage(
+        logo,
+        "PNG",
+        15,
+        10,
+        30,
+        30
+    );
+
+}
 
     pdf.setFontSize(18);
 
@@ -1685,7 +1700,21 @@ function imprimirAmbulatorio(index){
 
     const pdf =
     new jsPDF();
+const logo =
+document.getElementById("logoTalanga");
 
+if(logo){
+
+    pdf.addImage(
+        logo,
+        "PNG",
+        15,
+        10,
+        30,
+        30
+    );
+
+}
     pdf.setFontSize(18);
 
     pdf.text(
@@ -2440,7 +2469,21 @@ medicamentosFiltrados[index];
 
     const pdf =
     new jsPDF();
+const logo =
+document.getElementById("logoTalanga");
 
+if(logo){
+
+    pdf.addImage(
+        logo,
+        "PNG",
+        15,
+        10,
+        30,
+        30
+    );
+
+}
     pdf.setFontSize(18);
 
     pdf.text(
@@ -3701,7 +3744,21 @@ function imprimirEmergencia(index){
 
     const pdf =
     new jsPDF();
+    const logo =
+document.getElementById("logoTalanga");
 
+if(logo){
+
+    pdf.addImage(
+        logo,
+        "PNG",
+        15,
+        10,
+        30,
+        30
+    );
+
+}
     pdf.setFontSize(18);
 
     pdf.text(

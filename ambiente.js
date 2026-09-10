@@ -20,6 +20,7 @@ null;
 /* ==========================================
    IMPACTO AMBIENTAL
 ========================================== */
+let graficoAspectos = null;
 
 const formAspectoAmbiental = document.getElementById("formAspectoAmbiental");
 const tabelaAspectosAmbientais = document.querySelector("#tabelaAspectosAmbientais tbody");
@@ -42,8 +43,111 @@ async function carregarAspectosAmbientaisSupabase() {
     }
 
     aspectosAmbientais = data || [];
+    console.log(
+    "DADOS ASPECTOS:",
+    aspectosAmbientais
+);
 
     atualizarAspectosAmbientais();
+}
+function atualizarGraficoAspectos(){
+
+    const canvas =
+    document.getElementById(
+        "graficoAspectos"
+    );
+
+    if(!canvas){
+        return;
+    }
+
+    const ctx =
+    canvas.getContext("2d");
+
+    if(graficoAspectos){
+
+        graficoAspectos.destroy();
+
+    }
+
+    const baixos =
+    aspectosAmbientais.filter(
+        item => item.classificacao === "Baixo"
+    ).length;
+
+    const moderados =
+    aspectosAmbientais.filter(
+        item => item.classificacao === "Moderado"
+    ).length;
+
+    const altos =
+    aspectosAmbientais.filter(
+        item => item.classificacao === "Alto"
+    ).length;
+
+    const criticos =
+    aspectosAmbientais.filter(
+        item => item.classificacao === "Crítico"
+    ).length;
+
+    graficoAspectos =
+    new Chart(ctx, {
+
+        type: "doughnut",
+
+        data: {
+
+            labels: [
+
+                "Baixo",
+                "Moderado",
+                "Alto",
+                "Crítico"
+
+            ],
+
+            datasets: [{
+
+                data: [
+
+                    baixos,
+                    moderados,
+                    altos,
+                    criticos
+
+                ],
+
+                backgroundColor: [
+
+                    "#4CAF50",
+                    "#FFC107",
+                    "#FF9800",
+                    "#F44336"
+
+                ]
+
+            }]
+
+        },
+
+        options: {
+
+            responsive: true,
+
+            plugins: {
+
+                legend: {
+
+                    position: "bottom"
+
+                }
+
+            }
+
+        }
+
+    });
+
 }
 function atualizarAspectosAmbientais(lista = aspectosAmbientais) {
 
@@ -63,7 +167,29 @@ function atualizarAspectosAmbientais(lista = aspectosAmbientais) {
     <td>${item.responsavel || "-"}</td>
     <td>${item.status || "-"}</td>
     <td>${item.risco}</td>
-    <td>${item.classificacao}</td>
+    <td>
+    ${
+        item.significativo === "Sim"
+        ? "✅ Sim"
+        : "❌ Não"
+    }
+</td>
+    <td>
+
+${
+item.classificacao === "Crítico"
+? "🔴 Crítico"
+
+: item.classificacao === "Alto"
+? "🟠 Alto"
+
+: item.classificacao === "Moderado"
+? "🟡 Moderado"
+
+: "🟢 Baixo"
+}
+
+</td>
     <td>
     <button
         type="button"
@@ -93,6 +219,10 @@ function atualizarAspectosAmbientais(lista = aspectosAmbientais) {
     });
 
     atualizarIndicadoresAspectos();
+
+desenharMatrizAmbiental();
+
+atualizarGraficoAspectos();
 }
 
 document
@@ -343,6 +473,41 @@ function imprimirAspecto(index){
         195,
         45
     );
+    pdf.text(
+    `Total Aspectos: ${aspectosAmbientais.length}`,
+    15,
+    55
+);
+
+pdf.text(
+    `Críticos: ${
+        aspectosAmbientais.filter(
+            i => i.classificacao === "Crítico"
+        ).length
+    }`,
+    15,
+    65
+);
+
+pdf.text(
+    `Altos: ${
+        aspectosAmbientais.filter(
+            i => i.classificacao === "Alto"
+        ).length
+    }`,
+    15,
+    75
+);
+
+pdf.text(
+    `Significativos: ${
+        aspectosAmbientais.filter(
+            i => i.significativo === "Sim"
+        ).length
+    }`,
+    15,
+    85
+);
 
     pdf.setFontSize(11);
 
@@ -460,6 +625,24 @@ document.getElementById(
 ).textContent =
 aspectosAmbientais.filter(
     item => item.significativo === "Sim"
+).length;
+document.getElementById(
+    "riscosModerados"
+).textContent =
+
+aspectosAmbientais.filter(
+    item =>
+    item.classificacao ===
+    "Moderado"
+).length;
+document.getElementById(
+    "riscosBaixos"
+).textContent =
+
+aspectosAmbientais.filter(
+    item =>
+    item.classificacao ===
+    "Baixo"
 ).length;
 }
 if (
@@ -635,6 +818,206 @@ const status =
 
         }
     );
+
+}
+
+function desenharMatrizAmbiental(){
+
+    document
+        .querySelectorAll(
+            "#matrizAmbiental td"
+        )
+        .forEach(td => {
+
+            td.textContent = "";
+            td.className = "";
+
+        });
+
+    aspectosAmbientais.forEach(item => {
+
+        const prob =
+        Number(item.probabilidade);
+
+        const sev =
+        Number(item.severidade);
+
+        const risco =
+        Number(item.risco);
+
+        const id =
+        `p${prob}s${sev}`;
+
+        const celula =
+        document.getElementById(id);
+
+        celula.style.cursor =
+"pointer";
+
+celula.onclick = () => {
+
+    mostrarDetalhesMatriz(
+        prob,
+        sev
+    );
+
+};
+
+        if(!celula){
+            return;
+        }
+
+        celula.textContent =
+        Number(celula.textContent || 0) + 1;
+
+        if(risco <= 4){
+
+            celula.classList.add(
+                "baixo"
+            );
+
+        }
+        else if(risco <= 9){
+
+            celula.classList.add(
+                "moderado"
+            );
+
+        }
+        else if(risco <= 16){
+
+            celula.classList.add(
+                "alto"
+            );
+
+        }
+        else{
+
+            celula.classList.add(
+                "critico"
+            );
+
+        }
+
+    });
+
+}
+
+function mostrarDetalhesMatriz(
+    probabilidade,
+    severidade
+){
+
+    const detalhes =
+    document.getElementById(
+        "detalhesMatrizAmbiental"
+    );
+
+    const encontrados =
+    aspectosAmbientais.filter(
+        item =>
+
+        Number(item.probabilidade)
+        === probabilidade
+
+        &&
+
+        Number(item.severidade)
+        === severidade
+    );
+
+    detalhes.style.display =
+    "block";
+
+    if(!encontrados.length){
+
+        detalhes.innerHTML =
+        `
+        <h4>
+            Nenhum aspecto encontrado
+        </h4>
+        `;
+
+        return;
+    }
+
+    detalhes.innerHTML = `
+
+    <div
+        style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        "
+    >
+
+        <h4>
+            Aspectos da célula
+            P${probabilidade}
+            ×
+            S${severidade}
+        </h4>
+
+        <button
+            type="button"
+            onclick="fecharDetalhesMatriz()"
+        >
+            ✖ Fechar
+        </button>
+
+    </div>
+
+`;
+
+    encontrados.forEach(item => {
+
+        detalhes.innerHTML += `
+
+            <div
+                style="
+                padding:8px;
+                border-bottom:
+                1px solid #ddd;
+                "
+            >
+
+                <strong>
+                    ${item.atividade}
+                </strong>
+
+                <br>
+
+                Aspecto:
+                ${item.aspecto}
+
+                <br>
+
+                Impacto:
+                ${item.impacto}
+
+                <br>
+
+                Classificação:
+                ${item.classificacao}
+
+            </div>
+
+        `;
+
+    });
+
+}
+function fecharDetalhesMatriz(){
+
+    const detalhes =
+    document.getElementById(
+        "detalhesMatrizAmbiental"
+    );
+
+    detalhes.style.display =
+    "none";
+
+    detalhes.innerHTML = "";
 
 }
 
@@ -1424,6 +1807,21 @@ function imprimirResiduo(index){
     const pdf =
     new jsPDF();
 
+    const logo =
+document.getElementById("logoTalanga");
+
+if(logo){
+
+    pdf.addImage(
+        logo,
+        "PNG",
+        15,
+        10,
+        30,
+        30
+    );
+
+}
     pdf.setFontSize(18);
 
     pdf.text(
@@ -2228,7 +2626,21 @@ function imprimirConsumo(index){
 
     const pdf =
     new jsPDF();
+const logo =
+document.getElementById("logoTalanga");
 
+if(logo){
+
+    pdf.addImage(
+        logo,
+        "PNG",
+        15,
+        10,
+        30,
+        30
+    );
+
+}
     pdf.setFontSize(18);
 
     pdf.text(
@@ -2728,7 +3140,21 @@ ambiental[index];
 
     const pdf =
     new jsPDF();
+const logo =
+document.getElementById("logoTalanga");
 
+if(logo){
+
+    pdf.addImage(
+        logo,
+        "PNG",
+        15,
+        10,
+        30,
+        30
+    );
+
+}
     pdf.setFontSize(18);
 
     pdf.text(
@@ -2919,6 +3345,7 @@ function atualizarIndicadoresAmbientaisPesquisa(lista){
 controlarValidadeAmbiental();
 atualizarAmbiental();
 carregarConsumosSupabase();
+
 
 
 
@@ -3286,7 +3713,21 @@ function imprimirFauna(index){
 
     const pdf =
     new jsPDF();
+const logo =
+document.getElementById("logoTalanga");
 
+if(logo){
+
+    pdf.addImage(
+        logo,
+        "PNG",
+        15,
+        10,
+        30,
+        30
+    );
+
+}
     pdf.text(
         "TALANGA HSE",
         20,

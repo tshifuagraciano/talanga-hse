@@ -685,7 +685,21 @@ ambiental.filter(
         "helvetica",
         "bold"
     );
+const logo =
+document.getElementById("logoTalanga");
 
+if(logo){
+
+    pdf.addImage(
+        logo,
+        "PNG",
+        15,
+        10,
+        30,
+        30
+    );
+
+}
     pdf.setFontSize(22);
 
     pdf.text(

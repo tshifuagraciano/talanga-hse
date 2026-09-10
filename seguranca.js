@@ -133,7 +133,21 @@ item.fotoSolucao;
 
     const pdf =
     new jsPDF();
+const logo =
+document.getElementById("logoTalanga");
 
+if(logo){
+
+    pdf.addImage(
+        logo,
+        "PNG",
+        15,
+        10,
+        30,
+        30
+    );
+
+}
     pdf.setFontSize(18);
 
     pdf.text(
@@ -1636,6 +1650,21 @@ function imprimirSolicitacaoEPI(index){
 
     const pdf =
     new jsPDF();
+    const logo =
+document.getElementById("logoTalanga");
+
+if(logo){
+
+    pdf.addImage(
+        logo,
+        "PNG",
+        15,
+        10,
+        30,
+        30
+    );
+
+}
 
     pdf.setFontSize(18);
 
@@ -2814,7 +2843,21 @@ await supabaseClient
 
     const pdf =
     new jsPDF();
+const logo =
+document.getElementById("logoTalanga");
 
+if(logo){
+
+    pdf.addImage(
+        logo,
+        "PNG",
+        15,
+        10,
+        30,
+        30
+    );
+
+}
     pdf.setFontSize(18);
 
     pdf.text(
@@ -3250,7 +3293,21 @@ function imprimirFalaTalanga(index){
 
     const pdf =
     new jsPDF();
+const logo =
+document.getElementById("logoTalanga");
 
+if(logo){
+
+    pdf.addImage(
+        logo,
+        "PNG",
+        15,
+        10,
+        30,
+        30
+    );
+
+}
     pdf.setFontSize(18);
 
     pdf.text(
@@ -4627,7 +4684,21 @@ function imprimirInspecao(index){
 
     const pdf =
     new jsPDF();
+const logo =
+document.getElementById("logoTalanga");
 
+if(logo){
+
+    pdf.addImage(
+        logo,
+        "PNG",
+        15,
+        10,
+        30,
+        30
+    );
+
+}
     pdf.setFontSize(18);
 
     pdf.text(
@@ -5486,7 +5557,21 @@ async function imprimirOcorrenciaHSE(index){
 
     const pdf =
     new jsPDF();
+const logo =
+document.getElementById("logoTalanga");
 
+if(logo){
+
+    pdf.addImage(
+        logo,
+        "PNG",
+        15,
+        10,
+        30,
+        30
+    );
+
+}
     pdf.setFontSize(18);
 
     pdf.text(

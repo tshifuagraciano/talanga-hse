@@ -182,7 +182,7 @@ class="logo"
 
         <img
         id="logoTalanga"
-            src="talanga.png"
+            src="logo-talanga.png"
             alt="Talanga"
             class="logo-talanga"
         >
@@ -2827,21 +2827,129 @@ Produtos Químicos
     <h3>Significativos</h3>
     <span id="aspectosSignificativos">0</span>
 </div>
+<div class="card-indicador">
+    <h3>Moderados</h3>
+    <span id="riscosModerados">0</span>
+</div>
+<div class="card-indicador">
+    <h3>Baixos</h3>
+    <span id="riscosBaixos">0</span>
+</div>
 
 </div> 
-<div class="filtros-ambiente">
+<div class="painel-risco-ambiental">
 
+<div class="bloco-matriz">
+
+<h3>Matriz Ambiental 5x5</h3>
+
+<table id="matrizAmbiental" class="matriz-risco">
+
+    <tbody>
+
+        <tr>
+    <th>P \ S</th>
+    <th>1</th>
+    <th>2</th>
+    <th>3</th>
+    <th>4</th>
+    <th>5</th>
+</tr>
+
+<tr>
+    <th>5</th>
+    <td id="p5s1"></td>
+    <td id="p5s2"></td>
+    <td id="p5s3"></td>
+    <td id="p5s4"></td>
+    <td id="p5s5"></td>
+</tr>
+
+<tr>
+    <th>4</th>
+    <td id="p4s1"></td>
+    <td id="p4s2"></td>
+    <td id="p4s3"></td>
+    <td id="p4s4"></td>
+    <td id="p4s5"></td>
+</tr>
+
+<tr>
+    <th>3</th>
+    <td id="p3s1"></td>
+    <td id="p3s2"></td>
+    <td id="p3s3"></td>
+    <td id="p3s4"></td>
+    <td id="p3s5"></td>
+</tr>
+
+<tr>
+    <th>2</th>
+    <td id="p2s1"></td>
+    <td id="p2s2"></td>
+    <td id="p2s3"></td>
+    <td id="p2s4"></td>
+    <td id="p2s5"></td>
+</tr>
+
+<tr>
+    <th>1</th>
+    <td id="p1s1"></td>
+    <td id="p1s2"></td>
+    <td id="p1s3"></td>
+    <td id="p1s4"></td>
+    <td id="p1s5"></td>
+</tr>
+
+    </tbody>
+
+</table>
+<div id="detalhesMatrizAmbiental"
+     class="card-resumo"
+     style="display:none; margin-top:15px;">
+</div>
+
+<div class="legenda-matriz">
+
+    <span class="baixo">
+        Baixo (1-4)
+    </span>
+
+    <span class="moderado">
+        Moderado (5-9)
+    </span>
+
+    <span class="alto">
+        Alto (10-16)
+    </span>
+
+    <span class="critico">
+        Crítico (17-25)
+    </span>
+</div>
+</div>
+
+<div class="card-resumo">
+   <center> <h3>Distribuição dos Riscos</h3></center>
+<canvas
+    id="graficoAspectos"
+    height="120"
+></canvas></div>
+
+</div>
+<div class="filtros-ambiente">
+<label>Pesquisar</label>
     <input
         type="text"
         id="pesquisaAspecto"
         placeholder="Pesquisar..."
     >
-
+<label>Data inicial</label>
     <input
         type="date"
         id="dataInicioAspecto"
     >
-
+<label>Data final</label>
     <input
         type="date"
         id="dataFimAspecto"
@@ -2934,6 +3042,7 @@ Produtos Químicos
 <th>Responsável</th>
 <th>Status</th>
 <th>Risco</th>
+<th>Significativo</th>
 <th>Classificação</th>
 <th>Ações</th>
 
@@ -3154,6 +3263,540 @@ Produtos Químicos
     </tbody>
 
 </table></div>
+
+<button
+    class="secao-toggle"
+    onclick="
+        alternarSecao(
+            'secaoProdutosQuimicos'
+        )
+    "
+>
+     Produtos Químicos
+</button>
+
+<section
+    id="secaoProdutosQuimicos"
+    style="display:none;"
+>
+
+    
+
+    <div class="indicadores-ambientais">
+
+    <div class="card-indicador">
+        <h4>Total Produtos</h4>
+        <span id="totalProdutosQuimicos">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>FISPQ PDF</h4>
+        <span id="fispqPdf">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>FISPQ Digital</h4>
+        <span id="fispqDigital">0</span>
+    </div>
+
+    <div class="card-indicador alerta-vermelha">
+    <h4>Vencidos</h4>
+    <span id="quimicosVencidos">0</span>
+</div>
+
+<div class="card-indicador alerta-laranja">
+    <h4>Vencem em 30 Dias</h4>
+    <span id="quimicos30Dias">0</span>
+</div>
+
+<div class="card-indicador alerta-amarela">
+    <h4>Vencem em 60 Dias</h4>
+    <span id="quimicos60Dias">0</span>
+</div>
+<div class="card-indicador alerta-vermelha">
+    <h4>Incompatibilidades</h4>
+    <span id="incompatibilidadesQuimicas">0</span>
+</div>
+
+</div>
+<div
+    id="alertasCompatibilidade"
+    class="alertas-compatibilidade">
+</div>
+<div class="card-indicador alerta-vermelha">
+
+    <h4>
+        Riscos Químicos
+    </h4>
+
+    <span
+        id="riscosQuimicos"
+    >
+        0
+    </span>
+
+</div>
+
+    <div class="filtros">
+<label>Pesquisar</label>
+    <input
+        type="text"
+        id="pesquisarProduto"
+        placeholder="Pesquisar..."
+    >
+
+</div>
+<form id="formProdutosQuimicos">
+
+    <label>Produto</label>
+    <input
+        type="text"
+        id="produtoQuimico"
+        required
+    >
+
+    <label>Fornecedor</label>
+    <input
+        type="text"
+        id="fornecedorQuimico"
+    >
+
+    <label>Categoria</label>
+
+    <select id="categoriaQuimico">
+
+        <option value="Inflamável">
+            Inflamável
+        </option>
+
+        <option value="Corrosivo Ácido">
+            Corrosivo Ácido
+        </option>
+        <option value="Corrosivo Base">
+            Corrosivo Base
+        </option>
+
+        <option value="Tóxico">
+            Tóxico
+        </option>
+
+        <option value="Perigoso ao Ambiente">
+            Perigoso ao Ambiente
+        </option>
+
+        <option value="Comburente">
+            Comburente
+        </option>
+
+    </select>
+    <label>Classificação GHS</label>
+
+<select id="classificacaoGhs">
+
+    <option value="">
+        Selecione
+    </option>
+
+    <option value="GHS01">
+        GHS01 - Explosivo
+    </option>
+
+    <option value="GHS02">
+        GHS02 - Inflamável
+    </option>
+
+    <option value="GHS03">
+        GHS03 - Oxidante
+    </option>
+
+    <option value="GHS04">
+        GHS04 - Gás Sob Pressão
+    </option>
+
+    <option value="GHS05">
+        GHS05 - Corrosivo
+    </option>
+
+    <option value="GHS06">
+        GHS06 - Toxicidade Aguda
+    </option>
+
+    <option value="GHS07">
+        GHS07 - Irritante
+    </option>
+
+    <option value="GHS08">
+        GHS08 - Perigo Crônico
+    </option>
+
+    <option value="GHS09">
+        GHS09 - Ambiental
+    </option>
+
+</select>
+
+<label>Número CAS</label>
+
+<input
+    type="text"
+    id="numeroCas"
+    placeholder="Ex: 7664-93-9"
+>
+<label>Número ONU</label>
+
+<input
+    type="text"
+    id="numeroOnu"
+    placeholder="Ex: ONU 1830"
+>
+<label>Grupo de Embalagem</label>
+
+<select id="grupoEmbalagem">
+
+    <option value="">
+        Selecione
+    </option>
+
+    <option value="I">
+        I - Alto Perigo
+    </option>
+
+    <option value="II">
+        II - Médio Perigo
+    </option>
+
+    <option value="III">
+        III - Baixo Perigo
+    </option>
+
+</select>
+<label>Classe Transporte</label>
+
+<input
+    type="text"
+    id="classeTransporte"
+    placeholder="Ex: 8"
+>
+
+    <label>Quantidade</label>
+    <input
+        type="number"
+        id="quantidadeQuimica"
+    >
+
+    <label>Unidade</label>
+
+    <select id="unidadeQuimica">
+
+        <option value="L">
+            Litros
+        </option>
+
+        <option value="Kg">
+            Kg
+        </option>
+
+        <option value="Un">
+            Unidade
+        </option>
+
+    </select>
+
+  <label>
+Local de Armazenamento
+</label>
+
+<input
+    type="text"
+    id="localQuimico"
+    required
+>
+
+    <label>Responsável</label>
+    <input
+        type="text"
+        id="responsavelQuimico"
+    >
+
+    <label>Validade</label>
+    <input
+        type="date"
+        id="validadeQuimica"
+    >
+
+    <label>Tipo de FISPQ</label>
+
+<select id="tipoFispq">
+
+    <option value="">
+        Selecione
+    </option>
+
+    <option value="PDF">
+        PDF Externo
+    </option>
+
+    <option value="DIGITAL">
+        FISPQ Digital
+    </option>
+
+</select>
+<div
+    id="grupoFispqPdf"
+    style="display:none;"
+>
+
+    <label>FISPQ PDF</label>
+
+    <input
+        type="file"
+        id="fispqPdfUpload"
+        accept=".pdf"
+    >
+
+</div>
+<div
+    id="grupoFispqDigital"
+    style="display:none;"
+>
+
+<button
+    type="button"
+    id="btnGerarPdfFispq"
+>
+    Gerar PDF
+</button>
+
+<button
+    id="btnRevisarFispq"
+>
+    Revisar FISPQ
+</button>
+
+    <button
+    type="button"
+    id="btnCriarFispq"
+    style="display:none;"
+>
+    Criar FISPQ
+</button>
+
+</div>
+
+
+
+    <label>Observações</label>
+
+    <textarea
+        id="observacoesQuimico"
+    ></textarea>
+
+   <div
+    id="fispqDigitalForm"
+    class="fispq-container"
+    style="display:none;"
+>
+
+    <h3>FISPQ Digital</h3>
+
+    <details open>
+        <summary>1. Identificação</summary>
+
+        <input
+            type="text"
+            id="fispqEmpresa"
+            placeholder="Empresa"
+        >
+
+        <input
+            type="text"
+            id="fispqEmergencia"
+            placeholder="Telefone Emergência"
+        >
+
+    </details>
+
+    <details>
+        <summary>2. Identificação de Perigos</summary>
+
+        <textarea
+            id="fispqPerigos"
+        ></textarea>
+
+    </details>
+
+    <details>
+        <summary>3. Composição</summary>
+
+        <textarea
+            id="fispqComposicao"
+        ></textarea>
+
+    </details>
+
+    <details>
+        <summary>4. Primeiros Socorros</summary>
+
+        <textarea
+            id="fispqPrimeirosSocorros"
+        ></textarea>
+
+    </details>
+
+    <details>
+        <summary>5. Combate a Incêndio</summary>
+
+        <textarea
+            id="fispqIncendio"
+        ></textarea>
+
+    </details>
+
+    <details>
+        <summary>6. Derramamento Acidental</summary>
+
+        <textarea
+            id="fispqDerrame"
+        ></textarea>
+
+    </details>
+
+    <details>
+        <summary>7. Manuseamento e Armazenamento</summary>
+
+        <textarea
+            id="fispqArmazenamento"
+        ></textarea>
+
+    </details>
+
+    <details>
+        <summary>8. EPI</summary>
+
+        <textarea
+            id="fispqEpi"
+        ></textarea>
+
+    </details>
+
+    <details>
+        <summary>9. Propriedades Físico-Químicas</summary>
+
+        <textarea
+            id="fispqPropriedades"
+        ></textarea>
+
+    </details>
+
+    <details>
+        <summary>10. Estabilidade e Reatividade</summary>
+
+        <textarea
+            id="fispqEstabilidade"
+        ></textarea>
+
+    </details>
+
+    <details>
+        <summary>11. Informações Toxicológicas</summary>
+
+        <textarea
+            id="fispqToxicologia"
+        ></textarea>
+
+    </details>
+
+    <details>
+        <summary>12. Informações Ecológicas</summary>
+
+        <textarea
+            id="fispqEcologia"
+        ></textarea>
+
+    </details>
+
+    <details>
+        <summary>13. Destinação Final</summary>
+
+        <textarea
+            id="fispqDestinacao"
+        ></textarea>
+
+    </details>
+
+    <details>
+        <summary>14. Transporte</summary>
+
+        <textarea
+            id="fispqTransporte"
+        ></textarea>
+
+    </details>
+
+    <details>
+        <summary>15. Regulamentação</summary>
+
+        <textarea
+            id="fispqRegulamentacao"
+        ></textarea>
+
+    </details>
+
+    <details>
+        <summary>16. Outras Informações</summary>
+
+        <textarea
+            id="fispqOutrasInformacoes"
+        ></textarea>
+
+    </details>
+
+   
+
+</div>
+
+
+
+    <button type="submit">
+        Guardar
+    </button>
+
+</form>
+
+
+
+<table id="tabelaProdutosQuimicos">
+
+    <thead>
+
+        <tr>
+
+            <th>Produto</th>
+<th>Fornecedor</th>
+<th>Categoria</th>
+<th>GHS</th>
+<th>CAS</th>
+<th>ONU</th>
+<th>Quantidade</th>
+<th>Local</th>
+<th>Validade</th>
+<th>Responsável</th>
+<th>Tipo FISPQ</th>
+<th>Ações</th>
+
+
+        </tr>
+
+    </thead>
+
+    <tbody></tbody>
+
+</table>
+
+</section>
+
+
+
 <button
     class="secao-toggle"
     onclick="
@@ -3269,16 +3912,16 @@ Produtos Químicos
 </div>
 
 <div class="filtros-ambiente">
-
+<label>Pesquisar</label>
     <input
         type="text"
         id="pesquisaConsumos"
         placeholder="Pesquisar registos...">
-
+<label>Data inicial</label>
     <input
         type="date"
         id="dataInicio">
-
+<label>Data final</label>
     <input
         type="date"
         id="dataFim">
@@ -3468,16 +4111,16 @@ Produtos Químicos
 
 
 <div class="filtros-ambiente">
-
+<label>Pesquisar</label>
     <input
         type="text"
         id="pesquisaResiduo"
         placeholder="Pesquisar resíduos...">
-
+<label>Data inicial</label>
     <input
         type="date"
         id="dataInicioResiduo">
-
+<label>Data final</label>
     <input
         type="date"
         id="dataFimResiduo">
@@ -3703,6 +4346,7 @@ Produtos Químicos
 
 </div>
 <div style="margin-bottom:20px;">
+    <label>Pesquisar</label>
     <input
         type="text"
         id="pesquisaFauna"
@@ -3711,11 +4355,11 @@ Produtos Químicos
 </div>
 
 <div class="filtros-ambiente">
-
+<label>Data inicial</label>
     <input
         type="date"
         id="dataInicioFauna">
-
+<label>Data final</label>
     <input
         type="date"
         id="dataFimFauna">
@@ -5219,6 +5863,7 @@ Produtos Químicos
 </div>
 
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 
@@ -5240,7 +5885,8 @@ Produtos Químicos
 <script src="evidencia.js"></script>
 <script src="matriz.js"></script>
 <script src="relatorios.js"></script>
-<script src="pesquisa.js"></script>
+<script src="pesquisa.js"></script> 
+<script src="produtos-quimicos.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
 
