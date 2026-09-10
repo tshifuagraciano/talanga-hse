@@ -222,19 +222,22 @@ pdf.setTextColor(
     204
 );
 
-const logoTalanga =
-document.getElementById(
-    "logoTalanga"
-);
+const logo =
+document.getElementById("logoTalanga");
 
-pdf.addImage(
-    logoTalanga,
-    "PNG",
-    10,
-    10,
-    40,
-    20
-);
+if(logo){
+
+    pdf.addImage(
+        logo,
+        "PNG",
+        15,
+        10,
+        30,
+        30
+        
+    );
+
+}
 
 
 pdf.setFontSize(14);

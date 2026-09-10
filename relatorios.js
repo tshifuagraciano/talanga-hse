@@ -697,6 +697,7 @@ if(logo){
         10,
         30,
         30
+        
     );
 
 }
@@ -705,7 +706,10 @@ if(logo){
     pdf.text(
         "TALANGA HSE",
         20,
-        20
+        20,
+        {
+        align: "center"
+    }
     );
 
     
