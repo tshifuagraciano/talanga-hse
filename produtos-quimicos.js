@@ -1,6 +1,7 @@
 /* ==========================================
    Produtos quimicos
 ========================================== */
+let regrasCompatibilidade = [];
 
 const formProdutosQuimicos =
 document.getElementById(
@@ -63,7 +64,25 @@ document
     "click",
     revisarFispq
 );
+async function carregarCompatibilidades() {
 
+    const { data, error } =
+    await supabaseClient
+        .from("compatibilidade_quimica")
+        .select("*");
+
+    if (error) {
+
+        console.error(error);
+
+        return;
+
+    }
+
+    regrasCompatibilidade =
+    data || [];
+
+}
 function adicionarSecao(
     pdf,
     titulo,
@@ -338,7 +357,7 @@ pdf.line(
     200,
     48
 );
-const urlFispq =
+/*const urlFispq =
 `${window.location.origin}/fispq.html?id=${produtoEmEdicao}`;
 
 const qrContainer =
@@ -381,7 +400,7 @@ if (
         25
     );
 
-}
+}*/
 
 let y = 55;
 
@@ -1372,26 +1391,6 @@ const matrizCompatibilidade = {
 
 };
 
-const incompatibilidadesGHS = {
-
-    GHS02: [
-        "GHS03"
-    ],
-
-    GHS03: [
-        "GHS02"
-    ],
-
-    GHS05: [
-        "GHS05"
-    ],
-
-    GHS01: [
-        "GHS02",
-        "GHS03"
-    ]
-
-};
 
 
 function verificarCompatibilidade(produtos) {
@@ -1432,7 +1431,22 @@ function verificarCompatibilidade(produtos) {
             if (conflito) {
 
                 total++;
+const regra =
+regrasCompatibilidade.find(r =>
 
+    (
+        r.categoria_a === p1.classificacao_ghs &&
+        r.categoria_b === p2.classificacao_ghs
+    )
+
+    ||
+
+    (
+        r.categoria_a === p2.classificacao_ghs &&
+        r.categoria_b === p1.classificacao_ghs
+    )
+
+);
                 alertas.innerHTML += `
 
                 <div class="alerta-compatibilidade">
@@ -1493,44 +1507,58 @@ function verificarRiscosGhs(produtos) {
                 continue;
             }
 
-            const lista =
-            incompatibilidadesGHS[
-                p1.classificacao_ghs
-            ] || [];
+           if (
 
-            if (
-                lista.includes(
-                    p2.classificacao_ghs
-                )
-            ) {
+    !saoCompativeis(
+
+        p1.classificacao_ghs,
+
+        p2.classificacao_ghs
+
+    )
+
+)
+
+{
 
                 riscos++;
+                const regra =
+regrasCompatibilidade.find(r =>
 
-                alertas.innerHTML += `
+    (
+        r.categoria_a === p1.classificacao_ghs &&
+        r.categoria_b === p2.classificacao_ghs
+    )
 
-                <div class="alerta-compatibilidade">
+    ||
 
-                    ☣️ Risco GHS:
+    (
+        r.categoria_a === p2.classificacao_ghs &&
+        r.categoria_b === p1.classificacao_ghs
+    )
 
-                    ${p1.produto}
+);
 
-                    (${p1.classificacao_ghs})
+               alertas.innerHTML += `
 
-                    incompatível com
+<div class="alerta-compatibilidade">
 
-                    ${p2.produto}
+☣️ ${p1.produto}
+(${p1.classificacao_ghs})
 
-                    (${p2.classificacao_ghs})
+incompatível com
 
-                    <br>
+${p2.produto}
+(${p2.classificacao_ghs})
 
-                    Local:
-                    ${p1.local_armazenamento}
+<br>
 
-                </div>
+<strong>Motivo:</strong>
+${regra?.observacao || "Sem observação"}
 
-                `;
+</div>
 
+`;
             }
 
         }
@@ -2586,6 +2614,42 @@ ${produto.observacoes || ""}`;
     });
 
 }
+function saoCompativeis(
+    categoriaA,
+    categoriaB
+) {
 
+    const regra =
+    regrasCompatibilidade.find(r =>
 
-carregarProdutosQuimicos();
+        (
+            r.categoria_a === categoriaA &&
+            r.categoria_b === categoriaB
+        )
+
+        ||
+
+        (
+            r.categoria_a === categoriaB &&
+            r.categoria_b === categoriaA
+        )
+
+    );
+
+    if (!regra) {
+
+        return true;
+
+    }
+
+    return regra.compativel;
+
+}
+
+(async function () {
+
+    await carregarCompatibilidades();
+
+    carregarProdutosQuimicos();
+
+})();
