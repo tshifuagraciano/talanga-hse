@@ -240,6 +240,7 @@ if(logo){
 }
 
 
+
 pdf.setFontSize(14);
 
 pdf.setTextColor(
@@ -513,41 +514,51 @@ for (
     );
 
 }
-const urlFispq =
 
+const urlFispq =
 `${window.location.origin}/fispq.html?id=${produtoEmEdicao}`;
-const qrDiv =
-document.createElement(
-    "div"
+
+const qrContainer =
+document.getElementById(
+    "qrFispq"
 );
 
+qrContainer.innerHTML = "";
+
 new QRCode(
-    qrDiv,
+    qrContainer,
     {
         text: urlFispq,
         width: 120,
         height: 120
     }
 );
+
+await new Promise(
+    resolve =>
+    setTimeout(resolve, 500)
+);
+
 const qrImg =
-qrDiv.querySelector(
+qrContainer.querySelector(
     "img"
 );
-pdf.addImage(
 
-    qrImg.src,
+if (
+    qrImg &&
+    qrImg.src
+) {
 
-    "PNG",
+    pdf.addImage(
+        qrImg,
+        "PNG",
+        160,
+        15,
+        25,
+        25
+    );
 
-    160,
-
-    22,
-
-    30,
-
-    30
-
-);
+}
 
     pdf.save(
         `FISPQ_${data.produto}.pdf`
