@@ -690,27 +690,31 @@ document.getElementById("logoTalanga");
 
 if(logo){
 
-    pdf.addImage(
-        logo,
-        "PNG",
-        15,
-        10,
-        30,
-        30
-        
-    );
+   pdf.addImage(
+    logo,
+    "PNG",
+    20,
+    10,
+    25,
+    25
+);
+ }
+pdf.setFontSize(22);
 
-}
-    pdf.setFontSize(22);
+pdf.text(
+    "TALANGA HSE",
+    55,
+    20
+);
 
-    pdf.text(
-        "TALANGA HSE",
-        20,
-        20,
-        {
-        align: "center"
-    }
-    );
+pdf.setFontSize(10);
+
+pdf.text(
+    "Sistema Integrado de Gestão HSE",
+    55,
+    28
+);
+
 
     
 

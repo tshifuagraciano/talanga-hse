@@ -132,7 +132,15 @@ async function revisarFispq() {
         p => p.id === produtoEmEdicao
     );
 
-    if (!produto) return;
+    if (!produto) {
+
+        alert(
+            "Abra um produto primeiro."
+        );
+
+        return;
+
+    }
 
     await supabaseClient
         .from("produtos_quimicos")
@@ -150,8 +158,10 @@ async function revisarFispq() {
             produtoEmEdicao
         );
 
+    await carregarProdutosQuimicos();
+
     alert(
-        "FISPQ revisada."
+        "FISPQ revisada com sucesso."
     );
 
 }
@@ -293,6 +303,18 @@ pdf.text(
     150,
     22
 );
+pdf.text(
+    `Revisão: ${
+        data.ultima_revisao
+        ? new Date(
+            data.ultima_revisao
+          ).toLocaleDateString()
+        : "-"
+    }`,
+    150,
+    29
+);
+
 pdf.setFontSize(12);
 pdf.text(
     "FISPQ",
@@ -316,6 +338,51 @@ pdf.line(
     200,
     48
 );
+const urlFispq =
+`${window.location.origin}/fispq.html?id=${produtoEmEdicao}`;
+
+const qrContainer =
+document.getElementById(
+    "qrFispq"
+);
+
+qrContainer.innerHTML = "";
+
+new QRCode(
+    qrContainer,
+    {
+        text: urlFispq,
+        width: 120,
+        height: 120
+    }
+);
+
+await new Promise(
+    resolve =>
+    setTimeout(resolve, 500)
+);
+
+const qrImg =
+qrContainer.querySelector(
+    "img"
+);
+
+if (
+    qrImg &&
+    qrImg.src
+) {
+
+    pdf.addImage(
+        qrImg,
+        "PNG",
+        160,
+        15,
+        25,
+        25
+    );
+
+}
+
 let y = 55;
 
 pdf.setFontSize(12);
@@ -515,50 +582,6 @@ for (
 
 }
 
-const urlFispq =
-`${window.location.origin}/fispq.html?id=${produtoEmEdicao}`;
-
-const qrContainer =
-document.getElementById(
-    "qrFispq"
-);
-
-qrContainer.innerHTML = "";
-
-new QRCode(
-    qrContainer,
-    {
-        text: urlFispq,
-        width: 120,
-        height: 120
-    }
-);
-
-await new Promise(
-    resolve =>
-    setTimeout(resolve, 500)
-);
-
-const qrImg =
-qrContainer.querySelector(
-    "img"
-);
-
-if (
-    qrImg &&
-    qrImg.src
-) {
-
-    pdf.addImage(
-        qrImg,
-        "PNG",
-        160,
-        15,
-        25,
-        25
-    );
-
-}
 
     pdf.save(
         `FISPQ_${data.produto}.pdf`
