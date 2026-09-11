@@ -283,66 +283,34 @@ pdf.setFontSize(16);
 pdf.text(
     "FICHA DE INFORMAÇÕES DE SEGURANÇA",
     105,
-    28,
-    {
-        align: "center"
-    }
+    24,
+    { align: "center" }
 );
 
 pdf.text(
     "DE PRODUTOS QUÍMICOS",
     105,
-    36,
-    {
-        align: "center"
-    }
-);
-pdf.setFontSize(10);
-
-pdf.text(
-    `Emitido em: ${
-        new Date()
-        .toLocaleDateString()
-    }`,
-    150,
-    15
-);
-pdf.text(
-    `Versão: ${
-        data.versao_fispq || 1
-    }`,
-    150,
-    15
+    32,
+    { align: "center" }
 );
 
-pdf.text(
-    `Estado: ${
-        data.status_fispq || "APROVADA"
-    }`,
-    150,
-    22
-);
-pdf.text(
-    `Revisão: ${
-        data.ultima_revisao
-        ? new Date(
-            data.ultima_revisao
-          ).toLocaleDateString()
-        : "-"
-    }`,
-    150,
-    29
-);
-
-pdf.setFontSize(12);
 pdf.text(
     "FISPQ",
     105,
-    42,
-    {
-        align: "center"
-    }
+    40,
+    { align: "center" }
 );
+
+pdf.line(
+    10,
+    48,
+    200,
+    48
+);
+
+
+
+
 pdf.setDrawColor(
     0,
     102,
@@ -356,6 +324,32 @@ pdf.line(
     48,
     200,
     48
+);
+ let y = 58;
+
+pdf.setFontSize(10);
+
+pdf.text(
+    `Versão: ${data.versao_fispq || 1}`,
+    140,
+    y
+);
+
+pdf.text(
+    `Estado: ${data.status_fispq || "APROVADA"}`,
+    140,
+    y + 7
+);
+
+pdf.text(
+    `Revisão: ${
+        data.ultima_revisao
+        ? new Date(data.ultima_revisao)
+            .toLocaleDateString()
+        : "-"
+    }`,
+    140,
+    y + 14
 );
 /*const urlFispq =
 `${window.location.origin}/fispq.html?id=${produtoEmEdicao}`;
@@ -402,7 +396,7 @@ if (
 
 }*/
 
-let y = 55;
+ y = 55;
 
 pdf.setFontSize(12);
 
@@ -417,32 +411,25 @@ pdf.text(
     y
 );
 
-
-y += 8;
-
 pdf.text(
     `CAS: ${data.numero_cas || ""}`,
     10,
-    y
+    y + 7
 );
-
-y += 8;
 
 pdf.text(
     `ONU: ${data.numero_onu || ""}`,
     10,
-    y
+    y + 14
 );
-
-y += 8;
 
 pdf.text(
     `GHS: ${data.classificacao_ghs || ""}`,
     10,
-    y
+    y + 21
 );
 
-y += 25;
+y += 35;
 
   y = adicionarSecao(
     pdf,
@@ -1430,7 +1417,7 @@ function verificarCompatibilidade(produtos) {
 
             if (conflito) {
 
-                total++;
+                total++; 
 const regra =
 regrasCompatibilidade.find(r =>
 
