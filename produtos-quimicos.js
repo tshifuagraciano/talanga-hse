@@ -2,7 +2,7 @@
    Produtos quimicos
 ========================================== */
 let regrasCompatibilidade = [];
-
+let utilizadorAtual = null;
 const formProdutosQuimicos =
 document.getElementById(
     "formProdutosQuimicos"
@@ -1260,7 +1260,11 @@ new Date(produto.data_validade) < new Date();
 
         tabelaProdutosQuimicos.innerHTML += `
 
-<tr class="${classeLinha}">
+<tr
+    class="${classeLinha}"
+    data-produto-id="${produto.id}"
+>
+
 
     
 
@@ -1526,16 +1530,24 @@ regrasCompatibilidade.find(r =>
 
 );
 
-               alertas.innerHTML += `
+              alertas.innerHTML += `
 
-<div class="alerta-compatibilidade">
+<div
+    class="alerta-compatibilidade"
+    onclick="
+        abrirConflito(
+            '${p1.id}',
+            '${p2.id}'
+        )
+    "
+>
 
-☣️ ${p1.produto}
+☣️ <strong>${p1.produto}</strong>
 (${p1.classificacao_ghs})
 
 incompatível com
 
-${p2.produto}
+<strong>${p2.produto}</strong>
 (${p2.classificacao_ghs})
 
 <br>
@@ -1543,9 +1555,16 @@ ${p2.produto}
 <strong>Motivo:</strong>
 ${regra?.observacao || "Sem observação"}
 
+<br>
+
+<small>
+Clique para abrir os produtos
+</small>
+
 </div>
 
 `;
+
             }
 
         }
@@ -1557,6 +1576,39 @@ ${regra?.observacao || "Sem observação"}
     ).textContent = riscos;
 
     
+
+}
+
+function abrirConflito(
+    produto1Id,
+    produto2Id
+) {
+
+    editarProdutoQuimico(
+        produto1Id
+    );
+
+    setTimeout(() => {
+
+        const produto2 =
+        document.querySelector(
+            `[data-produto-id="${produto2Id}"]`
+        );
+
+        if (produto2) {
+
+            produto2.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+
+            produto2.classList.add(
+                "produto-conflito"
+            );
+
+        }
+
+    }, 500);
 
 }
 
@@ -1593,6 +1645,8 @@ document.getElementById(
             authUserId
         )
         .single();
+
+        
 
         if (
     tipoFispq.value === "PDF" &&
@@ -2633,9 +2687,282 @@ function saoCompativeis(
 
 }
 
-(async function () {
+const categoriasGhs = [
+
+    "GHS01",
+    "GHS02",
+    "GHS03",
+    "GHS04",
+    "GHS05",
+    "GHS06",
+    "GHS07",
+    "GHS08",
+    "GHS09"
+
+];
+function preencherCategorias() {
+
+    const a =
+    document.getElementById(
+        "categoriaA"
+    );
+
+    const b =
+    document.getElementById(
+        "categoriaB"
+    );
+
+    categoriasGhs.forEach(ghs => {
+
+        a.innerHTML +=
+        `<option value="${ghs}">
+            ${ghs}
+        </option>`;
+
+        b.innerHTML +=
+        `<option value="${ghs}">
+            ${ghs}
+        </option>`;
+
+    });
+
+}
+document
+.getElementById(
+    "formCompatibilidade"
+)
+.addEventListener(
+    "submit",
+    guardarCompatibilidade
+);
+async function guardarCompatibilidade(
+    e
+) {
+
+    e.preventDefault();
+
+    const resultado =
+    await supabaseClient
+
+        .from(
+            "compatibilidade_quimica"
+        )
+
+        .insert([{
+
+            categoria_a:
+            categoriaA.value,
+
+            categoria_b:
+            categoriaB.value,
+
+            compativel:
+            compativel.value ===
+            "true",
+
+            observacao:
+            observacaoCompatibilidade.value
+
+        }]);
+
+    if (resultado.error) {
+
+        console.error(
+            resultado.error
+        );
+
+        return;
+
+    }
+
+    carregarCompatibilidadesGrid();
+
+}
+async function carregarCompatibilidadesGrid() {
+
+    const {
+        data,
+        error
+    } =
+    await supabaseClient
+        .from("compatibilidade_quimica")
+        .select("*");
+
+    console.log(
+        "DATA:",
+        data
+    );
+
+    console.log(
+        "ERROR:",
+        error
+    );
+
+    if (error) {
+
+        console.error(error);
+
+        return;
+
+    }
+
+    const tbody =
+    document.querySelector(
+        "#tabelaCompatibilidade tbody"
+    );
+
+    if (!tbody) {
+
+        console.error(
+            "tbody não encontrado"
+        );
+
+        return;
+
+    }
+
+    tbody.innerHTML = "";
+
+   const podeEditar =
+(utilizadorAtual?.perfil || "")
+.trim()
+.toLowerCase() ===
+"super admin";
+
+    
+
+    data.forEach(regra => {
+
+       tbody.innerHTML += `
+
+<tr>
+
+    <td>${regra.categoria_a}</td>
+
+    <td>${regra.categoria_b}</td>
+
+    <td>
+        ${regra.compativel ? "✅" : "❌"}
+    </td>
+
+    <td>
+        ${regra.observacao || ""}
+    </td>
+
+    ${
+        podeEditar
+        ?
+        `
+        <td>
+            <button
+                onclick="
+                eliminarCompatibilidade(
+                    '${regra.id}'
+                )
+                "
+            >
+                🗑️
+            </button>
+        </td>
+        `
+        :
+        ""
+    }
+
+</tr>
+
+`;
+    });
+
+}
+async function
+eliminarCompatibilidade(id) {
+
+    if (
+        !confirm(
+            "Eliminar regra?"
+        )
+    ) {
+        return;
+    }
+
+    await supabaseClient
+
+        .from(
+            "compatibilidade_quimica"
+        )
+
+        .delete()
+
+        .eq("id", id);
+
+    carregarCompatibilidadesGrid();
+
+}
+async function carregarUtilizadorAtual() {
+
+    const {
+        data: userData
+    } =
+    await supabaseClient.auth.getUser();
+
+    const {
+        data: utilizador
+    } =
+    await supabaseClient
+        .from("utilizadores")
+        .select("*")
+        .eq(
+            "auth_user_id",
+            userData.user.id
+        )
+        .single();
+
+    utilizadorAtual =
+    utilizador;
+
+    const perfil =
+    (utilizadorAtual?.perfil || "")
+    .trim()
+    .toLowerCase();
+
+    console.log("PERFIL:", perfil);
+
+    if (
+        perfil !==
+        "super admin"
+    ) {
+
+        document
+        .getElementById(
+            "adminCompatibilidade"
+        )
+        ?.style.setProperty(
+            "display",
+            "none"
+        );
+
+        document
+        .getElementById(
+            "colunaAcoes"
+        )
+        ?.remove();
+
+    }
+
+}
+
+
+
+(async () => {
+
+    await carregarUtilizadorAtual();
 
     await carregarCompatibilidades();
+
+    preencherCategorias();
+
+    await carregarCompatibilidadesGrid();
 
     carregarProdutosQuimicos();
 

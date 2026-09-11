@@ -4112,3 +4112,68 @@ body.dark .talanguinhaRodape input::placeholder{
     margin: 10px 0;
 
 }
+.produto-conflito {
+
+    background-color: #ffcccc !important;
+    color: #900 !important;
+
+    animation: piscar 1s infinite;
+
+}
+body.dark-mode .produto-conflito {
+
+    background-color: #7a1c1c !important;
+    color: #ffd6d6 !important;
+
+}
+
+@keyframes piscar {
+
+    0% {
+        box-shadow: 0 0 0px #ff0000;
+    }
+
+    50% {
+        box-shadow: 0 0 15px #ff0000;
+    }
+
+    100% {
+        box-shadow: 0 0 0px #ff0000;
+    }
+
+}
+.produto-conflito {
+
+    animation: piscar 1s infinite;
+
+}
+.risco-baixo {
+    background:#d4edda;
+}
+
+.risco-medio {
+    background:#fff3cd;
+}
+
+.risco-alto {
+    background:#ffe5b4;
+}
+
+.risco-critico {
+    background:#f8d7da;
+}
+body.dark-mode .risco-baixo {
+    background: #1f4d2b;
+}
+
+body.dark-mode .risco-medio {
+    background: #665200;
+}
+
+body.dark-mode .risco-alto {
+    background: #6b3f00;
+}
+
+body.dark-mode .risco-critico {
+    background: #661f1f;
+}

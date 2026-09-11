@@ -67,7 +67,7 @@ function atualizarUtilizadores(){
 
     ${item.status || "Ativo"}
 
-</td>
+</td> 
 
     <td>
        ${item.created_at

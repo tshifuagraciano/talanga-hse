@@ -3,7 +3,55 @@ console.clear();
 console.log("Talanga HSE iniciado");
 
 
+async function validarUtilizadorAtivo() {
 
+    const {
+        data: userData
+    } =
+    await supabaseClient.auth.getUser();
+
+    if (!userData.user) {
+
+        return;
+
+    }
+
+    const {
+        data: utilizador
+    } =
+    await supabaseClient
+
+        .from("utilizadores")
+
+        .select("status")
+
+        .eq(
+            "auth_user_id",
+            userData.user.id
+        )
+
+        .single();
+
+    if (
+        utilizador?.status ===
+        "Inativo"
+    ) {
+
+        await supabaseClient
+            .auth
+            .signOut();
+
+        alert(
+            "A sua conta foi desativada."
+        );
+
+        location.href =
+        "login.html";
+
+    }
+
+}
+validarUtilizadorAtivo();
 
 /* ==========================================
    FUNÇÃO GENÉRICA TABELAS

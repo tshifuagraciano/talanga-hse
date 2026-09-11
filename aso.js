@@ -551,33 +551,30 @@ document.getElementById("logoTalanga");
 
 if(logo){
 
-    pdf.addImage(
-        logo,
-        "PNG",
-        15,
-        10,
-        30,
-        30
-    );
+   pdf.addImage(
+    logo,
+    "PNG",
+    20,
+    10,
+    25,
+    25
+);
+ }
+pdf.setFontSize(22);
 
-}
+pdf.text(
+    "TALANGA HSE",
+    55,
+    20
+);
 
-    pdf.setFontSize(18);
+pdf.setFontSize(10);
 
-    pdf.text(
-        "TALANGA HSE",
-        20,
-        20
-    );
-
-    pdf.setFontSize(14);
-
-    pdf.text(
-        "RELATORIO ASO",
-        20,
-        35
-    );
-
+pdf.text(
+    "RELATORIO ASO",
+    55,
+    28
+);
     pdf.line(
         20,
         40,
@@ -1705,29 +1702,30 @@ document.getElementById("logoTalanga");
 
 if(logo){
 
-    pdf.addImage(
-        logo,
-        "PNG",
-        15,
-        10,
-        30,
-        30
-    );
+   pdf.addImage(
+    logo,
+    "PNG",
+    20,
+    10,
+    25,
+    25
+);
+ }
+pdf.setFontSize(22);
 
-}
-    pdf.setFontSize(18);
+pdf.text(
+    "TALANGA HSE",
+    55,
+    20
+);
 
-    pdf.text(
-        "TALANGA HSE",
-        20,
-        20
-    );
+pdf.setFontSize(10);
 
-    pdf.text(
-        "ATENDIMENTO AMBULATORIAL",
-        20,
-        35
-    );
+pdf.text(
+    "ATENDIMENTO AMBULATORIAL",
+    55,
+    28
+);
 
     pdf.line(
         20,
@@ -2474,31 +2472,30 @@ document.getElementById("logoTalanga");
 
 if(logo){
 
-    pdf.addImage(
-        logo,
-        "PNG",
-        15,
-        10,
-        30,
-        30
-    );
+   pdf.addImage(
+    logo,
+    "PNG",
+    20,
+    10,
+    25,
+    25
+);
+ }
+pdf.setFontSize(22);
 
-}
-    pdf.setFontSize(18);
+pdf.text(
+    "TALANGA HSE",
+    55,
+    20
+);
 
-    pdf.text(
-        "TALANGA HSE",
-        20,
-        20
-    );
+pdf.setFontSize(10);
 
-    pdf.setFontSize(14);
-
-    pdf.text(
-        "CONTROLE DE VALIDADE DE MEDICAMENTOS",
-        20,
-        35
-    );
+pdf.text(
+    "CONTROLO DE VALIDADE DE MEDICAMENTOS",
+    55,
+    28
+);
 
     pdf.line(
         20,
@@ -3749,31 +3746,30 @@ document.getElementById("logoTalanga");
 
 if(logo){
 
-    pdf.addImage(
-        logo,
-        "PNG",
-        15,
-        10,
-        30,
-        30
-    );
+   pdf.addImage(
+    logo,
+    "PNG",
+    20,
+    10,
+    25,
+    25
+);
+ }
+pdf.setFontSize(22);
 
-}
-    pdf.setFontSize(18);
+pdf.text(
+    "TALANGA HSE",
+    55,
+    20
+);
 
-    pdf.text(
-        "TALANGA HSE",
-        20,
-        20
-    );
+pdf.setFontSize(10);
 
-    pdf.setFontSize(14);
-
-    pdf.text(
-        "RELATÓRIO DE EMERGÊNCIA",
-        20,
-        35
-    );
+pdf.text(
+    "RELATORIO DE EMERGENCIA",
+    55,
+    28
+);
 
     pdf.line(
         20,

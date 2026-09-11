@@ -1655,32 +1655,30 @@ document.getElementById("logoTalanga");
 
 if(logo){
 
-    pdf.addImage(
-        logo,
-        "PNG",
-        15,
-        10,
-        30,
-        30
-    );
+   pdf.addImage(
+    logo,
+    "PNG",
+    20,
+    10,
+    25,
+    25
+);
+ }
+pdf.setFontSize(22);
 
-}
+pdf.text(
+    "TALANGA HSE",
+    55,
+    20
+);
 
-    pdf.setFontSize(18);
+pdf.setFontSize(10);
 
-    pdf.text(
-        "TALANGA HSE",
-        20,
-        20
-    );
-
-    pdf.setFontSize(14);
-
-    pdf.text(
-        "SOLICITACAO DE EPI",
-        20,
-        35
-    );
+pdf.text(
+    "SOLICITACAO DE EPI",
+    55,
+    28
+);
 
     pdf.line(
         20,
@@ -2848,32 +2846,30 @@ document.getElementById("logoTalanga");
 
 if(logo){
 
-    pdf.addImage(
-        logo,
-        "PNG",
-        15,
-        10,
-        30,
-        30
-    );
+   pdf.addImage(
+    logo,
+    "PNG",
+    20,
+    10,
+    25,
+    25
+);
+ }
+pdf.setFontSize(22);
 
-}
-    pdf.setFontSize(18);
+pdf.text(
+    "TALANGA HSE",
+    55,
+    20
+);
 
-    pdf.text(
-        "TALANGA HSE",
-        20,
-        20
-    );
+pdf.setFontSize(10);
 
-    pdf.setFontSize(14);
-
-    pdf.text(
-        "DDS ELETRONICO",
-        20,
-        35
-    );
-
+pdf.text(
+    "DDS ELETRONICO",
+    55,
+    28
+);
     pdf.line(
         20,
         40,
@@ -3298,31 +3294,30 @@ document.getElementById("logoTalanga");
 
 if(logo){
 
-    pdf.addImage(
-        logo,
-        "PNG",
-        15,
-        10,
-        30,
-        30
-    );
+   pdf.addImage(
+    logo,
+    "PNG",
+    20,
+    10,
+    25,
+    25
+);
+ }
+pdf.setFontSize(22);
 
-}
-    pdf.setFontSize(18);
+pdf.text(
+    "TALANGA HSE",
+    55,
+    20
+);
 
-    pdf.text(
-        "TALANGA HSE",
-        20,
-        20
-    );
+pdf.setFontSize(10);
 
-    pdf.setFontSize(14);
-
-    pdf.text(
-        "FALA TALANGA",
-        20,
-        35
-    );
+pdf.text(
+    "FALA TALANGA",
+    55,
+    28
+);
 
     pdf.line(
         20,
@@ -4689,31 +4684,30 @@ document.getElementById("logoTalanga");
 
 if(logo){
 
-    pdf.addImage(
-        logo,
-        "PNG",
-        15,
-        10,
-        30,
-        30
-    );
+   pdf.addImage(
+    logo,
+    "PNG",
+    20,
+    10,
+    25,
+    25
+);
+ }
+pdf.setFontSize(22);
 
-}
-    pdf.setFontSize(18);
+pdf.text(
+    "TALANGA HSE",
+    55,
+    20
+);
 
-    pdf.text(
-        "TALANGA HSE",
-        20,
-        20
-    );
+pdf.setFontSize(10);
 
-    pdf.setFontSize(14);
-
-    pdf.text(
-        "RELATORIO DE INSPECAO",
-        20,
-        35
-    );
+pdf.text(
+    "RELATORIO DE INSPECAO",
+    55,
+    28
+);
 
     pdf.line(
         20,
@@ -5562,31 +5556,30 @@ document.getElementById("logoTalanga");
 
 if(logo){
 
-    pdf.addImage(
-        logo,
-        "PNG",
-        15,
-        10,
-        30,
-        30
-    );
+   pdf.addImage(
+    logo,
+    "PNG",
+    20,
+    10,
+    25,
+    25
+);
+ }
+pdf.setFontSize(22);
 
-}
-    pdf.setFontSize(18);
+pdf.text(
+    "TALANGA HSE",
+    55,
+    20
+);
 
-    pdf.text(
-        "TALANGA HSE",
-        20,
-        20
-    );
+pdf.setFontSize(10);
 
-    pdf.setFontSize(14);
-
-    pdf.text(
-        "RELATÓRIO DE OCORRÊNCIA",
-        20,
-        35
-    );
+pdf.text(
+    "RELATORIO DE DESVIO",
+    55,
+    28
+);
 
     pdf.line(
         20,

@@ -52,6 +52,41 @@ await supabaseClient.auth
     password: senha
 
 });
+
+const {
+    data: userData
+} =
+await supabaseClient.auth.getUser();
+
+const {
+    data: utilizador
+} =
+await supabaseClient
+    .from("utilizadores")
+    .select("status")
+    .eq(
+        "auth_user_id",
+        userData.user.id
+    )
+    .single();
+
+if (
+    utilizador?.status ===
+    "Inativo"
+) {
+
+    await supabaseClient
+        .auth
+        .signOut();
+
+    alert(
+        "Utilizador desativado."
+    );
+
+    return;
+
+}
+
 if(error){
 
     alert(

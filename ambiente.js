@@ -434,38 +434,34 @@ function imprimirAspecto(index){
    
 
     const logo =
-    document.getElementById(
-        "logoTalanga"
-    );
+document.getElementById("logoTalanga");
 
-    if(logo){
+if(logo){
 
-        pdf.addImage(
-            logo,
-            "PNG",
-            15,
-            10,
-            30,
-            30
-        );
+   pdf.addImage(
+    logo,
+    "PNG",
+    20,
+    10,
+    25,
+    25
+);
+ }
+pdf.setFontSize(22);
 
-    }
- 
-    pdf.setFontSize(18);
+pdf.text(
+    "TALANGA HSE",
+    55,
+    20
+);
 
-    pdf.text(
-        "TALANGA HSE",
-        55,
-        20
-    );
+pdf.setFontSize(10);
 
-    pdf.setFontSize(14);
-
-    pdf.text(
-        "ASPECTOS E IMPACTOS AMBIENTAIS",
-        55,
-        30
-    );
+pdf.text(
+    "ASPECTOS E IMPACTOS AMBIENTAIS",
+    55,
+    28
+);
 
     pdf.line(
         15,
@@ -1812,31 +1808,30 @@ document.getElementById("logoTalanga");
 
 if(logo){
 
-    pdf.addImage(
-        logo,
-        "PNG",
-        15,
-        10,
-        30,
-        30
-    );
+   pdf.addImage(
+    logo,
+    "PNG",
+    20,
+    10,
+    25,
+    25
+);
+ }
+pdf.setFontSize(22);
 
-}
-    pdf.setFontSize(18);
+pdf.text(
+    "TALANGA HSE",
+    55,
+    20
+);
 
-    pdf.text(
-        "TALANGA HSE",
-        20,
-        20
-    );
+pdf.setFontSize(10);
 
-    pdf.setFontSize(14);
-
-    pdf.text(
-        "RELATORIO DE RESIDUO",
-        20,
-        35
-    );
+pdf.text(
+    "RELATORIO DE RESIDUO",
+    55,
+    28
+);
 
     pdf.line(
         20,
@@ -2631,31 +2626,30 @@ document.getElementById("logoTalanga");
 
 if(logo){
 
-    pdf.addImage(
-        logo,
-        "PNG",
-        15,
-        10,
-        30,
-        30
-    );
+   pdf.addImage(
+    logo,
+    "PNG",
+    20,
+    10,
+    25,
+    25
+);
+ }
+pdf.setFontSize(22);
 
-}
-    pdf.setFontSize(18);
+pdf.text(
+    "TALANGA HSE",
+    55,
+    20
+);
 
-    pdf.text(
-        "TALANGA HSE",
-        20,
-        20
-    );
+pdf.setFontSize(10);
 
-    pdf.setFontSize(14);
-
-    pdf.text(
-        "RELATORIO DE CONSUMO",
-        20,
-        35
-    );
+pdf.text(
+    "RELATORIO DE CONSUMO",
+    55,
+    28
+);
 
     pdf.line(
         20,
@@ -3145,32 +3139,30 @@ document.getElementById("logoTalanga");
 
 if(logo){
 
-    pdf.addImage(
-        logo,
-        "PNG",
-        15,
-        10,
-        30,
-        30
-    );
+   pdf.addImage(
+    logo,
+    "PNG",
+    20,
+    10,
+    25,
+    25
+);
+ }
+pdf.setFontSize(22);
 
-}
-    pdf.setFontSize(18);
+pdf.text(
+    "TALANGA HSE",
+    55,
+    20
+);
 
-    pdf.text(
-        "TALANGA HSE",
-        20,
-        20
-    );
+pdf.setFontSize(10);
 
-    pdf.setFontSize(14);
-
-    pdf.text(
-        "REQUISITO LEGAL AMBIENTAL",
-        20,
-        35
-    );
-
+pdf.text(
+    "REQUISITO LEGAL AMBIENTAL",
+    55,
+    28
+);
     pdf.line(
         20,
         40,
@@ -3718,27 +3710,30 @@ document.getElementById("logoTalanga");
 
 if(logo){
 
-    pdf.addImage(
-        logo,
-        "PNG",
-        15,
-        10,
-        30,
-        30
-    );
+   pdf.addImage(
+    logo,
+    "PNG",
+    20,
+    10,
+    25,
+    25
+);
+ }
+pdf.setFontSize(22);
 
-}
-    pdf.text(
-        "TALANGA HSE",
-        20,
-        20
-    );
+pdf.text(
+    "TALANGA HSE",
+    55,
+    20
+);
 
-    pdf.text(
-        "RELATORIO DE FAUNA",
-        20,
-        35
-    );
+pdf.setFontSize(10);
+
+pdf.text(
+    "RELATORIO FAUNA",
+    55,
+    28
+);
 
     pdf.text(
         `Data: ${item.data_fauna || "-"}`,

@@ -745,7 +745,206 @@ Este lançamento representa um marco importante na aposta da GT Engenharia e Ser
         <section id="seguranca" class="modulo">
 
     <h2> Gestão de Segurança</h2>
-    
+
+    <button
+    class="secao-toggle"
+    onclick="
+        alternarSecao(
+            'secaoMatrizRiscos'
+        )
+    "
+>
+    Matriz de Riscos
+</button>
+
+<section
+    id="secaoMatrizRiscos"
+    style="display:none;"
+>
+<div class="cards-risco">
+
+    <div id="riscosBaixos">
+        🟢 0
+    </div>
+
+    <div id="riscosMedios">
+        🟡 0
+    </div>
+
+    <div id="riscosAltos">
+        🟠 0
+    </div>
+
+    <div id="riscosCriticos">
+        🔴 0
+    </div>
+
+</div>
+
+<form id="formMatrizRiscos">
+
+    <label>Categoria</label>
+    <select id="categoriaRisco">
+
+        <option>SST</option>
+        <option>Ambiental</option>
+        <option>Operacional</option>
+        <option>Engenharia</option>
+        <option>Construção</option>
+        <option>Financeiro</option>
+        <option>Contratual</option>
+
+    </select>
+
+    <label>Processo / Atividade</label>
+    <input
+        type="text"
+        id="processoRisco"
+    >
+
+    <label>Descrição do Risco</label>
+    <textarea
+        id="descricaoRisco"></textarea>
+        <label>Causa</label>
+<textarea id="causaRisco"></textarea>
+
+<label>Consequência</label>
+<textarea id="consequenciaRisco"></textarea>
+
+<label>Tipo de Resposta</label>
+<select id="tipoResposta">
+
+    <option>Evitar</option>
+    <option>Mitigar</option>
+    <option>Transferir</option>
+    <option>Aceitar</option>
+    <option>Explorar</option>
+
+</select>
+
+<label>Tratamento</label>
+<textarea id="tratamentoRisco"></textarea>
+
+
+    <label>Natureza</label>
+    <select id="naturezaRisco">
+
+        <option>Ameaça</option>
+        <option>Oportunidade</option>
+
+    </select>
+
+    <label>Probabilidade</label>
+    <select id="probabilidadeRisco">
+
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+
+    </select>
+
+    <label>Consequência</label>
+    <select id="impactoRisco">
+
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+
+    </select>
+    <h4>Risco Residual</h4>
+
+<label>Nova Probabilidade</label>
+<select id="novaProbabilidade">
+
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+
+</select>
+<label>Nova Consequência</label>
+<select id="novaConsequencia">
+
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+
+</select>
+<label>Prazo</label>
+
+<input
+    type="date"
+    id="prazoRisco"
+>
+
+    <label>Responsável</label>
+<input
+    type="text"
+    id="responsavelRisco"
+>
+<label>Status</label>
+<select id="statusRisco">
+
+    <option>ABERTO</option>
+
+    <option>EM TRATAMENTO</option>
+
+    <option>MITIGADO</option>
+
+    <option>FECHADO</option>
+
+</select>
+
+    <button type="submit">
+
+        Guardar
+
+    </button>
+    <button id="btnExportarMatriz">
+
+    Exportar Excel
+
+</button>
+
+</form>
+<table id="tabelaMatrizRiscos">
+
+    <thead>
+
+        <tr>
+
+<th>Categoria</th>
+<th>Processo</th>
+<th>Risco</th>
+<th>Natureza</th>
+<th>Prob.</th>
+<th>Impacto</th>
+<th>Inerente</th>
+<th>Residual</th>
+<th>Responsável</th>
+<th>Status</th>
+<th>Prazo</th>
+<th>Ações</th>
+
+
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+    </tbody>
+
+</table>
+</section>
 
 <!-- OCORRÊNCIAS -->
 
@@ -3336,6 +3535,91 @@ Produtos Químicos
     </span>
 
 </div>
+
+<button
+    class="secao-toggle"
+    onclick="
+        alternarSecao(
+            'secaoCompatibilidadeQuimica'
+        )
+    "
+>
+    Compatibilidade Química
+</button>
+<section id="secaoCompatibilidadeQuimica" style="display:none;">
+
+<div id="adminCompatibilidade">
+
+
+    <h3>
+        Compatibilidade Química
+    </h3>
+
+
+
+    <form id="formCompatibilidade">
+<label>Categoria A</label>
+        <select id="categoriaA">
+            
+            <option value="">
+                --
+            </option>
+        </select>
+<label>Categoria B</label>
+        <select id="categoriaB">
+            <option value="">
+                --
+            </option>
+        </select>
+<label>Compatibilidade</label>
+        <select id="compativel">
+            <option value="true">
+                Compatível
+            </option>
+
+            <option value="false">
+                Incompatível
+            </option>
+        </select>
+<label>Observações</label>
+        <textarea
+            id="observacaoCompatibilidade"
+            placeholder="Observação"
+        ></textarea>
+
+        <button type="submit">
+            Guardar
+        </button>
+
+    </form>
+
+</div>
+
+    <table id="tabelaCompatibilidade">
+
+        <thead>
+
+            <tr>
+
+                <th>A</th>
+                <th>B</th>
+                <th>Compatível</th>
+                <th>Observação</th>
+                <th id="colunaAcoes">Ações</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+</tbody>
+
+    </table>
+
+</section>
+
+
 
     <div class="filtros">
 <label>Pesquisar</label>
