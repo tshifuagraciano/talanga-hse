@@ -441,29 +441,23 @@ document.getElementById(
 if (logo) {
 
     pdf.addImage(
-        logo,
-        "PNG",
-        10,
-        8,
-        20,
-        20
-    );
-
-}
-
-pdf.setFontSize(18);
+    logo,
+    "PNG",
+    10,
+    8,
+    20,
+    20
+);}
 
 pdf.text(
     "TALANGA HSE",
-    40,
+    65,
     18
 );
 
-pdf.setFontSize(14);
-
 pdf.text(
     "RELATÓRIO ASPECTOS E IMPACTOS AMBIENTAIS",
-    40,
+    65,
     28
 );
 
@@ -1815,29 +1809,23 @@ document.getElementById(
 if (logo) {
 
     pdf.addImage(
-        logo,
-        "PNG",
-        10,
-        8,
-        20,
-        20
-    );
-
-}
-
-pdf.setFontSize(18);
+    logo,
+    "PNG",
+    10,
+    8,
+    20,
+    20
+);}
 
 pdf.text(
     "TALANGA HSE",
-    40,
+    65,
     18
 );
 
-pdf.setFontSize(14);
-
 pdf.text(
-    "RELATÓRIO DE RESIDUOS",
-    40,
+    "RELATÓRIO DE RESIDUO",
+    65,
     28
 );
 
@@ -2637,29 +2625,23 @@ document.getElementById(
 if (logo) {
 
     pdf.addImage(
-        logo,
-        "PNG",
-        10,
-        8,
-        20,
-        20
-    );
-
-}
-
-pdf.setFontSize(18);
+    logo,
+    "PNG",
+    10,
+    8,
+    20,
+    20
+);}
 
 pdf.text(
     "TALANGA HSE",
-    40,
+    65,
     18
 );
 
-pdf.setFontSize(14);
-
 pdf.text(
     "RELATÓRIO DE CONSUMO",
-    40,
+    65,
     28
 );
 
@@ -3154,29 +3136,23 @@ document.getElementById(
 if (logo) {
 
     pdf.addImage(
-        logo,
-        "PNG",
-        10,
-        8,
-        20,
-        20
-    );
-
-}
-
-pdf.setFontSize(18);
+    logo,
+    "PNG",
+    10,
+    8,
+    20,
+    20
+);}
 
 pdf.text(
     "TALANGA HSE",
-    40,
+    65,
     18
 );
 
-pdf.setFontSize(14);
-
 pdf.text(
     "RELATÓRIO REQUISITO LEGAL AMBIENTAL",
-    40,
+    65,
     28
 );
 
@@ -3730,29 +3706,23 @@ document.getElementById(
 if (logo) {
 
     pdf.addImage(
-        logo,
-        "PNG",
-        10,
-        8,
-        20,
-        20
-    );
-
-}
-
-pdf.setFontSize(18);
+    logo,
+    "PNG",
+    10,
+    8,
+    20,
+    20
+);}
 
 pdf.text(
     "TALANGA HSE",
-    40,
+    65,
     18
 );
 
-pdf.setFontSize(14);
-
 pdf.text(
     "RELATÓRIO FAUNA",
-    40,
+    65,
     28
 );
 
