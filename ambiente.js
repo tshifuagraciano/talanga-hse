@@ -431,159 +431,250 @@ function imprimirAspecto(index){
 
     const pdf =
     new jsPDF();
-   
 
     const logo =
-document.getElementById(
-    "logoTalanga"
-);
+    document.getElementById(
+        "logoTalanga"
+    );
 
-if (logo) {
+    if (logo) {
 
-    pdf.addImage(
-    logo,
-    "PNG",
-    10,
-    8,
-    20,
-    20
-);}
+        pdf.addImage(
+            logo,
+            "PNG",
+            10,
+            8,
+            20,
+            20
+        );
 
-pdf.text(
-    "TALANGA HSE",
-    65,
-    18
-);
+    }
 
-pdf.text(
-    "RELATÓRIO ASPECTOS E IMPACTOS AMBIENTAIS",
-    65,
-    28
-);
+    pdf.setFontSize(18);
 
-pdf.line(
-    10,
-    38,
-    200,
-    38
-);
     pdf.text(
-    `Total Aspectos: ${aspectosAmbientais.length}`,
-    15,
-    55
-);
+        "TALANGA HSE",
+        65,
+        18
+    );
 
-pdf.text(
-    `Críticos: ${
-        aspectosAmbientais.filter(
-            i => i.classificacao === "Crítico"
-        ).length
-    }`,
-    15,
-    65
-);
+    pdf.setFontSize(14);
 
-pdf.text(
-    `Altos: ${
-        aspectosAmbientais.filter(
-            i => i.classificacao === "Alto"
-        ).length
-    }`,
-    15,
-    75
-);
+    pdf.text(
+        "RELATÓRIO ASPECTOS E IMPACTOS AMBIENTAIS",
+        65,
+        28
+    );
 
-pdf.text(
-    `Significativos: ${
-        aspectosAmbientais.filter(
-            i => i.significativo === "Sim"
-        ).length
-    }`,
-    15,
-    85
-);
+    pdf.line(
+        10,
+        38,
+        200,
+        38
+    );
+
+    /* ==========================
+       RESUMO
+    ========================== */
+
+    pdf.rect(
+        10,
+        48,
+        190,
+        45
+    );
 
     pdf.setFontSize(11);
 
     pdf.text(
-        `Atividade: ${item.atividade}`,
+        `Total Aspectos: ${aspectosAmbientais.length}`,
         15,
         60
     );
 
     pdf.text(
-        `Aspecto: ${item.aspecto}`,
+        `Críticos: ${
+            aspectosAmbientais.filter(
+                i => i.classificacao === "Crítico"
+            ).length
+        }`,
         15,
-        75
+        70
     );
 
     pdf.text(
-        `Impacto: ${item.impacto}`,
+        `Altos: ${
+            aspectosAmbientais.filter(
+                i => i.classificacao === "Alto"
+            ).length
+        }`,
+        15,
+        80
+    );
+
+    pdf.text(
+        `Significativos: ${
+            aspectosAmbientais.filter(
+                i => i.significativo === "Sim"
+            ).length
+        }`,
         15,
         90
     );
 
+    pdf.line(
+        10,
+        100,
+        200,
+        100
+    );
+
+    let y = 115;
+
+    pdf.setFontSize(11);
+
+    pdf.text(
+        `Atividade: ${item.atividade || "-"}`,
+        15,
+        y
+    );
+
+    y += 15;
+
+    pdf.text(
+        `Aspecto: ${item.aspecto || "-"}`,
+        15,
+        y
+    );
+
+    y += 15;
+
+    pdf.text(
+        `Impacto: ${item.impacto || "-"}`,
+        15,
+        y
+    );
+
+    y += 15;
+
     pdf.text(
         `Área: ${item.area || "-"}`,
         15,
-        105
+        y
     );
+
+    y += 15;
 
     pdf.text(
         `Responsável: ${item.responsavel || "-"}`,
         15,
-        120
+        y
     );
+
+    y += 15;
 
     pdf.text(
         `Status: ${item.status || "-"}`,
         15,
-        135
+        y
+    );
+
+    y += 15;
+
+    pdf.text(
+        `Probabilidade: ${item.probabilidade || "-"}`,
+        15,
+        y
+    );
+
+    y += 15;
+
+    pdf.text(
+        `Severidade: ${item.severidade || "-"}`,
+        15,
+        y
+    );
+
+    y += 15;
+
+    pdf.text(
+        `Risco: ${item.risco || "-"}`,
+        15,
+        y
+    );
+
+    y += 15;
+
+    pdf.text(
+        `Classificação: ${item.classificacao || "-"}`,
+        15,
+        y
+    );
+
+    y += 15;
+
+    pdf.text(
+        `Significativo: ${
+            item.significativo || "Não"
+        }`,
+        15,
+        y
+    );
+
+    y += 20;
+
+    const controle =
+
+    pdf.splitTextToSize(
+        `Controle Existente: ${
+            item.controle_existente || "-"
+        }`,
+        170
     );
 
     pdf.text(
-        `Probabilidade: ${item.probabilidade}`,
+        controle,
         15,
-        150
+        y
+    );
+
+    y += controle.length * 6 + 10;
+
+    const mitigacao =
+
+    pdf.splitTextToSize(
+        `Ação de Mitigação: ${
+            item.acao_mitigacao || "-"
+        }`,
+        170
     );
 
     pdf.text(
-        `Severidade: ${item.severidade}`,
+        mitigacao,
         15,
-        165
+        y
     );
 
-    pdf.text(
-        `Risco: ${item.risco}`,
-        15,
-        180
-    );
+    const paginas =
+    pdf.internal.getNumberOfPages();
 
-    pdf.text(
-        `Classificação: ${item.classificacao}`,
-        15,
-        195
-    );
+    for (
+        let i = 1;
+        i <= paginas;
+        i++
+    ) {
 
-    pdf.text(
-        `Significativo: ${item.significativo || "Não"}`,
-        15,
-        210
-    );
+        pdf.setPage(i);
 
-    pdf.text(
-        `Controle Existente: ${item.controle_existente || "-"}`,
-        15,
-        225,
-        { maxWidth: 170 }
-    );
+        pdf.setFontSize(8);
 
-    pdf.text(
-        `Ação de Mitigação: ${item.acao_mitigacao || "-"}`,
-        15,
-        245,
-        { maxWidth: 170 }
-    );
+        pdf.text(
+            `Talanga HSE | Página ${i} de ${paginas}`,
+            10,
+            290
+        );
+
+    }
 
     pdf.save(
         `Aspecto_Ambiental_${item.atividade}.pdf`
