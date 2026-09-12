@@ -434,41 +434,45 @@ function imprimirAspecto(index){
    
 
     const logo =
-document.getElementById("logoTalanga");
-
-if(logo){
-
-   pdf.addImage(
-    logo,
-    "PNG",
-    20,
-    10,
-    25,
-    25
+document.getElementById(
+    "logoTalanga"
 );
- }
-pdf.setFontSize(22);
+
+if (logo) {
+
+    pdf.addImage(
+        logo,
+        "PNG",
+        10,
+        8,
+        20,
+        20
+    );
+
+}
+
+pdf.setFontSize(18);
 
 pdf.text(
     "TALANGA HSE",
-    55,
-    20
+    40,
+    18
 );
 
-pdf.setFontSize(10);
+pdf.setFontSize(14);
 
 pdf.text(
-    "ASPECTOS E IMPACTOS AMBIENTAIS",
-    55,
+    "RELATÓRIO ASPECTOS E IMPACTOS AMBIENTAIS",
+    40,
     28
 );
 
-    pdf.line(
-        15,
-        45,
-        195,
-        45
-    );
+pdf.line(
+    10,
+    38,
+    200,
+    38
+);
     pdf.text(
     `Total Aspectos: ${aspectosAmbientais.length}`,
     15,
@@ -1804,41 +1808,45 @@ function imprimirResiduo(index){
     new jsPDF();
 
     const logo =
-document.getElementById("logoTalanga");
-
-if(logo){
-
-   pdf.addImage(
-    logo,
-    "PNG",
-    20,
-    10,
-    25,
-    25
+document.getElementById(
+    "logoTalanga"
 );
- }
-pdf.setFontSize(22);
+
+if (logo) {
+
+    pdf.addImage(
+        logo,
+        "PNG",
+        10,
+        8,
+        20,
+        20
+    );
+
+}
+
+pdf.setFontSize(18);
 
 pdf.text(
     "TALANGA HSE",
-    55,
-    20
+    40,
+    18
 );
 
-pdf.setFontSize(10);
+pdf.setFontSize(14);
 
 pdf.text(
-    "RELATORIO DE RESIDUO",
-    55,
+    "RELATÓRIO DE RESIDUOS",
+    40,
     28
 );
 
-    pdf.line(
-        20,
-        40,
-        190,
-        40
-    );
+pdf.line(
+    10,
+    38,
+    200,
+    38
+);
 
     pdf.setFontSize(11);
 
@@ -2622,41 +2630,45 @@ function imprimirConsumo(index){
     const pdf =
     new jsPDF();
 const logo =
-document.getElementById("logoTalanga");
-
-if(logo){
-
-   pdf.addImage(
-    logo,
-    "PNG",
-    20,
-    10,
-    25,
-    25
+document.getElementById(
+    "logoTalanga"
 );
- }
-pdf.setFontSize(22);
+
+if (logo) {
+
+    pdf.addImage(
+        logo,
+        "PNG",
+        10,
+        8,
+        20,
+        20
+    );
+
+}
+
+pdf.setFontSize(18);
 
 pdf.text(
     "TALANGA HSE",
-    55,
-    20
+    40,
+    18
 );
 
-pdf.setFontSize(10);
+pdf.setFontSize(14);
 
 pdf.text(
-    "RELATORIO DE CONSUMO",
-    55,
+    "RELATÓRIO DE CONSUMO",
+    40,
     28
 );
 
-    pdf.line(
-        20,
-        40,
-        190,
-        40
-    );
+pdf.line(
+    10,
+    38,
+    200,
+    38
+);
 
     pdf.setFontSize(11);
 
@@ -3135,40 +3147,45 @@ ambiental[index];
     const pdf =
     new jsPDF();
 const logo =
-document.getElementById("logoTalanga");
-
-if(logo){
-
-   pdf.addImage(
-    logo,
-    "PNG",
-    20,
-    10,
-    25,
-    25
+document.getElementById(
+    "logoTalanga"
 );
- }
-pdf.setFontSize(22);
+
+if (logo) {
+
+    pdf.addImage(
+        logo,
+        "PNG",
+        10,
+        8,
+        20,
+        20
+    );
+
+}
+
+pdf.setFontSize(18);
 
 pdf.text(
     "TALANGA HSE",
-    55,
-    20
+    40,
+    18
 );
 
-pdf.setFontSize(10);
+pdf.setFontSize(14);
 
 pdf.text(
-    "REQUISITO LEGAL AMBIENTAL",
-    55,
+    "RELATÓRIO REQUISITO LEGAL AMBIENTAL",
+    40,
     28
 );
-    pdf.line(
-        20,
-        40,
-        190,
-        40
-    );
+
+pdf.line(
+    10,
+    38,
+    200,
+    38
+);
 
     pdf.setFontSize(11);
 
@@ -3706,33 +3723,44 @@ function imprimirFauna(index){
     const pdf =
     new jsPDF();
 const logo =
-document.getElementById("logoTalanga");
-
-if(logo){
-
-   pdf.addImage(
-    logo,
-    "PNG",
-    20,
-    10,
-    25,
-    25
+document.getElementById(
+    "logoTalanga"
 );
- }
-pdf.setFontSize(22);
+
+if (logo) {
+
+    pdf.addImage(
+        logo,
+        "PNG",
+        10,
+        8,
+        20,
+        20
+    );
+
+}
+
+pdf.setFontSize(18);
 
 pdf.text(
     "TALANGA HSE",
-    55,
-    20
+    40,
+    18
 );
 
-pdf.setFontSize(10);
+pdf.setFontSize(14);
 
 pdf.text(
-    "RELATORIO FAUNA",
-    55,
+    "RELATÓRIO FAUNA",
+    40,
     28
+);
+
+pdf.line(
+    10,
+    38,
+    200,
+    38
 );
 
     pdf.text(

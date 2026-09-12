@@ -547,40 +547,45 @@ const nomeColaborador =
     const pdf =
     new jsPDF();
     const logo =
-document.getElementById("logoTalanga");
-
-if(logo){
-
-   pdf.addImage(
-    logo,
-    "PNG",
-    20,
-    10,
-    25,
-    25
+document.getElementById(
+    "logoTalanga"
 );
- }
-pdf.setFontSize(22);
+
+if (logo) {
+
+    pdf.addImage(
+        logo,
+        "PNG",
+        10,
+        8,
+        20,
+        20
+    );
+
+}
+
+pdf.setFontSize(18);
 
 pdf.text(
     "TALANGA HSE",
-    55,
-    20
+    40,
+    18
 );
 
-pdf.setFontSize(10);
+pdf.setFontSize(14);
 
 pdf.text(
-    "RELATORIO ASO",
-    55,
+    "RELATÓRIO ASO",
+    40,
     28
 );
-    pdf.line(
-        20,
-        40,
-        190,
-        40
-    );
+
+pdf.line(
+    10,
+    38,
+    200,
+    38
+);
 
     pdf.setFontSize(11);
 
@@ -1698,41 +1703,45 @@ function imprimirAmbulatorio(index){
     const pdf =
     new jsPDF();
 const logo =
-document.getElementById("logoTalanga");
-
-if(logo){
-
-   pdf.addImage(
-    logo,
-    "PNG",
-    20,
-    10,
-    25,
-    25
+document.getElementById(
+    "logoTalanga"
 );
- }
-pdf.setFontSize(22);
+
+if (logo) {
+
+    pdf.addImage(
+        logo,
+        "PNG",
+        10,
+        8,
+        20,
+        20
+    );
+
+}
+
+pdf.setFontSize(18);
 
 pdf.text(
     "TALANGA HSE",
-    55,
-    20
+    40,
+    18
 );
 
-pdf.setFontSize(10);
+pdf.setFontSize(14);
 
 pdf.text(
     "ATENDIMENTO AMBULATORIAL",
-    55,
+    40,
     28
 );
 
-    pdf.line(
-        20,
-        40,
-        190,
-        40
-    );
+pdf.line(
+    10,
+    38,
+    200,
+    38
+);
 
     pdf.text(
         `Data: ${item.data_atendimento}`,
@@ -2468,41 +2477,45 @@ medicamentosFiltrados[index];
     const pdf =
     new jsPDF();
 const logo =
-document.getElementById("logoTalanga");
-
-if(logo){
-
-   pdf.addImage(
-    logo,
-    "PNG",
-    20,
-    10,
-    25,
-    25
+document.getElementById(
+    "logoTalanga"
 );
- }
-pdf.setFontSize(22);
+
+if (logo) {
+
+    pdf.addImage(
+        logo,
+        "PNG",
+        10,
+        8,
+        20,
+        20
+    );
+
+}
+
+pdf.setFontSize(18);
 
 pdf.text(
     "TALANGA HSE",
-    55,
-    20
+    40,
+    18
 );
 
-pdf.setFontSize(10);
+pdf.setFontSize(14);
 
 pdf.text(
-    "CONTROLO DE VALIDADE DE MEDICAMENTOS",
-    55,
+    "CONTROLO DE VALIDADE DE MEDICAMENTO",
+    40,
     28
 );
 
-    pdf.line(
-        20,
-        40,
-        190,
-        40
-    );
+pdf.line(
+    10,
+    38,
+    200,
+    38
+);
 
     pdf.setFontSize(11);
 
@@ -3742,41 +3755,45 @@ function imprimirEmergencia(index){
     const pdf =
     new jsPDF();
     const logo =
-document.getElementById("logoTalanga");
-
-if(logo){
-
-   pdf.addImage(
-    logo,
-    "PNG",
-    20,
-    10,
-    25,
-    25
+document.getElementById(
+    "logoTalanga"
 );
- }
-pdf.setFontSize(22);
+
+if (logo) {
+
+    pdf.addImage(
+        logo,
+        "PNG",
+        10,
+        8,
+        20,
+        20
+    );
+
+}
+
+pdf.setFontSize(18);
 
 pdf.text(
     "TALANGA HSE",
-    55,
-    20
+    40,
+    18
 );
 
-pdf.setFontSize(10);
+pdf.setFontSize(14);
 
 pdf.text(
-    "RELATORIO DE EMERGENCIA",
-    55,
+    "RELATÓRIO DE EMERGÊNCIA",
+    40,
     28
 );
 
-    pdf.line(
-        20,
-        40,
-        190,
-        40
-    );
+pdf.line(
+    10,
+    38,
+    200,
+    38
+);
 
     pdf.setFontSize(11);
 

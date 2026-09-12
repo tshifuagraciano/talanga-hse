@@ -1651,41 +1651,45 @@ function imprimirSolicitacaoEPI(index){
     const pdf =
     new jsPDF();
     const logo =
-document.getElementById("logoTalanga");
-
-if(logo){
-
-   pdf.addImage(
-    logo,
-    "PNG",
-    20,
-    10,
-    25,
-    25
+document.getElementById(
+    "logoTalanga"
 );
- }
-pdf.setFontSize(22);
+
+if (logo) {
+
+    pdf.addImage(
+        logo,
+        "PNG",
+        10,
+        8,
+        20,
+        20
+    );
+
+}
+
+pdf.setFontSize(18);
 
 pdf.text(
     "TALANGA HSE",
-    55,
-    20
+    40,
+    18
 );
 
-pdf.setFontSize(10);
+pdf.setFontSize(14);
 
 pdf.text(
-    "SOLICITACAO DE EPI",
-    55,
+    "SOLICITACAO EPI",
+    40,
     28
 );
 
-    pdf.line(
-        20,
-        40,
-        190,
-        40
-    );
+pdf.line(
+    10,
+    38,
+    200,
+    38
+);
 
     pdf.setFontSize(11);
 
@@ -2842,40 +2846,45 @@ await supabaseClient
     const pdf =
     new jsPDF();
 const logo =
-document.getElementById("logoTalanga");
-
-if(logo){
-
-   pdf.addImage(
-    logo,
-    "PNG",
-    20,
-    10,
-    25,
-    25
+document.getElementById(
+    "logoTalanga"
 );
- }
-pdf.setFontSize(22);
+
+if (logo) {
+
+    pdf.addImage(
+        logo,
+        "PNG",
+        10,
+        8,
+        20,
+        20
+    );
+
+}
+
+pdf.setFontSize(18);
 
 pdf.text(
     "TALANGA HSE",
-    55,
-    20
+    40,
+    18
 );
 
-pdf.setFontSize(10);
+pdf.setFontSize(14);
 
 pdf.text(
-    "DDS ELETRONICO",
-    55,
+    "RELATÓRIO DDS ELETRONICO",
+    40,
     28
 );
-    pdf.line(
-        20,
-        40,
-        190,
-        40
-    );
+
+pdf.line(
+    10,
+    38,
+    200,
+    38
+);
 
     pdf.setFontSize(11);
 
@@ -3290,41 +3299,45 @@ function imprimirFalaTalanga(index){
     const pdf =
     new jsPDF();
 const logo =
-document.getElementById("logoTalanga");
-
-if(logo){
-
-   pdf.addImage(
-    logo,
-    "PNG",
-    20,
-    10,
-    25,
-    25
+document.getElementById(
+    "logoTalanga"
 );
- }
-pdf.setFontSize(22);
+
+if (logo) {
+
+    pdf.addImage(
+        logo,
+        "PNG",
+        10,
+        8,
+        20,
+        20
+    );
+
+}
+
+pdf.setFontSize(18);
 
 pdf.text(
     "TALANGA HSE",
-    55,
-    20
+    40,
+    18
 );
 
-pdf.setFontSize(10);
+pdf.setFontSize(14);
 
 pdf.text(
-    "FALA TALANGA",
-    55,
+    "RELATÓRIO FALA TALANGA",
+    40,
     28
 );
 
-    pdf.line(
-        20,
-        40,
-        190,
-        40
-    );
+pdf.line(
+    10,
+    38,
+    200,
+    38
+);
 
     pdf.setFontSize(11);
 
@@ -4680,41 +4693,45 @@ function imprimirInspecao(index){
     const pdf =
     new jsPDF();
 const logo =
-document.getElementById("logoTalanga");
-
-if(logo){
-
-   pdf.addImage(
-    logo,
-    "PNG",
-    20,
-    10,
-    25,
-    25
+document.getElementById(
+    "logoTalanga"
 );
- }
-pdf.setFontSize(22);
+
+if (logo) {
+
+    pdf.addImage(
+        logo,
+        "PNG",
+        10,
+        8,
+        20,
+        20
+    );
+
+}
+
+pdf.setFontSize(18);
 
 pdf.text(
     "TALANGA HSE",
-    55,
-    20
+    40,
+    18
 );
 
-pdf.setFontSize(10);
+pdf.setFontSize(14);
 
 pdf.text(
-    "RELATORIO DE INSPECAO",
-    55,
+    "RELATÓRIO DE INSPECÃO",
+    40,
     28
 );
 
-    pdf.line(
-        20,
-        40,
-        190,
-        40
-    );
+pdf.line(
+    10,
+    38,
+    200,
+    38
+);
 
     pdf.setFontSize(11);
 
@@ -5552,41 +5569,45 @@ async function imprimirOcorrenciaHSE(index){
     const pdf =
     new jsPDF();
 const logo =
-document.getElementById("logoTalanga");
-
-if(logo){
-
-   pdf.addImage(
-    logo,
-    "PNG",
-    20,
-    10,
-    25,
-    25
+document.getElementById(
+    "logoTalanga"
 );
- }
-pdf.setFontSize(22);
+
+if (logo) {
+
+    pdf.addImage(
+        logo,
+        "PNG",
+        10,
+        8,
+        20,
+        20
+    );
+
+}
+
+pdf.setFontSize(18);
 
 pdf.text(
     "TALANGA HSE",
-    55,
-    20
+    40,
+    18
 );
 
-pdf.setFontSize(10);
+pdf.setFontSize(14);
 
 pdf.text(
-    "RELATORIO DE DESVIO",
-    55,
+    "RELATÓRIO DE DESVIO",
+    40,
     28
 );
 
-    pdf.line(
-        20,
-        40,
-        190,
-        40
-    );
+pdf.line(
+    10,
+    38,
+    200,
+    38
+);
 
     pdf.setFontSize(11);
 

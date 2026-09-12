@@ -761,23 +761,44 @@ Este lançamento representa um marco importante na aposta da GT Engenharia e Ser
     id="secaoMatrizRiscos"
     style="display:none;"
 >
-<div class="cards-risco">
 
-    <div id="riscosBaixos">
-        🟢 0
+    <div class="cards-risco">
+        <div class="card-indicador">
+<h4>Total de Riscos</h4>
+<span id="totalRiscos">0</span>
+</div>
+
+    <div class="card-indicador">
+        <h4>🟢 Riscos Baixos</h4>
+        <span id="riscosBaixos">0</span>
     </div>
 
-    <div id="riscosMedios">
-        🟡 0
+    <div class="card-indicador">
+        <h4>🟡 Riscos Médios</h4>
+        <span id="riscosMedios">0</span>
     </div>
 
-    <div id="riscosAltos">
-        🟠 0
+    <div class="card-indicador">
+        <h4>🟠 Riscos Altos</h4>
+        <span id="riscosAltos">0</span>
     </div>
 
-    <div id="riscosCriticos">
-        🔴 0
+    <div class="card-indicador">
+        <h4>🔴 Riscos Críticos</h4>
+        <span id="riscosCriticos">0</span>
     </div>
+
+    <div class="card-indicador">
+        <h4>🚨 Riscos com Prazo de Tratamento Vencidos</h4>
+        <span id="riscosVencidos">0</span>
+    </div>
+
+</div>
+<div class="grafico-riscos">
+
+    <canvas
+        id="graficoRiscos"
+    ></canvas>
 
 </div>
 
@@ -824,7 +845,11 @@ Este lançamento representa um marco importante na aposta da GT Engenharia e Ser
 
 <label>Tratamento</label>
 <textarea id="tratamentoRisco"></textarea>
+<label>Ação Corretiva</label>
 
+<textarea
+    id="acaoCorretiva"
+></textarea>
 
     <label>Natureza</label>
     <select id="naturezaRisco">
@@ -914,6 +939,103 @@ Este lançamento representa um marco importante na aposta da GT Engenharia e Ser
 </button>
 
 </form>
+<label>Pesquisar</label>
+
+<input
+    type="text"
+    id="pesquisaMatrizRisco"
+    placeholder="Pesquisar risco..."
+>
+<label>Filtrar por Status</label>
+
+<select id="filtroStatusRisco">
+
+    <option value="">
+        Todos
+    </option>
+
+    <option value="ABERTO">
+        ABERTO
+    </option>
+
+    <option value="EM TRATAMENTO">
+        EM TRATAMENTO
+    </option>
+
+    <option value="MITIGADO">
+        MITIGADO
+    </option>
+
+    <option value="FECHADO">
+        FECHADO
+    </option>
+
+</select>
+<button
+    class="secao-toggle"
+    onclick="
+        alternarSecao(
+            'secaoPlanoAcoes'
+        )
+    "
+>
+    Plano de Ação
+</button>
+
+<section
+    id="secaoPlanoAcoes"
+    style="display:none;"
+>
+
+<div class="cards-acoes">
+
+    <div class="card-indicador">
+        <h4>📋 Total</h4>
+        <span id="totalAcoes">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>🔓 Abertas</h4>
+        <span id="acoesAbertas">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>✅ Fechadas</h4>
+        <span id="acoesFechadas">0</span>
+    </div>
+
+    <div class="card-indicador">
+        <h4>🚨 Vencidas</h4>
+        <span id="acoesVencidas">0</span>
+    </div>
+
+</div>
+
+<table id="tabelaPlanoAcoes">
+
+    <thead>
+
+        <tr>
+
+            <th>Origem</th>
+            <th>Título</th>
+            <th>Responsável</th>
+            <th>Prazo</th>
+            <th>Prioridade</th>
+            <th>Status</th>
+            <th>Ações</th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+    </tbody>
+
+</table>
+
+</section>
 <table id="tabelaMatrizRiscos">
 
     <thead>
@@ -931,6 +1053,7 @@ Este lançamento representa um marco importante na aposta da GT Engenharia e Ser
 <th>Responsável</th>
 <th>Status</th>
 <th>Prazo</th>
+<th>Plano de Ação</th>
 <th>Ações</th>
 
 
@@ -6158,6 +6281,7 @@ Local de Armazenamento
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="supabase.js"></script>
 <script src="storage.js"></script>
 <script src="db.js"></script>
@@ -6175,7 +6299,7 @@ Local de Armazenamento
 <script src="relatorios.js"></script>
 <script src="pesquisa.js"></script> 
 <script src="produtos-quimicos.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
 
 <script src="dashboard.js"></script>

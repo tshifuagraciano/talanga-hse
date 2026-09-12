@@ -911,33 +911,44 @@ function imprimirTreinamento(index){
     const pdf =
     new jsPDF();
 const logo =
-document.getElementById("logoTalanga");
-
-if(logo){
-
-   pdf.addImage(
-    logo,
-    "PNG",
-    20,
-    10,
-    25,
-    25
+document.getElementById(
+    "logoTalanga"
 );
- }
-pdf.setFontSize(22);
+
+if (logo) {
+
+    pdf.addImage(
+        logo,
+        "PNG",
+        10,
+        8,
+        20,
+        20
+    );
+
+}
+
+pdf.setFontSize(18);
 
 pdf.text(
     "TALANGA HSE",
-    55,
-    20
+    40,
+    18
 );
 
-pdf.setFontSize(10);
+pdf.setFontSize(14);
 
 pdf.text(
-    "RELATORIO DE TREINAMENTO",
-    55,
+    "RELATÓRIO DE TREINAMENTO",
+    40,
     28
+);
+
+pdf.line(
+    10,
+    38,
+    200,
+    38
 );
 
     pdf.text(

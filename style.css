@@ -4147,33 +4147,48 @@ body.dark-mode .produto-conflito {
     animation: piscar 1s infinite;
 
 }
-.risco-baixo {
-    background:#d4edda;
+.cards-risco {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 12px;
+
 }
 
-.risco-medio {
-    background:#fff3cd;
-}
+.cards-risco .card-indicador {
 
-.risco-alto {
-    background:#ffe5b4;
-}
+    flex: 1 1 220px;
 
-.risco-critico {
-    background:#f8d7da;
-}
-body.dark-mode .risco-baixo {
-    background: #1f4d2b;
-}
+    min-width: 220px;
 
-body.dark-mode .risco-medio {
-    background: #665200;
 }
+.cards-risco{
 
-body.dark-mode .risco-alto {
-    background: #6b3f00;
+    display:grid;
+
+    grid-template-columns:
+    repeat(
+        auto-fit,
+        minmax(220px,1fr)
+    );
+
+    gap:20px;
+
 }
+.cards-acoes {
 
-body.dark-mode .risco-critico {
-    background: #661f1f;
+    display: grid;
+
+    grid-template-columns:
+    repeat(
+        auto-fit,
+        minmax(220px, 1fr)
+    );
+
+    gap: 15px;
+
+    margin-bottom: 20px;
+
 }
